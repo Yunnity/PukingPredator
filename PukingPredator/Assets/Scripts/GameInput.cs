@@ -9,7 +9,7 @@ public class GameInput : MonoBehaviour
 {
     private PlayerInput playerInput;
     public EventHandler onInteractAction;
-
+    public EventHandler onPukeAction;
 
     public void Awake()
     {
@@ -17,11 +17,17 @@ public class GameInput : MonoBehaviour
         playerInput.Player.Enable();
 
         playerInput.Player.Action.performed += Interact_performed;
+        playerInput.Player.Puke.performed += Puke_performed;
     }
 
     private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         onInteractAction?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void Puke_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        onPukeAction?.Invoke(this, EventArgs.Empty);
     }
 
     public Vector2 GetInputVectorNormalized()

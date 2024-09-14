@@ -8,9 +8,14 @@ public class Item : MonoBehaviour
     private Vector3 position;
     private Quaternion rotation;
 
-    void PlaceItem()
+    public void PlaceItem()
     {
-        Instantiate(prefab, position, rotation);
+        prefab.SetActive(true);
+    }
+
+    public void MoveItem(Vector3 position)
+    {
+        prefab.transform.position = position;
     }
 
     public void Initialize(GameObject newPrefab, Vector3 newPosition, Quaternion newRotation)
