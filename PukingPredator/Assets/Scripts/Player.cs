@@ -11,7 +11,6 @@ public class Player : MonoBehaviour
 
     const float SPEED = 20;
 
-    public Transform groundCheckPoint;  // A Transform positioned at the feet
     public float groundCheckRadius = 0.5f; // Radius of the sphere
     public LayerMask groundLayer; // Layer of ground objects
     private Rigidbody rigidBody;
@@ -104,15 +103,13 @@ public class Player : MonoBehaviour
         {
             Debug.Log("jumping");
             rigidBody.AddForce(Vector3.up * jumpForce);
-            //transform.position += Vector3.up * jumpForce;
             StartCoroutine(ApplyJumpCooldown());
         }
     }
 
     private void GroundedUpdate()
     {
-        Debug.Log("checking a");
-        var onGround = Physics.CheckSphere(transform.position, groundCheckRadius, groundLayer);
+        var onGround = Physics.CheckSphere(transform.position + Vector3.down*0.75f, groundCheckRadius, groundLayer);
         if (onGround)
         {
             isGrounded = true;
@@ -124,8 +121,6 @@ public class Player : MonoBehaviour
         }
         else if (isGrounded && ungroundedCoroutine is null)
         {
-            Debug.Log("checking b");
-
             ungroundedCoroutine = StartCoroutine(SetGroundedFalse(coyotteTime));
         }
 
