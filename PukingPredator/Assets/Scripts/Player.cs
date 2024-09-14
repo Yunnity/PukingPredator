@@ -32,9 +32,10 @@ public class Player : MonoBehaviour
         // Define the ray, starting from the player's position, shooting forward
         Ray ray = new Ray(transform.position, lastDir);
         RaycastHit hit;
+        float sphereRadius = 0.5f; // Adjust as needed
 
-        // Check if the ray hits something
-        if (Physics.Raycast(ray, out hit, 70f)) // 5f is the maximum ray distance
+        // Perform the sphere cast
+        if (Physics.SphereCast(ray, sphereRadius, out hit, Mathf.Infinity)) // 5f is the maximum ray distance
         {
             // Get the GameObject that was hit
             GameObject hitObject = hit.collider.gameObject;
