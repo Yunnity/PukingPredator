@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     private Rigidbody rigidBody;
     private float jumpForce = 100f;
 
+    private Vector3 moveDir;
+
     [SerializeField]
     private bool isGrounded;
     private Coroutine ungroundedCoroutine = null;
@@ -86,9 +88,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         Vector2 inputVector = gameInput.GetInputVectorNormalized();
-        Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
-
-        transform.position += moveDir * SPEED * Time.deltaTime;
+        moveDir = new Vector3(inputVector.x, 0, inputVector.y);
 
         float turnSpeed = 10f;
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
@@ -105,6 +105,11 @@ public class Player : MonoBehaviour
             rigidBody.AddForce(Vector3.up * jumpForce);
             StartCoroutine(ApplyJumpCooldown());
         }
+    }
+
+    private void FixedUpdate()
+    {
+        rigidBody.velocity += moveDir * SPEED * 0.01f;
     }
 
     private void GroundedUpdate()
