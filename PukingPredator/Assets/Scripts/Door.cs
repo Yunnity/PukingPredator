@@ -10,9 +10,12 @@ public class Door : MonoBehaviour
         {
             Debug.Log("Key hit door");
 
-            // Destroy the key and the door
+            // Destroy the key
             Destroy(collision.gameObject);
-            Destroy(gameObject);
+
+            // Make the door consumable now that it is unlocked
+            var consumable = GetComponent<Consumable>();
+            consumable.IsConsumable = true;
         }
     }
 }
