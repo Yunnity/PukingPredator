@@ -11,10 +11,29 @@ public class Player : MonoBehaviour
 
     const float SPEED = 20;
 
+    public Transform groundCheckPoint;  // A Transform positioned at the feet
+    public float groundCheckRadius = 0.5f; // Radius of the sphere
+    public LayerMask groundLayer; // Layer of ground objects
+    private Rigidbody rigidBody;
+    private float jumpForce = 100f;
+
+    [SerializeField]
+    private bool isGrounded;
+    private Coroutine ungroundedCoroutine = null;
+    private bool isJumpOnCooldown = false;
+    private float jumpCooldown = 0.25f;
+    private float coyotteTime = 0.15f;
+    private bool canJump
+    {
+        get => isGrounded && !isJumpOnCooldown;
+    }
+
     private void Start()
     {
         gameInput.onInteractAction += GameInput_OnInteract;
         gameInput.onPukeAction += GameInput_OnPuke;
+        //rigidBody = transform.Find("Capsule").GetComponent<Rigidbody>();
+        rigidBody = GetComponent<Rigidbody>();
     }
 
     private void GameInput_OnPuke(object sender, System.EventArgs e)
@@ -79,5 +98,50 @@ public class Player : MonoBehaviour
         {
             lastDir = moveDir;
         }
+
+        GroundedUpdate();
+        if (canJump && Input.GetButton("Jump"))
+        {
+            Debug.Log("jumping");
+            rigidBody.AddForce(Vector3.up * jumpForce);
+            //transform.position += Vector3.up * jumpForce;
+            StartCoroutine(ApplyJumpCooldown());
+        }
     }
+
+    private void GroundedUpdate()
+    {
+        Debug.Log("checking a");
+        var onGround = Physics.CheckSphere(transform.position, groundCheckRadius, groundLayer);
+        if (onGround)
+        {
+            isGrounded = true;
+            if (ungroundedCoroutine is not null)
+            {
+                StopCoroutine(ungroundedCoroutine);
+                ungroundedCoroutine = null;
+            }
+        }
+        else if (isGrounded && ungroundedCoroutine is null)
+        {
+            Debug.Log("checking b");
+
+            ungroundedCoroutine = StartCoroutine(SetGroundedFalse(coyotteTime));
+        }
+
+    }
+    private IEnumerator ApplyJumpCooldown()
+    {
+        isJumpOnCooldown = true;
+        yield return new WaitForSeconds(jumpCooldown);
+        isJumpOnCooldown = false;
+    }
+
+    private IEnumerator SetGroundedFalse(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        isGrounded = false;
+        ungroundedCoroutine = null;
+    }
+
 }
