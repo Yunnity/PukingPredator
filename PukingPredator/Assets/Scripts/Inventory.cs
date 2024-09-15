@@ -13,6 +13,10 @@ public class Inventory : MonoBehaviour
         items = new Stack<Item>();
     }
 
+    public bool isFull()
+    {
+        return items.Count >= 2 ;
+    }
     // Method to add an item to the inventory
     public void AddItem(Item item)
     {

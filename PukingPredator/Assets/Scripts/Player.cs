@@ -9,12 +9,14 @@ public class Player : MonoBehaviour
     [SerializeField] private Inventory inventory;
     private Vector3 lastDir;
 
-    const float SPEED = 20;
+    const float SPEED = 200;
 
     public float groundCheckRadius = 0.5f; // Radius of the sphere
     public LayerMask groundLayer; // Layer of ground objects
     private Rigidbody rigidBody;
     private float jumpForce = 100f;
+
+    private Vector3 moveDir;
 
     [SerializeField]
     private bool isGrounded;
@@ -47,6 +49,10 @@ public class Player : MonoBehaviour
 
     private void GameInput_OnInteract(object sender, System.EventArgs e)
     {
+        if (inventory.isFull())
+        {
+            return;
+        }
         // Define the ray, starting from the player's position, shooting forward
         Ray ray = new Ray(transform.position, lastDir);
         RaycastHit hit;
@@ -86,9 +92,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         Vector2 inputVector = gameInput.GetInputVectorNormalized();
-        Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
-
-        transform.position += moveDir * SPEED * Time.deltaTime;
+        moveDir = new Vector3(inputVector.x, 0, inputVector.y);
 
         float turnSpeed = 10f;
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
@@ -107,9 +111,14 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        rigidBody.velocity = moveDir * SPEED * 0.05f + new Vector3( 0, rigidBody.velocity.y, 0);
+    }
+
     private void GroundedUpdate()
     {
-        var onGround = Physics.CheckSphere(transform.position + Vector3.down*0.75f, groundCheckRadius, groundLayer);
+        var onGround = Physics.CheckSphere(transform.position + Vector3.down * 0.75f, groundCheckRadius, groundLayer);
         if (onGround)
         {
             isGrounded = true;
