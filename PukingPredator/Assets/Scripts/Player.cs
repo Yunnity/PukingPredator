@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private GameInput gameInput;
     [SerializeField] private Inventory inventory;
+    [SerializeField] private LayerMask consumable;
+
     private Vector3 lastDir;
 
     const float SPEED = 200;
@@ -14,7 +16,7 @@ public class Player : MonoBehaviour
     public float groundCheckRadius = 0.5f; // Radius of the sphere
     public LayerMask groundLayer; // Layer of ground objects
     private Rigidbody rigidBody;
-    private float jumpForce = 100f;
+    private float jumpForce = 350f;
 
     private Vector3 moveDir;
 
@@ -59,7 +61,7 @@ public class Player : MonoBehaviour
         float sphereRadius = 0.5f; // Adjust as needed
 
         // Perform the sphere cast
-        if (Physics.SphereCast(ray, sphereRadius, out hit, Mathf.Infinity)) // 5f is the maximum ray distance
+        if (Physics.SphereCast(ray, sphereRadius, out hit, 5f, consumable)) // 5f is the maximum ray distance
         {
             // Get the GameObject that was hit
             GameObject hitObject = hit.collider.gameObject;

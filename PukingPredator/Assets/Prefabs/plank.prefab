@@ -66,7 +66,12 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 9045b9a6b1005f94582816520e3668a7,
         type: 3}
       propertyPath: m_Name
-      value: SM_plank_01
+      value: plank
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9045b9a6b1005f94582816520e3668a7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
