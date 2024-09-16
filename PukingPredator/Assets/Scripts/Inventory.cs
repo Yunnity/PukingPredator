@@ -30,12 +30,15 @@ public class Inventory : MonoBehaviour
         if (items.Count > 0)
         {
             Item removedItem = items.Pop();
-            Debug.Log("Item removed: " + removedItem.name);
+            if (removedItem.collect)
+            {
+                items.Push(removedItem);
+                return null;
+            }
             return removedItem;
         }
         else
         {
-            Debug.Log("Inventory is empty!");
             return null;
         }
     }

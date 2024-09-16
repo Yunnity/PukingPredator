@@ -41,9 +41,10 @@ public class Player : MonoBehaviour
 
     private void GameInput_OnPuke(object sender, System.EventArgs e)
     {
-        if (!inventory.IsEmpty())
+        Item itemToPlace = inventory.RemoveItem();
+        if (itemToPlace != null)
         {
-            Item itemToPlace = inventory.RemoveItem();
+            Debug.Log(lastDir);
             itemToPlace.MoveItem(transform.position + lastDir);
             itemToPlace.PlaceItem();
         }
@@ -65,10 +66,6 @@ public class Player : MonoBehaviour
         {
             // Get the GameObject that was hit
             GameObject hitObject = hit.collider.gameObject;
-
-            // Log the object hit
-            Debug.Log("Hit object: " + hitObject.name);
-
             GameObject newItemObject = new GameObject("NewItem");  // Create a new empty GameObject
             Item newItem = newItemObject.AddComponent<Item>();     // Add the Item component
 
@@ -78,15 +75,9 @@ public class Player : MonoBehaviour
 
             newItem.Initialize(hitObject.gameObject, itemPosition, itemRotation);
 
-            // Add the newly created item to the inventory
             inventory.AddItem(newItem);
-
-            // Optional: Destroy the hit object after turning it into an inventory item
-            hitObject.SetActive(false);
-        }
-        else
-        {
-            Debug.Log("No object hit.");
+            newItem.Collect(transform.position);
+            //hitObject.SetActive(false);
         }
     }
 
