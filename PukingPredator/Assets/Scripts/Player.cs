@@ -21,8 +21,6 @@ public class Player : MonoBehaviour
 
     private Vector3 moveDir;
 
-    private Vector3 moveDir;
-
     [SerializeField]
     private bool isGrounded;
     private Coroutine ungroundedCoroutine = null;
@@ -36,9 +34,9 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        gameInput.onInteractAction += GameInput_OnInteract;
+        gameInput.onEatAction += GameInput_OnEat;
         gameInput.onPukeAction += GameInput_OnPuke;
-        gameInput.onResetAction += ResetLevel;
+        gameInput.onResetLevelAction += ResetLevel;
         //rigidBody = transform.Find("Capsule").GetComponent<Rigidbody>();
         rigidBody = GetComponent<Rigidbody>();
     }
@@ -54,7 +52,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void GameInput_OnInteract(object sender, System.EventArgs e)
+    private void GameInput_OnEat(object sender, System.EventArgs e)
     {
         if (inventory.isFull())
         {

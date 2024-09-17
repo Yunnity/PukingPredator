@@ -30,7 +30,7 @@ public class Inventory : MonoBehaviour
         if (items.Count > 0)
         {
             Item removedItem = items.Pop();
-            if (removedItem.collect)
+            if (removedItem.isCollecting)
             {
                 items.Push(removedItem);
                 return null;

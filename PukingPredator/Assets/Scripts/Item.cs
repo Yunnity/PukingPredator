@@ -5,7 +5,7 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     private GameObject prefab;
-    private Rigidbody rb;
+    private Rigidbody rigidBody;
 
     private Vector3 position;
     private Quaternion rotation;
@@ -13,15 +13,12 @@ public class Item : MonoBehaviour
     private Vector3 playerPos;
     private Vector3 initialScale;
     
-    public bool collect = false;
+    public bool isCollecting = false;
     float collectionTimer = 0f;
 
     public void PlaceItem()
     {
-        if (collect)
-        {
-            return;
-        }
+        if (isCollecting) {  return; }
         prefab.SetActive(true);
     }
 
@@ -34,7 +31,7 @@ public class Item : MonoBehaviour
     {
         prefab = newPrefab;
         initialScale = prefab.transform.localScale;
-        rb = prefab.GetComponent<Rigidbody>();
+        rigidBody = prefab.GetComponent<Rigidbody>();
 
         position = newPosition;
         rotation = newRotation == default ? Quaternion.identity : newRotation;
@@ -43,12 +40,12 @@ public class Item : MonoBehaviour
     public void Collect(Vector3 pos)
     {
         playerPos = pos;
-        collect = true;
+        isCollecting = true;
     }
 
     public void Update()
     {
-        if (collect)
+        if (isCollecting)
         {
             collectionTimer += Time.deltaTime;
             float lerpFactor = collectionTimer / 0.6f;
@@ -64,13 +61,13 @@ public class Item : MonoBehaviour
                 prefab.transform.localScale = initialScale;
                 prefab.transform.rotation = Quaternion.identity;
 
-                if (rb != null)
+                if (rigidBody != null)
                 {
-                    rb.velocity = Vector3.zero;
-                    rb.angularVelocity = Vector3.zero;
+                    rigidBody.velocity = Vector3.zero;
+                    rigidBody.angularVelocity = Vector3.zero;
                 }
 
-                collect = false;
+                isCollecting = false;
             }
         }
     }
