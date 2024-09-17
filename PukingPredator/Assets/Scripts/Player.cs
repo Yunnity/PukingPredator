@@ -2,19 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private GameInput gameInput;
     [SerializeField] private Inventory inventory;
+    [SerializeField] private LayerMask consumable;
+
     private Vector3 lastDir;
 
-    const float SPEED = 20;
+    const float SPEED = 200;
 
     public float groundCheckRadius = 0.5f; // Radius of the sphere
     public LayerMask groundLayer; // Layer of ground objects
     private Rigidbody rigidBody;
-    private float jumpForce = 100f;
+    private float jumpForce = 350f;
 
     private Vector3 moveDir;
 
@@ -31,38 +34,40 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        gameInput.onInteractAction += GameInput_OnInteract;
+        gameInput.onEatAction += GameInput_OnEat;
         gameInput.onPukeAction += GameInput_OnPuke;
+        gameInput.onResetLevelAction += ResetLevel;
         //rigidBody = transform.Find("Capsule").GetComponent<Rigidbody>();
         rigidBody = GetComponent<Rigidbody>();
     }
 
     private void GameInput_OnPuke(object sender, System.EventArgs e)
     {
-        if (!inventory.IsEmpty())
+        Item itemToPlace = inventory.RemoveItem();
+        if (itemToPlace != null)
         {
-            Item itemToPlace = inventory.RemoveItem();
+            Debug.Log(lastDir);
             itemToPlace.MoveItem(transform.position + lastDir);
             itemToPlace.PlaceItem();
         }
     }
 
-    private void GameInput_OnInteract(object sender, System.EventArgs e)
+    private void GameInput_OnEat(object sender, System.EventArgs e)
     {
+        if (inventory.isFull())
+        {
+            return;
+        }
         // Define the ray, starting from the player's position, shooting forward
         Ray ray = new Ray(transform.position, lastDir);
         RaycastHit hit;
         float sphereRadius = 0.5f; // Adjust as needed
 
         // Perform the sphere cast
-        if (Physics.SphereCast(ray, sphereRadius, out hit, Mathf.Infinity)) // 5f is the maximum ray distance
+        if (Physics.SphereCast(ray, sphereRadius, out hit, 5f, consumable)) // 5f is the maximum ray distance
         {
             // Get the GameObject that was hit
             GameObject hitObject = hit.collider.gameObject;
-
-            // Log the object hit
-            Debug.Log("Hit object: " + hitObject.name);
-
             GameObject newItemObject = new GameObject("NewItem");  // Create a new empty GameObject
             Item newItem = newItemObject.AddComponent<Item>();     // Add the Item component
 
@@ -72,16 +77,14 @@ public class Player : MonoBehaviour
 
             newItem.Initialize(hitObject.gameObject, itemPosition, itemRotation);
 
-            // Add the newly created item to the inventory
             inventory.AddItem(newItem);
+            newItem.Collect(transform.position);
+        }
+    }
 
-            // Optional: Destroy the hit object after turning it into an inventory item
-            hitObject.SetActive(false);
-        }
-        else
-        {
-            Debug.Log("No object hit.");
-        }
+    public void ResetLevel(object sender, System.EventArgs e)
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     // Update is called once per frame
@@ -109,12 +112,12 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rigidBody.velocity += moveDir * SPEED * 0.01f;
+        rigidBody.velocity = moveDir * SPEED * 0.05f + new Vector3( 0, rigidBody.velocity.y, 0);
     }
 
     private void GroundedUpdate()
     {
-        var onGround = Physics.CheckSphere(transform.position + Vector3.down*0.75f, groundCheckRadius, groundLayer);
+        var onGround = Physics.CheckSphere(transform.position + Vector3.down * 0.75f, groundCheckRadius, groundLayer);
         if (onGround)
         {
             isGrounded = true;

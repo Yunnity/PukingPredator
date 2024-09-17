@@ -13,6 +13,10 @@ public class Inventory : MonoBehaviour
         items = new Stack<Item>();
     }
 
+    public bool isFull()
+    {
+        return items.Count >= 2 ;
+    }
     // Method to add an item to the inventory
     public void AddItem(Item item)
     {
@@ -26,12 +30,15 @@ public class Inventory : MonoBehaviour
         if (items.Count > 0)
         {
             Item removedItem = items.Pop();
-            Debug.Log("Item removed: " + removedItem.name);
+            if (removedItem.isCollecting)
+            {
+                items.Push(removedItem);
+                return null;
+            }
             return removedItem;
         }
         else
         {
-            Debug.Log("Inventory is empty!");
             return null;
         }
     }

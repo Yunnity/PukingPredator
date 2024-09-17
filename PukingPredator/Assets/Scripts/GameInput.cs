@@ -8,26 +8,33 @@ using UnityEngine.Rendering;
 public class GameInput : MonoBehaviour
 {
     private PlayerInput playerInput;
-    public EventHandler onInteractAction;
+    public EventHandler onEatAction;
     public EventHandler onPukeAction;
+    public EventHandler onResetLevelAction;
 
     public void Awake()
     {
         playerInput = new PlayerInput();
         playerInput.Player.Enable();
 
-        playerInput.Player.Action.performed += Interact_performed;
+        playerInput.Player.Action.performed += Eat_performed;
         playerInput.Player.Puke.performed += Puke_performed;
+        playerInput.Player.Reset.performed += ResetLevel_performed;
     }
 
-    private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    private void Eat_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        onInteractAction?.Invoke(this, EventArgs.Empty);
+        onEatAction?.Invoke(this, EventArgs.Empty);
     }
 
     private void Puke_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         onPukeAction?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void ResetLevel_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        onResetLevelAction?.Invoke(this, EventArgs.Empty);
     }
 
     public Vector2 GetInputVectorNormalized()
