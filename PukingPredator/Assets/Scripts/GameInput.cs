@@ -10,6 +10,7 @@ public class GameInput : MonoBehaviour
     private PlayerInput playerInput;
     public EventHandler onInteractAction;
     public EventHandler onPukeAction;
+    public EventHandler onResetAction;
 
     public void Awake()
     {
@@ -18,6 +19,7 @@ public class GameInput : MonoBehaviour
 
         playerInput.Player.Action.performed += Interact_performed;
         playerInput.Player.Puke.performed += Puke_performed;
+        playerInput.Player.Reset.performed += Reset_performed;
     }
 
     private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -28,6 +30,11 @@ public class GameInput : MonoBehaviour
     private void Puke_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         onPukeAction?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void Reset_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        onResetAction?.Invoke(this, EventArgs.Empty);
     }
 
     public Vector2 GetInputVectorNormalized()

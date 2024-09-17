@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -35,6 +36,7 @@ public class Player : MonoBehaviour
     {
         gameInput.onInteractAction += GameInput_OnInteract;
         gameInput.onPukeAction += GameInput_OnPuke;
+        gameInput.onResetAction += ResetLevel;
         //rigidBody = transform.Find("Capsule").GetComponent<Rigidbody>();
         rigidBody = GetComponent<Rigidbody>();
     }
@@ -77,8 +79,12 @@ public class Player : MonoBehaviour
 
             inventory.AddItem(newItem);
             newItem.Collect(transform.position);
-            //hitObject.SetActive(false);
         }
+    }
+
+    public void ResetLevel(object sender, System.EventArgs e)
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     // Update is called once per frame

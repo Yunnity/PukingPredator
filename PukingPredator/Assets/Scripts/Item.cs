@@ -54,9 +54,9 @@ public class Item : MonoBehaviour
             float lerpFactor = collectionTimer / 0.6f;
 
             prefab.transform.position = Vector3.Lerp(prefab.transform.position, playerPos, lerpFactor);
-            prefab.transform.localScale = Vector3.Lerp(prefab.transform.localScale, Vector3.one * 0.3f, lerpFactor);
+            prefab.transform.localScale = Vector3.Lerp(prefab.transform.localScale, Vector3.zero, lerpFactor);
 
-            if (lerpFactor >= 1f)
+            if (lerpFactor >= 0.8f)
             {
                 collectionTimer = 0f;
                 prefab.SetActive(false);
