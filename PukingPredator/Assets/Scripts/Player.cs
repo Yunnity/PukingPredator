@@ -21,6 +21,8 @@ public class Player : MonoBehaviour
 
     private Vector3 moveDir;
 
+    private Vector3 moveDir;
+
     [SerializeField]
     private bool isGrounded;
     private Coroutine ungroundedCoroutine = null;
