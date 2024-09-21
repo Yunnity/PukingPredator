@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
@@ -9,8 +7,6 @@ public class Player : MonoBehaviour
     [SerializeField] private GameInput gameInput;
     [SerializeField] private Inventory inventory;
     [SerializeField] private LayerMask consumable;
-
-    private Vector3 lastDir;
 
     const float SPEED = 200;
 
@@ -32,34 +28,32 @@ public class Player : MonoBehaviour
         get => isGrounded && !isJumpOnCooldown;
     }
 
+    private float pukeDistance = 2f;
+
     private void Start()
     {
         gameInput.onEatAction += GameInput_OnEat;
         gameInput.onPukeAction += GameInput_OnPuke;
         gameInput.onResetLevelAction += ResetLevel;
-        //rigidBody = transform.Find("Capsule").GetComponent<Rigidbody>();
         rigidBody = GetComponent<Rigidbody>();
     }
 
     private void GameInput_OnPuke(object sender, System.EventArgs e)
     {
-        Item itemToPlace = inventory.RemoveItem();
-        if (itemToPlace != null)
-        {
-            Debug.Log(lastDir);
-            itemToPlace.MoveItem(transform.position + lastDir);
-            itemToPlace.PlaceItem();
-        }
+        Item itemToPlace = inventory.PopItem();
+
+        if (itemToPlace is null) { return; }
+
+        var pukeDir = transform.forward;
+        itemToPlace.PlaceAt(transform.position + pukeDir*pukeDistance);
     }
 
     private void GameInput_OnEat(object sender, System.EventArgs e)
     {
-        if (inventory.isFull)
-        {
-            return;
-        }
+        if (inventory.isFull) { return; }
+
         // Define the ray, starting from the player's position, shooting forward
-        Ray ray = new Ray(transform.position, lastDir);
+        Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
         float sphereRadius = 0.5f; // Adjust as needed
 
@@ -72,13 +66,9 @@ public class Player : MonoBehaviour
             Item newItem = newItemObject.AddComponent<Item>();     // Add the Item component
 
             // Initialize the item with properties from the hit object
-            Vector3 itemPosition = hitObject.transform.position;
-            Quaternion itemRotation = hitObject.transform.rotation;
+            newItem.Initialize(hitObject.gameObject, gameObject);
 
-            newItem.Initialize(hitObject.gameObject, itemPosition, itemRotation);
-
-            inventory.AddItem(newItem);
-            newItem.Collect(transform.position);
+            inventory.PushItem(newItem);
         }
     }
 
@@ -95,11 +85,6 @@ public class Player : MonoBehaviour
 
         float turnSpeed = 10f;
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
-
-        if (moveDir != Vector3.zero)
-        {
-            lastDir = moveDir;
-        }
 
         GroundedUpdate();
         if (canJump && Input.GetButton("Jump"))

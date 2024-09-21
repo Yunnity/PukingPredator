@@ -45,7 +45,7 @@ public class Inventory : MonoBehaviour
     /// Add an item to the inventory
     /// </summary>
     /// <param name="item">The item to be added.</param>
-    public void AddItem(Item item)
+    public void PushItem(Item item)
     {
         items.Insert(0, item);
         Debug.Log($"Item added: {item.name}");
@@ -55,13 +55,13 @@ public class Inventory : MonoBehaviour
     /// Remove an item from the inventory and return it.
     /// </summary>
     /// <returns>The last item added to the inventory.</returns>
-    public Item RemoveItem()
+    public Item PopItem()
     {
         if (isEmpty) { return null; }
 
         var topOfStack = items[0];
 
-        if (topOfStack.isCollecting) { return null; }
+        if (topOfStack.state != ItemState.inInventory) { return null; }
 
         items.RemoveAt(0);
         return topOfStack;

@@ -1,74 +1,117 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+public enum ItemState
+{
+    beingConsumed,
+    inInventory,
+    beingPuked,
+}
 public class Item : MonoBehaviour
 {
-    private GameObject prefab;
-    private Rigidbody rigidBody;
+    /// <summary>
+    /// The lerp factor used when shrinking items.
+    /// </summary>
+    [SerializeField]
+    private float consumptionRate = 0.025f;
 
-    private Vector3 position;
-    private Quaternion rotation;
+    /// <summary>
+    /// The relative scale at which an object will be treated as consumed.
+    /// ie 0.05 means 5% of original size.
+    /// </summary>
+    private float consumptionCutoff = 0.05f;
 
-    private Vector3 playerPos;
+    /// <summary>
+    /// The initial scale of the instance before being eaten. Used to restore
+    /// its size to normal after being puked.
+    /// </summary>
     private Vector3 initialScale;
-    
-    public bool isCollecting = false;
-    float collectionTimer = 0f;
 
-    public void PlaceItem()
-    {
-        if (isCollecting) {  return; }
-        prefab.SetActive(true);
-    }
+    /// <summary>
+    /// The game object for this item in the inventory. It may be inactive or
+    /// active.
+    /// </summary>
+    private GameObject instance;
 
-    public void MoveItem(Vector3 position)
-    {
-        prefab.transform.position = position;
-    }
+    /// <summary>
+    /// The entity that is holding the item.
+    /// </summary>
+    private GameObject owner;
 
-    public void Initialize(GameObject newPrefab, Vector3 newPosition, Quaternion newRotation)
-    {
-        prefab = newPrefab;
-        initialScale = prefab.transform.localScale;
-        rigidBody = prefab.GetComponent<Rigidbody>();
+    /// <summary>
+    /// If the item is entering, leaving, or sitting in the inventory.
+    /// </summary>
+    public ItemState state = ItemState.beingConsumed;
 
-        position = newPosition;
-        rotation = newRotation == default ? Quaternion.identity : newRotation;
-    }
 
-    public void Collect(Vector3 pos)
-    {
-        playerPos = pos;
-        isCollecting = true;
-    }
 
     public void Update()
     {
-        if (isCollecting)
+        switch(state)
         {
-            collectionTimer += Time.deltaTime;
-            float lerpFactor = collectionTimer / 0.6f;
+            case ItemState.inInventory:
+                return;
 
-            prefab.transform.position = Vector3.Lerp(prefab.transform.position, playerPos, lerpFactor);
-            prefab.transform.localScale = Vector3.Lerp(prefab.transform.localScale, Vector3.zero, lerpFactor);
+            case ItemState.beingConsumed:
+                var ownerPosition = owner.transform.position;
+                instance.transform.position = Vector3.Lerp(instance.transform.position, ownerPosition, consumptionRate);
+                instance.transform.localScale = Vector3.Lerp(instance.transform.localScale, Vector3.zero, consumptionRate);
 
-            if (lerpFactor >= 0.8f)
-            {
-                collectionTimer = 0f;
-                prefab.SetActive(false);
-
-                prefab.transform.localScale = initialScale;
-                prefab.transform.rotation = Quaternion.identity;
-
-                if (rigidBody != null)
+                var hasBeenConsumed = instance.transform.localScale.magnitude / initialScale.magnitude < consumptionCutoff;
+                if (hasBeenConsumed)
                 {
-                    rigidBody.velocity = Vector3.zero;
-                    rigidBody.angularVelocity = Vector3.zero;
+                    instance.SetActive(false);
+                    state = ItemState.inInventory;
                 }
 
-                isCollecting = false;
-            }
+                break;
+
+            case ItemState.beingPuked:
+                //TODO: implement gradual puking
+                break;
         }
+
     }
+
+
+
+    /// <summary>
+    /// Set up the inventory item.
+    /// </summary>
+    /// <param name="itemInstance"></param>
+    /// <param name="itemOwner"></param>
+    public void Initialize(GameObject itemInstance, GameObject itemOwner)
+    {
+        instance = itemInstance;
+        owner = itemOwner;
+
+        // Store the scale so it can later be used to return the object to the
+        // right size
+        initialScale = instance.transform.localScale;
+
+    }
+
+    /// <summary>
+    /// Moves the item to the position and reactivates it.
+    /// </summary>
+    /// <param name="position"></param>
+    public void PlaceAt(Vector3 position)
+    {
+        if (state != ItemState.inInventory) { return; }
+
+        instance.transform.localScale = initialScale;
+        //TODO: we should probably undo this at some point OR make it so you have control over the rotation
+        instance.transform.rotation = Quaternion.identity;
+
+        //reset the velocity 
+        var rigidBody = instance.GetComponent<Rigidbody>();
+        if (rigidBody != null)
+        {
+            rigidBody.velocity = Vector3.zero;
+            rigidBody.angularVelocity = Vector3.zero;
+        }
+
+        instance.transform.position = position;
+        instance.SetActive(true);
+    }
+
 }
