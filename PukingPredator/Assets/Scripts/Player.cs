@@ -54,7 +54,7 @@ public class Player : MonoBehaviour
 
     private void GameInput_OnEat(object sender, System.EventArgs e)
     {
-        if (inventory.isFull())
+        if (inventory.isFull)
         {
             return;
         }
