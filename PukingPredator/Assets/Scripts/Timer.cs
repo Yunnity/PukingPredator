@@ -7,8 +7,8 @@ using UnityEngine.Events;
 public class Timer : MonoBehaviour
 {
     public float duration = 0f;
-    private float timeRemaining;
     private bool isRunning = false;
+    private float timeRemaining;
 
     public EventHandler OnTimerComplete;
 

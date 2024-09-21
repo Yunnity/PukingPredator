@@ -17,43 +17,26 @@ public class Item : MonoBehaviour
     float collectionTimer = 0f;
     Timer timer;
 
-    public void Start()
-    {
-        timer = gameObject.AddComponent<Timer>();
-        timer.Init(1f);
-        timer.OnTimerComplete += StartDecay;
-    }
-
     public void StartDecay(object sender, System.EventArgs e)
     {
-        StartCoroutine(Decay());
-    }
-
-    private System.Collections.IEnumerator Decay()
-    {
-        MeshRenderer objectRenderer = prefab.GetComponent<MeshRenderer>();
-        Color initialColor = objectRenderer.material.color;
-        float elapsedTime = 0f;
-        float decayDuration = 5f;
-
-        while (elapsedTime < decayDuration)
+        if (prefab == null) { return; }
+        ItemReplace replacement = prefab.GetComponent<ItemReplace>();
+        // Checks if theres an item that will replace the current one after the decay
+        if (replacement != null)
         {
-            float t = elapsedTime / decayDuration;
-            objectRenderer.material.color = Color.Lerp(initialColor, new Color(0, 1, 0, 0), t);
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
+            if (!replacement.Replace()) {
+                prefab.SetActive(false);
+            };
+        } else
+        {
+            prefab.SetActive(false);
         }
-
-        objectRenderer.material.color = new Color(0, 1, 0, 0);
-        prefab.SetActive(false);
     }
 
     public void PlaceItem()
     {
         if (isCollecting) {  return; }
         prefab.SetActive(true);
-        timer.StartTimer();
     }
 
     public void MoveItem(Vector3 position)
@@ -75,6 +58,11 @@ public class Item : MonoBehaviour
     {
         playerPos = pos;
         isCollecting = true;
+
+        timer = gameObject.AddComponent<Timer>();
+        timer.Init(5f);
+        timer.OnTimerComplete += StartDecay;
+        timer.StartTimer();
     }
 
     public void Update()
