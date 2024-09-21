@@ -6,6 +6,14 @@ public enum ItemState
     inInventory,
     beingPuked,
 }
+
+public enum ItemSize
+{
+    small,
+    medium,
+    large
+}
+
 public class Item : MonoBehaviour
 {
     /// <summary>
@@ -41,6 +49,12 @@ public class Item : MonoBehaviour
     /// If the item is entering, leaving, or sitting in the inventory.
     /// </summary>
     public ItemState state { get; private set; } = ItemState.beingConsumed;
+
+    /// <summary>
+    /// Size of the item, affects mass of the player
+    /// </summary>
+    /// TODO: vary sizes
+    public ItemSize size { get; private set; } = ItemSize.small;
 
 
 

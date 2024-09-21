@@ -4,16 +4,29 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    [SerializeField] private Transform player;
+    [SerializeField] private GameObject player;
+    [SerializeField] private Transform playerTransform;
+    [SerializeField] private float sensitivity;
+
+    private Vector3 finalOffset;
 
     void Start()
     {
-        if (player == null) player = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Transform>();
+        Cursor.lockState = CursorLockMode.Locked;
+        if (player == null) player = GameObject.FindGameObjectsWithTag("Player")[0];
+        finalOffset = transform.position - player.transform.position;
     }
 
-    // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        transform.position = player.transform.position + new Vector3(0, 15, -15);
+        Rotate();
+        transform.position = Vector3.Lerp(transform.position, player.transform.position + finalOffset, 0.25f);
+        transform.LookAt(player.transform.position);
+    }
+
+    void Rotate()
+    {
+        finalOffset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * sensitivity, Vector3.up) * finalOffset;
+        
     }
 }
