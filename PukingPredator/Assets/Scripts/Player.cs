@@ -7,13 +7,13 @@ public class Player : MonoBehaviour
     [SerializeField] private GameInput gameInput;
     [SerializeField] private Inventory inventory;
     [SerializeField] private LayerMask consumable;
-
-    const float SPEED = 200;
+    [SerializeField] private GameObject playerCamera;
 
     public float groundCheckRadius = 0.5f; // Radius of the sphere
     public LayerMask groundLayer; // Layer of ground objects
     private Rigidbody rigidBody;
-    private float jumpForce = 350f;
+    private float moveSpeed = 10f;
+    private float jumpForce = 7f;
 
     private Vector3 moveDir;
 
@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
         gameInput.onPukeAction += GameInput_OnPuke;
         gameInput.onResetLevelAction += ResetLevel;
         rigidBody = GetComponent<Rigidbody>();
+        playerCamera = playerCamera == null ? GameObject.FindGameObjectsWithTag("MainCamera")[0] : playerCamera;
     }
 
     private void GameInput_OnPuke(object sender, System.EventArgs e)
@@ -46,6 +47,10 @@ public class Player : MonoBehaviour
 
         var pukeDir = transform.forward;
         itemToPlace.PlaceAt(transform.position + pukeDir*pukeDistance);
+
+        // increase move speed and jump force of player
+        // TODO make values dynamic (?)
+        AlterMovement(itemToPlace, -1);
     }
 
     private void GameInput_OnEat(object sender, System.EventArgs e)
@@ -65,10 +70,13 @@ public class Player : MonoBehaviour
             GameObject newItemObject = new GameObject("NewItem");  // Create a new empty GameObject
             Item newItem = newItemObject.AddComponent<Item>();     // Add the Item component
 
-            // Initialize the item with properties from the hit object
+            // Initialize the item with properties from the hit object and push it to the inventory
             newItem.Initialize(hitObject.gameObject, gameObject);
-
             inventory.PushItem(newItem);
+
+            // lower move speed and jump force of player
+            // TODO make values dynamic (would be more intuitive); alter mass and drag instead? (makes a difference for collisions and falling)
+            AlterMovement(newItem, 1);
         }
     }
 
@@ -81,7 +89,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         Vector2 inputVector = gameInput.GetInputVectorNormalized();
-        moveDir = new Vector3(inputVector.x, 0, inputVector.y);
+        moveDir = Quaternion.Euler(0, playerCamera.transform.eulerAngles.y, 0) * new Vector3(inputVector.x, 0, inputVector.y);
 
         float turnSpeed = 10f;
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
@@ -90,14 +98,14 @@ public class Player : MonoBehaviour
         if (canJump && Input.GetButton("Jump"))
         {
             Debug.Log("jumping");
-            rigidBody.AddForce(Vector3.up * jumpForce);
+            rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             StartCoroutine(ApplyJumpCooldown());
         }
     }
 
     private void FixedUpdate()
     {
-        rigidBody.velocity = moveDir * SPEED * 0.05f + new Vector3( 0, rigidBody.velocity.y, 0);
+        rigidBody.velocity = moveDir * moveSpeed + new Vector3( 0, rigidBody.velocity.y, 0);
     }
 
     private void GroundedUpdate()
@@ -130,6 +138,27 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(delay);
         isGrounded = false;
         ungroundedCoroutine = null;
+    }
+
+    private void AlterMovement(Item item, int isEating)
+    {
+        switch (item.size)
+        {
+            case ItemSize.small:
+                moveSpeed -= 1f * isEating;
+                jumpForce -= 1f * isEating;
+                break;
+
+            case ItemSize.medium:
+                moveSpeed -= 1.5f * isEating;
+                jumpForce -= 1.5f * isEating;
+                break;
+
+            case ItemSize.large:
+                moveSpeed -= 2f * isEating;
+                jumpForce -= 2f * isEating;
+                break;
+        }
     }
 
 }
