@@ -1,57 +1,70 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    // Stack to store items in the inventory
-    private Stack<Item> items;
-
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// If the inventory is empty.
+    /// </summary>
+    public bool isEmpty
     {
-        items = new Stack<Item>();
+        get => items.Count == 0;
     }
 
-    public bool isFull()
+    /// <summary>
+    /// If the inventory is full.
+    /// </summary>
+    public bool isFull
     {
-        return items.Count >= 2 ;
-    }
-    // Method to add an item to the inventory
-    public void AddItem(Item item)
-    {
-        items.Push(item);
-        Debug.Log("Item added: " + item.name);
+        get => items.Count >= maxCount;
     }
 
-    // Method to remove the last added item from the inventory
-    public Item RemoveItem()
+    /// <summary>
+    /// The number of items in the inventory.
+    /// </summary>
+    public int itemCount
     {
-        if (items.Count > 0)
-        {
-            Item removedItem = items.Pop();
-            if (removedItem.isCollecting)
-            {
-                items.Push(removedItem);
-                return null;
-            }
-            return removedItem;
-        }
-        else
-        {
-            return null;
-        }
+        get => items.Count;
     }
 
-    // Check if the inventory is empty
-    public bool IsEmpty()
+    /// <summary>
+    /// Stack to store the items in the inventory.
+    /// </summary>
+    [SerializeField]
+    private List<Item> items = new();
+
+    /// <summary>
+    /// The max number of items that can be held at once.
+    /// </summary>
+    [SerializeField]
+    private int maxCount = 2;
+
+
+
+    /// <summary>
+    /// Add an item to the inventory
+    /// </summary>
+    /// <param name="item">The item to be added.</param>
+    public void PushItem(Item item)
     {
-        return items.Count == 0;
+        items.Insert(0, item);
+        Debug.Log($"Item added: {item.name}");
     }
 
-    // Get the current number of items in the inventory
-    public int ItemCount()
+    /// <summary>
+    /// Remove an item from the inventory and return it.
+    /// </summary>
+    /// <returns>The last item added to the inventory.</returns>
+    public Item PopItem()
     {
-        return items.Count;
+        if (isEmpty) { return null; }
+
+        var topOfStack = items[0];
+
+        if (topOfStack.state != ItemState.inInventory) { return null; }
+
+        items.RemoveAt(0);
+        return topOfStack;
     }
+
 }
