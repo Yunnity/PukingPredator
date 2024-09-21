@@ -40,7 +40,7 @@ public class Item : MonoBehaviour
     /// <summary>
     /// If the item is entering, leaving, or sitting in the inventory.
     /// </summary>
-    public ItemState state = ItemState.beingConsumed;
+    public ItemState state { get; private set; } = ItemState.beingConsumed;
 
 
 
