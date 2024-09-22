@@ -4,6 +4,18 @@ public class ItemReplace : MonoBehaviour
 {
     public GameObject nextPrefab;
 
+    public Item GetNext()
+    {
+        GameObject replaceItemObject = new GameObject("ReplaceItem");
+        Item replaceItem = replaceItemObject.AddComponent<Item>();
+
+        GameObject replaceObject = Instantiate(nextPrefab, transform.position, transform.rotation);
+        replaceObject.SetActive(false);
+
+        replaceItem.Initialize(replaceObject, transform.position, transform.rotation);
+        return replaceItem;
+    }
+
     /// <summary>
     /// Replaces the current prefab with the specified next prefab.
     /// Returns true if the replacement was successful; otherwise, false.
@@ -12,7 +24,6 @@ public class ItemReplace : MonoBehaviour
     {
         if (nextPrefab != null)
         {
-            Debug.Log(gameObject.activeSelf);
             Vector3 position = transform.position;
             Quaternion rotation = transform.rotation;
 

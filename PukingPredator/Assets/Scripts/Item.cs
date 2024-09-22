@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    private GameObject prefab;
+    public Inventory inventory;
+
+    public GameObject prefab;
     private Rigidbody rigidBody;
 
     private Vector3 position;
@@ -21,16 +23,28 @@ public class Item : MonoBehaviour
     {
         if (prefab == null) { return; }
         ItemReplace replacement = prefab.GetComponent<ItemReplace>();
+        Item nextItem = null;
+
         // Checks if theres an item that will replace the current one after the decay
         if (replacement != null)
         {
-            if (!replacement.Replace()) {
+            nextItem = replacement.GetNext();
+            nextItem.inventory = inventory;
+        }
+
+        // Tries replacing the item in teh inventory with the new decayed item
+        if (!inventory.ReplaceItem(this, nextItem))
+        {
+            // This means the item did not decay in the player it decayed outside
+            if (replacement)
+            {
+                replacement.Replace();
+            }
+            else
+            {
                 prefab.SetActive(false);
             };
-        } else
-        {
-            prefab.SetActive(false);
-        }
+        };
     }
 
     public void PlaceItem()
