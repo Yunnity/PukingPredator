@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -53,6 +54,24 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public float totalMass => items.Select(i => i.mass).Sum();
 
+    /// <summary>
+    /// The panel that the inventory is contained in.
+    /// </summary>
+    public GameObject panel;  // The panel with the Vertical Layout Group
+    public GameObject itemUIPrefab;  // The prefab for the inventory items (Text)
+    /// <summary>
+    /// The label that says "inventory"
+    /// </summary>
+    public GameObject inventoryLabel;  // The static "Inventory" label at the bottom
+
+
+
+    private void Start()
+    {
+        onChange += UpdateUI;
+        UpdateUI();
+    }
+
 
 
     /// <summary>
@@ -84,6 +103,32 @@ public class Inventory : MonoBehaviour
         onChange?.Invoke();
 
         return topOfStack;
+    }
+
+    /// <summary>
+    /// Changes the items that are currently displayed.
+    /// </summary>
+    public void UpdateUI()
+    {
+        const string ITEM_SLOT_ID = "ItemSlotUI";
+
+        // Clear the items other than the label for the inventory
+        foreach (Transform child in panel.transform)
+        {
+            if (child.gameObject.name == ITEM_SLOT_ID)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        foreach (var item in items.AsEnumerable().Reverse())
+        {
+            GameObject newItem = Instantiate(itemUIPrefab, panel.transform);
+            newItem.name = ITEM_SLOT_ID;
+
+            var itemSlotLabel = newItem.GetComponent<TextMeshProUGUI>();
+            itemSlotLabel.text = item.instanceName;
+        }
     }
 
 }

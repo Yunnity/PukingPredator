@@ -47,6 +47,11 @@ public class Item : MonoBehaviour
     public float mass => sizeToMass[size];
 
     /// <summary>
+    /// The name of the instance associatd with the item.
+    /// </summary>
+    public string instanceName => instance is null ? "Unknown Object" : instance.name;
+
+    /// <summary>
     /// The entity that is holding the item.
     /// </summary>
     private GameObject owner;
