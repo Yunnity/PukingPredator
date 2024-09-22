@@ -1,17 +1,18 @@
+using System.Collections.Generic;
 using UnityEngine;
-
-public enum ItemState
-{
-    beingConsumed,
-    inInventory,
-    beingPuked,
-}
 
 public enum ItemSize
 {
     small,
     medium,
     large
+}
+
+public enum ItemState
+{
+    beingConsumed,
+    inInventory,
+    beingPuked,
 }
 
 public class Item : MonoBehaviour
@@ -41,20 +42,35 @@ public class Item : MonoBehaviour
     private GameObject instance;
 
     /// <summary>
+    /// The mass of an object. This is based on its size.
+    /// </summary>
+    public float mass => sizeToMass[size];
+
+    /// <summary>
     /// The entity that is holding the item.
     /// </summary>
     private GameObject owner;
-
-    /// <summary>
-    /// If the item is entering, leaving, or sitting in the inventory.
-    /// </summary>
-    public ItemState state { get; private set; } = ItemState.beingConsumed;
 
     /// <summary>
     /// Size of the item, affects mass of the player
     /// </summary>
     /// TODO: vary sizes
     public ItemSize size { get; private set; } = ItemSize.small;
+
+    /// <summary>
+    /// The mappings from sizes to masses
+    /// </summary>
+    private Dictionary<ItemSize, float> sizeToMass = new()
+    {
+        {ItemSize.small, 1f},
+        {ItemSize.medium, 1.5f},
+        {ItemSize.large, 2f},
+    };
+
+    /// <summary>
+    /// If the item is entering, leaving, or sitting in the inventory.
+    /// </summary>
+    public ItemState state { get; private set; } = ItemState.beingConsumed;
 
 
 
