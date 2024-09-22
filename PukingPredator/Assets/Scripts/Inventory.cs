@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -39,6 +41,18 @@ public class Inventory : MonoBehaviour
     [SerializeField]
     private int maxCount = 2;
 
+    /// <summary>
+    /// Triggered whenever items enter/leave the inventory or decay. This will
+    /// specifically trigger after the change has taken effect.
+    /// </summary>
+    //TODO: make this trigger when the items decay
+    public event Action onChange;
+
+    /// <summary>
+    /// The mass of all items in the inventory.
+    /// </summary>
+    public float totalMass => items.Select(i => i.mass).Sum();
+
 
 
     /// <summary>
@@ -49,6 +63,8 @@ public class Inventory : MonoBehaviour
     {
         items.Insert(0, item);
         Debug.Log($"Item added: {item.name}");
+
+        onChange?.Invoke();
     }
 
     /// <summary>
@@ -64,6 +80,9 @@ public class Inventory : MonoBehaviour
         if (topOfStack.state != ItemState.inInventory) { return null; }
 
         items.RemoveAt(0);
+
+        onChange?.Invoke();
+
         return topOfStack;
     }
 

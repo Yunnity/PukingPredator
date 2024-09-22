@@ -13,7 +13,7 @@ public class PlayerCamera : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        if (player == null) player = GameObject.FindGameObjectsWithTag("Player")[0];
+        player ??= GameObject.FindGameObjectsWithTag("Player")[0];
         finalOffset = transform.position - player.transform.position;
     }
 
