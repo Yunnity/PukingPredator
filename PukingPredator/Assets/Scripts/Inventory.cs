@@ -25,10 +25,7 @@ public class Inventory : MonoBehaviour
     /// <summary>
     /// The number of items in the inventory.
     /// </summary>
-    public int itemCount
-    {
-        get => items.Count;
-    }
+    public int itemCount => items.Count;
 
     /// <summary>
     /// The prefab used to create item slots in the inventory UI.
