@@ -11,23 +11,20 @@ public class ItemReplace : MonoBehaviour
 
     /// <summary>
     /// Replaces the current prefab with the specified next prefab.
-    /// Returns true if the replacement was successful; otherwise, false.
     /// </summary>
+    /// <returns>If the replacement was successful</returns>
     public bool Replace()
     {
-        if (nextPrefab != null)
-        {
-            Vector3 position = transform.position;
-            Quaternion rotation = transform.rotation;
+        if (nextPrefab is null) { return false; }
 
-            GameObject newPrefab = Instantiate(nextPrefab, position, rotation);
-            newPrefab.SetActive(true);
+        Vector3 position = transform.position;
+        Quaternion rotation = transform.rotation;
 
-            Destroy(gameObject);
+        GameObject newPrefab = Instantiate(nextPrefab, position, rotation);
+        newPrefab.SetActive(true);
 
-            return true;
-        }
+        Destroy(gameObject);
 
-        return false;
+        return true;
     }
 }
