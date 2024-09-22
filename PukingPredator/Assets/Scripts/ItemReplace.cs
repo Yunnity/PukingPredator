@@ -2,16 +2,12 @@ using UnityEngine;
 
 public class ItemReplace : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject nextPrefab;
-
     /// <summary>
-    /// Returns the prefab that will replace the current one
+    /// The prefab for the instance that replaces the current instance.
     /// </summary>
-    public GameObject GetNext()
-    {
-        return nextPrefab;
-    }
+    public GameObject nextPrefab { get; private set; }
+
+
 
     /// <summary>
     /// Replaces the current prefab with the specified next prefab.

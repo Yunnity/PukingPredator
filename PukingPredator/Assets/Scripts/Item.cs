@@ -177,7 +177,7 @@ public class Item : MonoBehaviour
         // Checks if theres an item that will replace the current one after the decay
         if (replacement != null)
         {
-            GameObject nextInstance = replacement.GetNext();
+            GameObject nextInstance = replacement.nextPrefab;
 
             // Creates new game object and item for the object that will replace the current
             GameObject replaceItemObject = new GameObject("ReplaceItem");
