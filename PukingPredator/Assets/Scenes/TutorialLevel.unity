@@ -800,6 +800,11 @@ PrefabInstance:
       propertyPath: playerTransform
       value: 
       objectReference: {fileID: 2102560202}
+    - target: {fileID: 3042836795401077674, guid: ffe3631cc44e34b26b4730f4088425f5,
+        type: 3}
+      propertyPath: field of view
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 4224338608034013212, guid: ffe3631cc44e34b26b4730f4088425f5,
         type: 3}
       propertyPath: m_Name
