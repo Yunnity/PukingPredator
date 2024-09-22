@@ -14,17 +14,18 @@ public class Player : MonoBehaviour
     private Rigidbody rigidBody;
     private float baseMoveSpeed = 10f;
     private float moveSpeed;
-    private float baseJumpForce = 7f;
+    private float baseJumpForce = 6f;
     private float jumpForce;
 
     private Vector3 moveDir;
 
     [SerializeField]
     private bool isGrounded;
+    [SerializeField] bool isJumpOnCooldown = false;
     private Coroutine ungroundedCoroutine = null;
-    private bool isJumpOnCooldown = false;
+    //private bool isJumpOnCooldown = false;
     private float jumpCooldown = 0.25f;
-    private float coyotteTime = 0.15f;
+    private float coyotteTime = 0.12f;
     private bool canJump
     {
         get => isGrounded && !isJumpOnCooldown;
@@ -93,9 +94,9 @@ public class Player : MonoBehaviour
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
 
         GroundedUpdate();
-        if (canJump && Input.GetButton("Jump"))
+        if (canJump && Input.GetKeyDown("space"))
         {
-            Debug.Log("jumping");
+            Debug.Log($"jumpOnCooldown = {isJumpOnCooldown}, isGrounded = {isGrounded}");
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             StartCoroutine(ApplyJumpCooldown());
         }
