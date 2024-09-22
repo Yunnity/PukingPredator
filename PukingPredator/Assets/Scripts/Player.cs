@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
@@ -9,15 +7,13 @@ public class Player : MonoBehaviour
     [SerializeField] private GameInput gameInput;
     [SerializeField] private Inventory inventory;
     [SerializeField] private LayerMask consumable;
-
-    private Vector3 lastDir;
-
-    const float SPEED = 200;
+    [SerializeField] private GameObject playerCamera;
 
     public float groundCheckRadius = 0.5f; // Radius of the sphere
     public LayerMask groundLayer; // Layer of ground objects
     private Rigidbody rigidBody;
-    private float jumpForce = 350f;
+    private float moveSpeed = 10f;
+    private float jumpForce = 7f;
 
     private Vector3 moveDir;
 
@@ -32,34 +28,37 @@ public class Player : MonoBehaviour
         get => isGrounded && !isJumpOnCooldown;
     }
 
+    private float pukeDistance = 2f;
+
     private void Start()
     {
         gameInput.onEatAction += GameInput_OnEat;
         gameInput.onPukeAction += GameInput_OnPuke;
         gameInput.onResetLevelAction += ResetLevel;
-        //rigidBody = transform.Find("Capsule").GetComponent<Rigidbody>();
         rigidBody = GetComponent<Rigidbody>();
+        playerCamera = playerCamera == null ? GameObject.FindGameObjectsWithTag("MainCamera")[0] : playerCamera;
     }
 
     private void GameInput_OnPuke(object sender, System.EventArgs e)
     {
-        Item itemToPlace = inventory.RemoveItem();
-        if (itemToPlace != null)
-        {
-            Debug.Log(lastDir);
-            itemToPlace.MoveItem(transform.position + lastDir);
-            itemToPlace.PlaceItem();
-        }
+        Item itemToPlace = inventory.PopItem();
+
+        if (itemToPlace is null) { return; }
+
+        var pukeDir = transform.forward;
+        itemToPlace.PlaceAt(transform.position + pukeDir*pukeDistance);
+
+        // increase move speed and jump force of player
+        // TODO make values dynamic (?)
+        AlterMovement(itemToPlace, -1);
     }
 
     private void GameInput_OnEat(object sender, System.EventArgs e)
     {
-        if (inventory.isFull())
-        {
-            return;
-        }
+        if (inventory.isFull) { return; }
+
         // Define the ray, starting from the player's position, shooting forward
-        Ray ray = new Ray(transform.position, lastDir);
+        Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
         float sphereRadius = 0.5f; // Adjust as needed
 
@@ -72,14 +71,13 @@ public class Player : MonoBehaviour
             Item newItem = newItemObject.AddComponent<Item>();     // Add the Item component
             newItem.inventory = inventory;
 
-            // Initialize the item with properties from the hit object
-            Vector3 itemPosition = hitObject.transform.position;
-            Quaternion itemRotation = hitObject.transform.rotation;
+            // Initialize the item with properties from the hit object and push it to the inventory
+            newItem.Initialize(hitObject.gameObject, gameObject);
+            inventory.PushItem(newItem);
 
-            newItem.Initialize(hitObject.gameObject, itemPosition, itemRotation);
-
-            inventory.AddItem(newItem);
-            newItem.Collect(transform.position);
+            // lower move speed and jump force of player
+            // TODO make values dynamic (would be more intuitive); alter mass and drag instead? (makes a difference for collisions and falling)
+            AlterMovement(newItem, 1);
         }
     }
 
@@ -92,28 +90,23 @@ public class Player : MonoBehaviour
     void Update()
     {
         Vector2 inputVector = gameInput.GetInputVectorNormalized();
-        moveDir = new Vector3(inputVector.x, 0, inputVector.y);
+        moveDir = Quaternion.Euler(0, playerCamera.transform.eulerAngles.y, 0) * new Vector3(inputVector.x, 0, inputVector.y);
 
         float turnSpeed = 10f;
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
-
-        if (moveDir != Vector3.zero)
-        {
-            lastDir = moveDir;
-        }
 
         GroundedUpdate();
         if (canJump && Input.GetButton("Jump"))
         {
             Debug.Log("jumping");
-            rigidBody.AddForce(Vector3.up * jumpForce);
+            rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             StartCoroutine(ApplyJumpCooldown());
         }
     }
 
     private void FixedUpdate()
     {
-        rigidBody.velocity = moveDir * SPEED * 0.05f + new Vector3( 0, rigidBody.velocity.y, 0);
+        rigidBody.velocity = moveDir * moveSpeed + new Vector3( 0, rigidBody.velocity.y, 0);
     }
 
     private void GroundedUpdate()
@@ -146,6 +139,27 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(delay);
         isGrounded = false;
         ungroundedCoroutine = null;
+    }
+
+    private void AlterMovement(Item item, int isEating)
+    {
+        switch (item.size)
+        {
+            case ItemSize.small:
+                moveSpeed -= 1f * isEating;
+                jumpForce -= 1f * isEating;
+                break;
+
+            case ItemSize.medium:
+                moveSpeed -= 1.5f * isEating;
+                jumpForce -= 1.5f * isEating;
+                break;
+
+            case ItemSize.large:
+                moveSpeed -= 2f * isEating;
+                jumpForce -= 2f * isEating;
+                break;
+        }
     }
 
 }
