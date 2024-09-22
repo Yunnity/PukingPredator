@@ -792,6 +792,11 @@ PrefabInstance:
       objectReference: {fileID: 1491875063}
     - target: {fileID: 772070024568196264, guid: ffe3631cc44e34b26b4730f4088425f5,
         type: 3}
+      propertyPath: sensitivity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 772070024568196264, guid: ffe3631cc44e34b26b4730f4088425f5,
+        type: 3}
       propertyPath: playerTransform
       value: 
       objectReference: {fileID: 2102560202}
@@ -808,12 +813,12 @@ PrefabInstance:
     - target: {fileID: 5016651992623044816, guid: ffe3631cc44e34b26b4730f4088425f5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 15
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5016651992623044816, guid: ffe3631cc44e34b26b4730f4088425f5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -15
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 5016651992623044816, guid: ffe3631cc44e34b26b4730f4088425f5,
         type: 3}
