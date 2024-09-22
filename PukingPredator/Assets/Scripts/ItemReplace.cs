@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class ItemReplace : MonoBehaviour
 {
-    public GameObject nextPrefab;
+    [SerializeField]
+    private GameObject nextPrefab;
 
     /// <summary>
     /// Returns the prefab that will replace the current one

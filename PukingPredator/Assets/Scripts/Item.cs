@@ -80,6 +80,13 @@ public class Item : MonoBehaviour
     Timer timer;
     public void Update()
     {
+        // Handles the case if you start consuming as soon as an item is destroyed
+        if (instance == null)
+        {
+            if (gameObject) Destroy(gameObject);
+            return;
+        }
+
         switch (state)
         {
             case ItemState.inInventory:
@@ -135,6 +142,11 @@ public class Item : MonoBehaviour
     public void PlaceAt(Vector3 position)
     {
         if (state != ItemState.inInventory) { return; }
+        if (instance == null)
+        {
+            if (gameObject) Destroy(gameObject);
+            return;
+        }
 
         instance.transform.localScale = initialScale;
         //TODO: we should probably undo this at some point OR make it so you have control over the rotation
