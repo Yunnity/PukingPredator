@@ -4,16 +4,12 @@ public class ItemReplace : MonoBehaviour
 {
     public GameObject nextPrefab;
 
-    public Item GetNext()
+    /// <summary>
+    /// Returns the prefab that will replace the current one
+    /// </summary>
+    public GameObject GetNext()
     {
-        GameObject replaceItemObject = new GameObject("ReplaceItem");
-        Item replaceItem = replaceItemObject.AddComponent<Item>();
-
-        GameObject replaceObject = Instantiate(nextPrefab, transform.position, transform.rotation);
-        replaceObject.SetActive(false);
-
-        replaceItem.Initialize(replaceObject, transform.position, transform.rotation);
-        return replaceItem;
+        return nextPrefab;
     }
 
     /// <summary>
@@ -28,6 +24,8 @@ public class ItemReplace : MonoBehaviour
             Quaternion rotation = transform.rotation;
 
             GameObject newPrefab = Instantiate(nextPrefab, position, rotation);
+            newPrefab.SetActive(true);
+
             Destroy(gameObject);
 
             return true;

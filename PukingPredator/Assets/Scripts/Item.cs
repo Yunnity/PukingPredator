@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum ItemState
@@ -16,8 +17,11 @@ public enum ItemSize
 
 public class Item : MonoBehaviour
 {
-    private GameObject prefab;
-    private Rigidbody rigidBody;
+    /// <summary>
+    /// The lerp factor used when shrinking items.
+    /// </summary>
+    [SerializeField]
+    private float consumptionRate = 0.25f;
 
     /// <summary>
     /// The relative scale at which an object will be treated as consumed.
@@ -30,19 +34,28 @@ public class Item : MonoBehaviour
     /// its size to normal after being puked.
     /// </summary>
     private Vector3 initialScale;
-    
-    public bool isCollecting = false;
-    float collectionTimer = 0f;
+
+    /// <summary>
+    /// The game object for this item in the inventory. It may be inactive or
+    /// active.
+    /// </summary>
+    private GameObject instance;
+
+    /// <summary>
+    /// Reference to the inventory this item belongs to
+    /// </summary>
+    public Inventory inventory;
+
+    /// <summary>
+    /// The mass of an object. This is based on its size.
+    /// </summary>
+    public float mass => sizeToMass[size];
 
     /// <summary>
     /// The entity that is holding the item.
     /// </summary>
     private GameObject owner;
 
-    /// <summary>
-    /// If the item is entering, leaving, or sitting in the inventory.
-    /// </summary>
-    public ItemState state { get; private set; } = ItemState.beingConsumed;
 
     /// <summary>
     /// Size of the item, affects mass of the player
@@ -50,11 +63,25 @@ public class Item : MonoBehaviour
     /// TODO: vary sizes
     public ItemSize size { get; private set; } = ItemSize.small;
 
+    /// <summary>
+    /// The mappings from sizes to masses
+    /// </summary>
+    private Dictionary<ItemSize, float> sizeToMass = new()
+    {
+        {ItemSize.small, 1f},
+        {ItemSize.medium, 1.5f},
+        {ItemSize.large, 2f},
+    };
 
+    /// <summary>
+    /// If the item is entering, leaving, or sitting in the inventory.
+    /// </summary>
+    public ItemState state { get; private set; } = ItemState.beingConsumed;
 
+    Timer timer;
     public void Update()
     {
-        switch(state)
+        switch (state)
         {
             case ItemState.inInventory:
                 return;
@@ -67,6 +94,7 @@ public class Item : MonoBehaviour
                 var hasBeenConsumed = instance.transform.localScale.magnitude / initialScale.magnitude < consumptionCutoff;
                 if (hasBeenConsumed)
                 {
+                    timer.StartTimer();
                     instance.SetActive(false);
                     state = ItemState.inInventory;
                 }
@@ -78,10 +106,6 @@ public class Item : MonoBehaviour
                 break;
         }
 
-    public void Collect(Vector3 pos)
-    {
-        playerPos = pos;
-        isCollecting = true;
     }
 
 
@@ -99,7 +123,10 @@ public class Item : MonoBehaviour
         // Store the scale so it can later be used to return the object to the
         // right size
         initialScale = instance.transform.localScale;
-
+        
+        timer = gameObject.AddComponent<Timer>();
+        timer.Init(5f);
+        timer.OnTimerComplete += StartDecay;
     }
 
     /// <summary>
@@ -126,4 +153,44 @@ public class Item : MonoBehaviour
         instance.SetActive(true);
     }
 
+    /// <summary>
+    /// Replaces the current item with the decayed item or destroys it if there
+    /// is no such item
+    /// </summary>
+    public void StartDecay(object sender, System.EventArgs e)
+    {
+        if (instance == null) { return; }
+        ItemReplace replacement = instance.GetComponent<ItemReplace>();
+        Item nextItem = null;
+
+        // Checks if theres an item that will replace the current one after the decay
+        if (replacement != null)
+        {
+            GameObject nextInstance = replacement.GetNext();
+
+            // Creates new game object and item for the object that will replace the current
+            GameObject replaceItemObject = new GameObject("ReplaceItem");
+            nextItem = replaceItemObject.AddComponent<Item>();
+
+            GameObject replaceObject = Instantiate(nextInstance, transform.position, transform.rotation);
+            replaceObject.SetActive(false);
+
+            nextItem.Initialize(replaceObject, owner);
+            nextItem.inventory = inventory;
+        }
+
+        // Tries replacing the item in the inventory with the new decayed item
+        if (!inventory.ReplaceItem(this, nextItem))
+        {
+            // This means the item did not decay in the player it decayed outside
+            if (replacement)
+            {
+                replacement.Replace();
+            }
+            else
+            {
+                Destroy(instance);
+            };
+        };
+    }
 }
