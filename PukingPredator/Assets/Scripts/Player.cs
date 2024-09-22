@@ -12,8 +12,10 @@ public class Player : MonoBehaviour
     public float groundCheckRadius = 0.5f; // Radius of the sphere
     public LayerMask groundLayer; // Layer of ground objects
     private Rigidbody rigidBody;
-    private float moveSpeed = 10f;
-    private float jumpForce = 7f;
+    private float baseMoveSpeed = 10f;
+    private float moveSpeed;
+    private float baseJumpForce = 7f;
+    private float jumpForce;
 
     private Vector3 moveDir;
 
@@ -35,6 +37,10 @@ public class Player : MonoBehaviour
         gameInput.onEatAction += GameInput_OnEat;
         gameInput.onPukeAction += GameInput_OnPuke;
         gameInput.onResetLevelAction += ResetLevel;
+
+        inventory.onChange += UpdateMovementAttributes;
+        UpdateMovementAttributes();
+
         rigidBody = GetComponent<Rigidbody>();
         playerCamera = playerCamera == null ? GameObject.FindGameObjectsWithTag("MainCamera")[0] : playerCamera;
     }
@@ -47,10 +53,6 @@ public class Player : MonoBehaviour
 
         var pukeDir = transform.forward;
         itemToPlace.PlaceAt(transform.position + pukeDir*pukeDistance);
-
-        // increase move speed and jump force of player
-        // TODO make values dynamic (?)
-        AlterMovement(itemToPlace, -1);
     }
 
     private void GameInput_OnEat(object sender, System.EventArgs e)
@@ -74,10 +76,6 @@ public class Player : MonoBehaviour
             // Initialize the item with properties from the hit object and push it to the inventory
             newItem.Initialize(hitObject.gameObject, gameObject);
             inventory.PushItem(newItem);
-
-            // lower move speed and jump force of player
-            // TODO make values dynamic (would be more intuitive); alter mass and drag instead? (makes a difference for collisions and falling)
-            AlterMovement(newItem, 1);
         }
     }
 
@@ -141,25 +139,14 @@ public class Player : MonoBehaviour
         ungroundedCoroutine = null;
     }
 
-    private void AlterMovement(Item item, int isEating)
+    private void UpdateMovementAttributes()
     {
-        switch (item.size)
-        {
-            case ItemSize.small:
-                moveSpeed -= 1f * isEating;
-                jumpForce -= 1f * isEating;
-                break;
+        //TODO: make values dynamic (would be more intuitive); alter mass and drag instead? (makes a difference for collisions and falling)
 
-            case ItemSize.medium:
-                moveSpeed -= 1.5f * isEating;
-                jumpForce -= 1.5f * isEating;
-                break;
+        var totalItemMass = inventory.totalMass;
 
-            case ItemSize.large:
-                moveSpeed -= 2f * isEating;
-                jumpForce -= 2f * isEating;
-                break;
-        }
+        moveSpeed = baseMoveSpeed - totalItemMass;
+        jumpForce = baseJumpForce - totalItemMass;
     }
 
 }

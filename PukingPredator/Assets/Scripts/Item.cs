@@ -1,18 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemState
-{
-    beingConsumed,
-    inInventory,
-    beingPuked,
-}
-
 public enum ItemSize
 {
     small,
     medium,
     large
+}
+
+public enum ItemState
+{
+    beingConsumed,
+    inInventory,
+    beingPuked,
 }
 
 public class Item : MonoBehaviour
@@ -55,7 +55,6 @@ public class Item : MonoBehaviour
     /// The entity that is holding the item.
     /// </summary>
     private GameObject owner;
-
 
     /// <summary>
     /// Size of the item, affects mass of the player
