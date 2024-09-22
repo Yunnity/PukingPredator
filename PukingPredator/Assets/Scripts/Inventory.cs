@@ -9,18 +9,12 @@ public class Inventory : MonoBehaviour
     /// <summary>
     /// If the inventory is empty.
     /// </summary>
-    public bool isEmpty
-    {
-        get => items.Count == 0;
-    }
+    public bool isEmpty => items.Count == 0;
 
     /// <summary>
     /// If the inventory is full.
     /// </summary>
-    public bool isFull
-    {
-        get => items.Count >= maxCount;
-    }
+    public bool isFull => items.Count >= maxCount;
 
     /// <summary>
     /// The number of items in the inventory.
