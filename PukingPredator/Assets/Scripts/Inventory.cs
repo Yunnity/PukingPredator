@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -46,6 +47,11 @@ public class Inventory : MonoBehaviour
     /// </summary>
     //TODO: make this trigger when the items decay
     public event Action onChange;
+
+    /// <summary>
+    /// The mass of all items in the inventory.
+    /// </summary>
+    public float totalMass => items.Select(i => i.mass).Sum();
 
 
 
