@@ -912,6 +912,32 @@ PrefabInstance:
       propertyPath: m_PlayOnAwake
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2990891393853639730, guid: 896d9874d44b1764097762f9350055cf,
+        type: 3}
+      propertyPath: m_Height
+      value: 1.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990891393853639730, guid: 896d9874d44b1764097762f9350055cf,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990891393853639730, guid: 896d9874d44b1764097762f9350055cf,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990891393853639730, guid: 896d9874d44b1764097762f9350055cf,
+        type: 3}
+      propertyPath: m_Center.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990891393853639730, guid: 896d9874d44b1764097762f9350055cf,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 7e290163a6c784e4095fa9ae4438f436,
+        type: 2}
     - target: {fileID: 5441739923584274610, guid: 896d9874d44b1764097762f9350055cf,
         type: 3}
       propertyPath: m_Name
