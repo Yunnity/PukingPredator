@@ -31,6 +31,11 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
+    /// The prefab used to create item slots in the inventory UI.
+    /// </summary>
+    public GameObject itemUIPrefab;
+
+    /// <summary>
     /// Stack to store the items in the inventory.
     /// </summary>
     [SerializeField]
@@ -50,19 +55,14 @@ public class Inventory : MonoBehaviour
     public event Action onChange;
 
     /// <summary>
+    /// The panel that the inventory is contained in.
+    /// </summary>
+    public GameObject panel;
+
+    /// <summary>
     /// The mass of all items in the inventory.
     /// </summary>
     public float totalMass => items.Select(i => i.mass).Sum();
-
-    /// <summary>
-    /// The panel that the inventory is contained in.
-    /// </summary>
-    public GameObject panel;  // The panel with the Vertical Layout Group
-    public GameObject itemUIPrefab;  // The prefab for the inventory items (Text)
-    /// <summary>
-    /// The label that says "inventory"
-    /// </summary>
-    public GameObject inventoryLabel;  // The static "Inventory" label at the bottom
 
 
 
