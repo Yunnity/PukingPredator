@@ -129,38 +129,34 @@ public class Item : MonoBehaviour
     public void Decay()
     {
         if (instance == null) { return; }
+
         ItemReplace replacement = instance.GetComponent<ItemReplace>();
-        Item nextItem = null;
-
-        // Checks if theres an item that will replace the current one after the decay
-        if (replacement != null)
+        if (replacement is null)
         {
-            GameObject nextInstance = replacement.nextPrefab;
-
-            // Creates new game object and item for the object that will replace the current
-            GameObject replaceItemObject = new GameObject("ReplaceItem");
-            nextItem = replaceItemObject.AddComponent<Item>();
-
-            GameObject replaceObject = Instantiate(nextInstance, transform.position, transform.rotation);
-            replaceObject.SetActive(false);
-
-            nextItem.Initialize(replaceObject, owner);
-            nextItem.inventory = inventory;
+            inventory?.RemoveItem(this);
         }
-
-        // Tries replacing the item in the inventory with the new decayed item
-        if (!inventory.ReplaceItem(this, nextItem))
+        else
         {
-            // This means the item did not decay in the player it decayed outside
-            if (replacement)
+            GameObject replaceObject = Instantiate(replacement.nextPrefab, transform.position, transform.rotation);
+
+            if (inventory is null)
             {
                 replacement.Replace();
             }
             else
             {
-                Destroy(instance);
-            };
-        };
+                // Creates new game object and item for the object that will replace the current
+                var replaceItemObject = new GameObject("ReplaceItem");
+                var newItem = replaceItemObject.AddComponent<Item>();
+
+                replaceObject.SetActive(false);
+                newItem.Initialize(replaceObject, owner);
+                inventory.ReplaceItem(this, newItem);
+            }
+        }
+
+        Destroy(instance);
+        Destroy(gameObject);
     }
 
     /// <summary>

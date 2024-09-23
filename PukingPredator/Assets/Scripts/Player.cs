@@ -72,7 +72,6 @@ public class Player : MonoBehaviour
             GameObject hitObject = hit.collider.gameObject;
             GameObject newItemObject = new GameObject("NewItem");  // Create a new empty GameObject
             Item newItem = newItemObject.AddComponent<Item>();     // Add the Item component
-            newItem.inventory = inventory;
 
             // Initialize the item with properties from the hit object and push it to the inventory
             newItem.Initialize(hitObject.gameObject, gameObject);

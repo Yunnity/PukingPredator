@@ -66,6 +66,26 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
+    /// Handles behaviour for whenever an item is added.
+    /// </summary>
+    /// <param name="item"></param>
+    private void ItemAdded(Item item)
+    {
+        item.inventory = this;
+        onChange?.Invoke();
+    }
+
+    /// <summary>
+    /// Handles behaviour for whenever an item is removed.
+    /// </summary>
+    /// <param name="item"></param>
+    private void ItemRemoved(Item item)
+    {
+        item.inventory = null;
+        onChange?.Invoke();
+    }
+
+    /// <summary>
     /// Add an item to the inventory
     /// </summary>
     /// <param name="item">The item to be added.</param>
@@ -74,7 +94,7 @@ public class Inventory : MonoBehaviour
         items.Insert(0, item);
         Debug.Log($"Item added: {item.name}");
 
-        onChange?.Invoke();
+        ItemAdded(item);
     }
 
     /// <summary>
@@ -91,7 +111,7 @@ public class Inventory : MonoBehaviour
 
         items.RemoveAt(0);
 
-        onChange?.Invoke();
+        ItemRemoved(topOfStack);
 
         return topOfStack;
     }
@@ -103,7 +123,8 @@ public class Inventory : MonoBehaviour
     public void RemoveItem(Item item)
     {
         items.Remove(item);
-        onChange?.Invoke();
+
+        ItemAdded(item);
     }
 
     /// <summary>
@@ -123,11 +144,12 @@ public class Inventory : MonoBehaviour
         else
         {
             var index = items.IndexOf(oldItem);
-            //TODO: delete the "item" object?
             items[index] = newItem;
+
+            ItemAdded(newItem);
         }
 
-        onChange?.Invoke();
+        ItemRemoved(oldItem);
 
         return true;
     }
