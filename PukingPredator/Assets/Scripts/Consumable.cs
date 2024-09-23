@@ -141,7 +141,8 @@ public class Consumable : MonoBehaviour
             //Copy the state of this object over
             var replaceConsumableData = replaceObject.GetComponent<Consumable>();
             replaceConsumableData.SetState(state);
-            replaceObject.transform.localScale *= gameObject.transform.localScale.magnitude / initialScale.magnitude;
+            //TODO: the following line doesnt work but it needs to be implemented in case an item is converted while being spit out or consumed
+            //replaceObject.transform.localScale *= gameObject.transform.localScale.magnitude / initialScale.magnitude;
 
             if (inventory != null) { inventory.ReplaceItem(this, replaceConsumableData); }
         }
@@ -188,6 +189,8 @@ public class Consumable : MonoBehaviour
             case ItemState.inInventory:
                 rb.isKinematic = true;
                 hitbox.enabled = false;
+
+                gameObject.transform.localScale = new Vector3(1f, 1f, 1f) * consumptionCutoff;
 
                 StartDecay();
                 break;
