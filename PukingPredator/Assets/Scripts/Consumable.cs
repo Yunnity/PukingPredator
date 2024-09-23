@@ -98,15 +98,24 @@ public class Consumable : MonoBehaviour
 
     public void Update()
     {
+        if (state == ItemState.inWorld) { return; }
+
+        var ownerPosition = inventory.owner.transform.position;
+
         switch (state)
         {
             case ItemState.beingConsumed:
-                var ownerPosition = inventory.owner.transform.position;
                 gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, ownerPosition, consumptionRate);
                 gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, Vector3.zero, consumptionRate);
 
                 var hasBeenConsumed = gameObject.transform.localScale.magnitude / initialScale.magnitude < consumptionCutoff;
                 if (hasBeenConsumed) { SetState(ItemState.inInventory); }
+
+                break;
+
+            case ItemState.inInventory:
+                //TODO: add some periodic + random offset so objects float around in you?
+                gameObject.transform.position = ownerPosition;
 
                 break;
 
