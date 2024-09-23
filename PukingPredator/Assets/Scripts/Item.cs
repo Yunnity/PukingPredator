@@ -42,7 +42,7 @@ public class Item : MonoBehaviour
     private GameObject instance;
 
     /// <summary>
-    /// Reference to the inventory this item belongs to
+    /// Reference to the inventory this item belongs to.
     /// </summary>
     public Inventory inventory;
 
@@ -63,7 +63,7 @@ public class Item : MonoBehaviour
     public ItemSize size { get; private set; } = ItemSize.small;
 
     /// <summary>
-    /// The mappings from sizes to masses
+    /// The mappings from sizes to masses.
     /// </summary>
     private Dictionary<ItemSize, float> sizeToMass = new()
     {
