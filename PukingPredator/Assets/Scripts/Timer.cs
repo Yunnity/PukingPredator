@@ -1,38 +1,69 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Timer : MonoBehaviour
 {
-    public float duration = 0f;
+    /// <summary>
+    /// The time assigned at the start.
+    /// </summary>
+    private float initialDuration;
+
+    /// <summary>
+    /// If the timer is currently running
+    /// </summary>
     private bool isRunning = false;
-    private float timeRemaining;
 
-    public EventHandler OnTimerComplete;
+    /// <summary>
+    /// Triggered when the timer finishes.
+    /// </summary>
+    public event Action onTimerComplete;
 
-    public void Init(float timerDuration)
-    {
-        duration = timerDuration;
-        timeRemaining = duration;
-    }
+    /// <summary>
+    /// The percentage of the timer that has been completed.
+    /// </summary>
+    public float percentComplete => 1f - timeRemaining/initialDuration;
+
+    /// <summary>
+    /// The percentage of the timer left before it is completed.
+    /// </summary>
+    public float percentRemaining => timeRemaining / initialDuration;
+
+    /// <summary>
+    /// The time left on the timer.
+    /// </summary>
+    public float timeRemaining { get; private set; }
+
+
 
     void Update()
     {
-        if (isRunning)
-        {
-            timeRemaining -= Time.deltaTime;
+        if (!isRunning) { return; }
 
-            if (timeRemaining <= 0)
-            {
-                timeRemaining = 0;
-                isRunning = false;
-                OnTimerComplete?.Invoke(this, EventArgs.Empty);
-            }
+        timeRemaining -= Time.deltaTime;
+
+        if (timeRemaining <= 0)
+        {
+            timeRemaining = 0;
+            isRunning = false;
+            onTimerComplete?.Invoke();
         }
     }
 
+
+
+    /// <summary>
+    /// Set up the timer.
+    /// </summary>
+    /// <param name="duration"></param>
+    public void Initialize(float duration)
+    {
+        initialDuration = duration;
+        timeRemaining = duration;
+    }
+
+    /// <summary>
+    /// Makes the timer start running.
+    /// </summary>
     public void StartTimer()
     {
         isRunning = true;

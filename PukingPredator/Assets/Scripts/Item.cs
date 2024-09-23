@@ -131,8 +131,8 @@ public class Item : MonoBehaviour
         initialScale = instance.transform.localScale;
         
         timer = gameObject.AddComponent<Timer>();
-        timer.Init(5f);
-        timer.OnTimerComplete += StartDecay;
+        timer.Initialize(5f);
+        timer.onTimerComplete += StartDecay;
     }
 
     /// <summary>
@@ -166,9 +166,9 @@ public class Item : MonoBehaviour
 
     /// <summary>
     /// Replaces the current item with the decayed item or destroys it if there
-    /// is no such item
+    /// is no such item.
     /// </summary>
-    public void StartDecay(object sender, System.EventArgs e)
+    public void StartDecay()
     {
         if (instance == null) { return; }
         ItemReplace replacement = instance.GetComponent<ItemReplace>();
