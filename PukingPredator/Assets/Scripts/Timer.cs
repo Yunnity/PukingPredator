@@ -52,20 +52,14 @@ public class Timer : MonoBehaviour
 
 
     /// <summary>
-    /// Set up the timer.
+    /// Makes the timer start running.
     /// </summary>
     /// <param name="duration"></param>
-    public void Initialize(float duration)
+    public void StartTimer(float duration)
     {
         initialDuration = duration;
         timeRemaining = duration;
-    }
 
-    /// <summary>
-    /// Makes the timer start running.
-    /// </summary>
-    public void StartTimer()
-    {
         isRunning = true;
     }
 }

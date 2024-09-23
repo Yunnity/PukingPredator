@@ -15,7 +15,7 @@ public class Door : MonoBehaviour
 
             // Make the door consumable now that it is unlocked
             var consumable = GetComponent<Consumable>();
-            consumable.IsConsumable = true;
+            consumable.isConsumable = true;
         }
     }
 }

@@ -33,7 +33,7 @@ public class Inventory : MonoBehaviour
     /// Stack to store the items in the inventory.
     /// </summary>
     [SerializeField]
-    private List<Item> items = new();
+    private List<Consumable> items = new();
 
     /// <summary>
     /// The max number of items that can be held at once.
@@ -45,8 +45,12 @@ public class Inventory : MonoBehaviour
     /// Triggered whenever items enter/leave the inventory or decay. This will
     /// specifically trigger after the change has taken effect.
     /// </summary>
-    //TODO: make this trigger when the items decay
     public event Action onChange;
+
+    /// <summary>
+    /// The object that owns the inventory, ie the player.
+    /// </summary>
+    public GameObject owner;
 
     /// <summary>
     /// The mass of all items in the inventory.
@@ -60,7 +64,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
-    public bool ContainsItem(Item item)
+    public bool ContainsItem(Consumable item)
     {
         return items.Contains(item);
     }
@@ -69,7 +73,7 @@ public class Inventory : MonoBehaviour
     /// Handles behaviour for whenever an item is added.
     /// </summary>
     /// <param name="item"></param>
-    private void ItemAdded(Item item)
+    private void ItemAdded(Consumable item)
     {
         item.inventory = this;
         onChange?.Invoke();
@@ -79,7 +83,7 @@ public class Inventory : MonoBehaviour
     /// Handles behaviour for whenever an item is removed.
     /// </summary>
     /// <param name="item"></param>
-    private void ItemRemoved(Item item)
+    private void ItemRemoved(Consumable item)
     {
         item.inventory = null;
         onChange?.Invoke();
@@ -89,22 +93,24 @@ public class Inventory : MonoBehaviour
     /// Add an item to the inventory
     /// </summary>
     /// <param name="item">The item to be added.</param>
-    public void PushItem(Item item)
+    public void PushItem(Consumable item)
     {
         items.Insert(0, item);
         Debug.Log($"Item added: {item.name}");
 
         ItemAdded(item);
     }
+    public void PushItem(GameObject instance)
+    {
+        PushItem(instance.GetComponent<Consumable>());
+    }
 
     /// <summary>
     /// Remove an item from the inventory and return it.
     /// </summary>
     /// <returns>The last item added to the inventory.</returns>
-    public Item PopItem()
+    public Consumable PopItem()
     {
-        if (isEmpty) { return null; }
-
         var topOfStack = items[0];
 
         if (topOfStack.state != ItemState.inInventory) { return null; }
@@ -120,11 +126,15 @@ public class Inventory : MonoBehaviour
     /// Removes the item from the inventory.
     /// </summary>
     /// <param name="item"></param>
-    public void RemoveItem(Item item)
+    public void RemoveItem(Consumable item)
     {
         items.Remove(item);
 
         ItemAdded(item);
+    }
+    public void RemoveItem(GameObject instance)
+    {
+        RemoveItem(instance.GetComponent<Consumable>());
     }
 
     /// <summary>
@@ -132,25 +142,16 @@ public class Inventory : MonoBehaviour
     /// </summary>
     /// <param name="oldItem"></param>
     /// <param name="newItem"></param>
-    /// <returns></returns>
-    public bool ReplaceItem(Item oldItem, Item newItem)
+    public void ReplaceItem(Consumable oldItem, Consumable newItem)
     {
-        if (!items.Contains(oldItem)) { return false; }
+        var index = items.IndexOf(oldItem);
+        items[index] = newItem;
 
-        if (newItem == null)
-        {
-            items.Remove(oldItem);
-        }
-        else
-        {
-            var index = items.IndexOf(oldItem);
-            items[index] = newItem;
-
-            ItemAdded(newItem);
-        }
-
+        ItemAdded(newItem);
         ItemRemoved(oldItem);
-
-        return true;
+    }
+    public void ReplaceItem(GameObject oldInstance, GameObject newInstance)
+    {
+        ReplaceItem(oldInstance.GetComponent<Consumable>(), newInstance.GetComponent<Consumable>());
     }
 }

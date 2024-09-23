@@ -1095,6 +1095,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8207544996398094478, guid: c98f49f8c63534cd0ab393f2d59e152a,
+        type: 3}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 1491875063}
     - target: {fileID: 8244225763142743375, guid: c98f49f8c63534cd0ab393f2d59e152a,
         type: 3}
       propertyPath: m_Name
@@ -2785,6 +2790,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2386394299745980840}
+    - targetCorrespondingSourceObject: {fileID: 172161737079081414, guid: 1877d96399af08044a68c3f04f0b3360,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2386394299745980845}
   m_SourcePrefab: {fileID: 100100000, guid: 1877d96399af08044a68c3f04f0b3360, type: 3}
 --- !u!1 &2386394299745980839 stripped
 GameObject:
@@ -2841,6 +2850,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 1437783819252952107, guid: 9045b9a6b1005f94582816520e3668a7, type: 3}
+--- !u!114 &2386394299745980845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2386394299745980839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dceb359917d1411f8a63078f82aa37f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _canDecay: 1
+  consumptionRate: 0.25
+  decayInto: {fileID: 0}
+  inventory: {fileID: 0}
+  isConsumable: 1
 --- !u!1001 &4761542396052212621
 PrefabInstance:
   m_ObjectHideFlags: 0
