@@ -123,58 +123,10 @@ public class Item : MonoBehaviour
 
 
     /// <summary>
-    /// Set up the inventory item.
-    /// </summary>
-    /// <param name="itemInstance"></param>
-    /// <param name="itemOwner"></param>
-    public void Initialize(GameObject itemInstance, GameObject itemOwner)
-    {
-        instance = itemInstance;
-        owner = itemOwner;
-
-        // Store the scale so it can later be used to return the object to the
-        // right size
-        initialScale = instance.transform.localScale;
-
-        decayTimer = gameObject.AddComponent<Timer>();
-        decayTimer.Initialize(5f);
-        decayTimer.onTimerComplete += StartDecay;
-    }
-
-    /// <summary>
-    /// Moves the item to the position and reactivates it.
-    /// </summary>
-    /// <param name="position"></param>
-    public void PlaceAt(Vector3 position)
-    {
-        if (state != ItemState.inInventory) { return; }
-        if (instance == null)
-        {
-            if (gameObject) Destroy(gameObject);
-            return;
-        }
-
-        instance.transform.localScale = initialScale;
-        //TODO: we should probably undo this at some point OR make it so you have control over the rotation
-        instance.transform.rotation = Quaternion.identity;
-
-        //reset the velocity 
-        var rigidBody = instance.GetComponent<Rigidbody>();
-        if (rigidBody != null)
-        {
-            rigidBody.velocity = Vector3.zero;
-            rigidBody.angularVelocity = Vector3.zero;
-        }
-
-        instance.transform.position = position;
-        instance.SetActive(true);
-    }
-
-    /// <summary>
     /// Replaces the current item with the decayed item or destroys it if there
     /// is no such item.
     /// </summary>
-    public void StartDecay()
+    public void Decay()
     {
         if (instance == null) { return; }
         ItemReplace replacement = instance.GetComponent<ItemReplace>();
@@ -209,5 +161,53 @@ public class Item : MonoBehaviour
                 Destroy(instance);
             };
         };
+    }
+
+    /// <summary>
+    /// Set up the inventory item.
+    /// </summary>
+    /// <param name="itemInstance"></param>
+    /// <param name="itemOwner"></param>
+    public void Initialize(GameObject itemInstance, GameObject itemOwner)
+    {
+        instance = itemInstance;
+        owner = itemOwner;
+
+        // Store the scale so it can later be used to return the object to the
+        // right size
+        initialScale = instance.transform.localScale;
+
+        decayTimer = gameObject.AddComponent<Timer>();
+        decayTimer.Initialize(5f);
+        decayTimer.onTimerComplete += Decay;
+    }
+
+    /// <summary>
+    /// Moves the item to the position and reactivates it.
+    /// </summary>
+    /// <param name="position"></param>
+    public void PlaceAt(Vector3 position)
+    {
+        if (state != ItemState.inInventory) { return; }
+        if (instance == null)
+        {
+            if (gameObject) Destroy(gameObject);
+            return;
+        }
+
+        instance.transform.localScale = initialScale;
+        //TODO: we should probably undo this at some point OR make it so you have control over the rotation
+        instance.transform.rotation = Quaternion.identity;
+
+        //reset the velocity 
+        var rigidBody = instance.GetComponent<Rigidbody>();
+        if (rigidBody != null)
+        {
+            rigidBody.velocity = Vector3.zero;
+            rigidBody.angularVelocity = Vector3.zero;
+        }
+
+        instance.transform.position = position;
+        instance.SetActive(true);
     }
 }
