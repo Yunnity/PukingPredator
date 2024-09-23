@@ -56,6 +56,16 @@ public class Inventory : MonoBehaviour
 
 
     /// <summary>
+    /// Checks if the inventory contains the given item.
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    public bool ContainsItem(Item item)
+    {
+        return items.Contains(item);
+    }
+
+    /// <summary>
     /// Add an item to the inventory
     /// </summary>
     /// <param name="item">The item to be added.</param>
@@ -86,26 +96,39 @@ public class Inventory : MonoBehaviour
         return topOfStack;
     }
 
-
-    public bool ReplaceItem(Item current, Item newItem)
+    /// <summary>
+    /// Removes the item from the inventory.
+    /// </summary>
+    /// <param name="item"></param>
+    public void RemoveItem(Item item)
     {
-        for (int i = 0; i < items.Count; i++)
-        {
-            if (items[i] == current)
-            {
-                if (newItem == null)
-                {
-                    items.Remove(current);
-                }
-                else
-                {
-                    items[i] = newItem;
-                }
+        items.Remove(item);
+        onChange?.Invoke();
+    }
 
-                return true;
-            }
+    /// <summary>
+    /// Replaces an item with another.
+    /// </summary>
+    /// <param name="oldItem"></param>
+    /// <param name="newItem"></param>
+    /// <returns></returns>
+    public bool ReplaceItem(Item oldItem, Item newItem)
+    {
+        if (!items.Contains(oldItem)) { return false; }
+
+        if (newItem == null)
+        {
+            items.Remove(oldItem);
+        }
+        else
+        {
+            var index = items.IndexOf(oldItem);
+            //TODO: delete the "item" object?
+            items[index] = newItem;
         }
 
-        return false;
+        onChange?.Invoke();
+
+        return true;
     }
 }
