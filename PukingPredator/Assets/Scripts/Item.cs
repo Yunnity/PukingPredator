@@ -77,7 +77,13 @@ public class Item : MonoBehaviour
     /// </summary>
     public ItemState state { get; private set; } = ItemState.beingConsumed;
 
-    Timer timer;
+    /// <summary>
+    /// Timer tracking the instances decay.
+    /// </summary>
+    private Timer decayTimer;
+
+
+
     public void Update()
     {
         // Handles the case if you start consuming as soon as an item is destroyed
@@ -100,7 +106,7 @@ public class Item : MonoBehaviour
                 var hasBeenConsumed = instance.transform.localScale.magnitude / initialScale.magnitude < consumptionCutoff;
                 if (hasBeenConsumed)
                 {
-                    timer.StartTimer();
+                    decayTimer?.StartTimer();
                     instance.SetActive(false);
                     state = ItemState.inInventory;
                 }
@@ -129,10 +135,10 @@ public class Item : MonoBehaviour
         // Store the scale so it can later be used to return the object to the
         // right size
         initialScale = instance.transform.localScale;
-        
-        timer = gameObject.AddComponent<Timer>();
-        timer.Initialize(5f);
-        timer.onTimerComplete += StartDecay;
+
+        decayTimer = gameObject.AddComponent<Timer>();
+        decayTimer.Initialize(5f);
+        decayTimer.onTimerComplete += StartDecay;
     }
 
     /// <summary>
