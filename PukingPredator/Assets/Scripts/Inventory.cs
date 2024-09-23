@@ -186,7 +186,7 @@ public class Inventory : MonoBehaviour
             newItem.name = ITEM_SLOT_ID;
 
             var itemSlotLabel = newItem.GetComponent<TextMeshProUGUI>();
-            itemSlotLabel.text = item.instanceName;
+            itemSlotLabel.text = item.gameObject.name;
         }
     }
 }
