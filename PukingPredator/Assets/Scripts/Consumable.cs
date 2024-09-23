@@ -89,7 +89,7 @@ public class Consumable : MonoBehaviour
 
 
 
-    private void Start()
+    private void Awake()
     {
         initialScale = gameObject.transform.localScale;
         rb = GetComponent<Rigidbody>();
