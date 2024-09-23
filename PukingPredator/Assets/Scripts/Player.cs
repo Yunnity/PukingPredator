@@ -43,14 +43,14 @@ public class Player : MonoBehaviour
         UpdateMovementAttributes();
 
         rigidBody = GetComponent<Rigidbody>();
-        playerCamera = playerCamera == null ? GameObject.FindGameObjectsWithTag("MainCamera")[0] : playerCamera;
+        if (playerCamera == null) { playerCamera = GameObject.FindGameObjectsWithTag("MainCamera")[0]; }
     }
 
     private void GameInput_OnPuke(object sender, System.EventArgs e)
     {
-        Item itemToPlace = inventory.PopItem();
+        if (inventory.isEmpty) { return; }
 
-        if (itemToPlace is null) { return; }
+        Consumable itemToPlace = inventory.PopItem();
 
         var pukeDir = transform.forward;
         itemToPlace.PlaceAt(transform.position + pukeDir*pukeDistance);
@@ -70,12 +70,12 @@ public class Player : MonoBehaviour
         {
             // Get the GameObject that was hit
             GameObject hitObject = hit.collider.gameObject;
-            GameObject newItemObject = new GameObject("NewItem");  // Create a new empty GameObject
-            Item newItem = newItemObject.AddComponent<Item>();     // Add the Item component
 
-            // Initialize the item with properties from the hit object and push it to the inventory
-            newItem.Initialize(hitObject.gameObject, gameObject);
-            inventory.PushItem(newItem);
+            var consumableData = hitObject.GetComponent<Consumable>();
+            if (consumableData == null || !consumableData.isConsumable) { return; }
+
+            inventory.PushItem(consumableData);
+            consumableData.SetState(ItemState.beingConsumed);
         }
     }
 
@@ -113,13 +113,13 @@ public class Player : MonoBehaviour
         if (onGround)
         {
             isGrounded = true;
-            if (ungroundedCoroutine is not null)
+            if (ungroundedCoroutine != null)
             {
                 StopCoroutine(ungroundedCoroutine);
                 ungroundedCoroutine = null;
             }
         }
-        else if (isGrounded && ungroundedCoroutine is null)
+        else if (isGrounded && ungroundedCoroutine == null)
         {
             ungroundedCoroutine = StartCoroutine(SetGroundedFalse(coyotteTime));
         }
