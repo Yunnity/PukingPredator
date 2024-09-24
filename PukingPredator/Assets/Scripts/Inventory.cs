@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -8,26 +9,22 @@ public class Inventory : MonoBehaviour
     /// <summary>
     /// If the inventory is empty.
     /// </summary>
-    public bool isEmpty
-    {
-        get => items.Count == 0;
-    }
+    public bool isEmpty => items.Count == 0;
 
     /// <summary>
     /// If the inventory is full.
     /// </summary>
-    public bool isFull
-    {
-        get => items.Count >= maxCount;
-    }
+    public bool isFull => items.Count >= maxCount;
 
     /// <summary>
     /// The number of items in the inventory.
     /// </summary>
-    public int itemCount
-    {
-        get => items.Count;
-    }
+    public int itemCount => items.Count;
+
+    /// <summary>
+    /// The prefab used to create item slots in the inventory UI.
+    /// </summary>
+    public GameObject itemUIPrefab;
 
     /// <summary>
     /// Stack to store the items in the inventory.
@@ -48,6 +45,11 @@ public class Inventory : MonoBehaviour
     public event Action onChange;
 
     /// <summary>
+    /// The panel that the inventory is contained in.
+    /// </summary>
+    public GameObject UIPanel;
+
+    /// <summary>
     /// The object that owns the inventory, ie the player.
     /// </summary>
     public GameObject owner;
@@ -56,6 +58,14 @@ public class Inventory : MonoBehaviour
     /// The mass of all items in the inventory.
     /// </summary>
     public float totalMass => items.Select(i => i.mass).Sum();
+
+
+
+    private void Start()
+    {
+        onChange += UpdateUI;
+        UpdateUI();
+    }
 
 
 
@@ -122,7 +132,6 @@ public class Inventory : MonoBehaviour
         return topOfStack;
     }
 
-    /// <summary>
     /// Removes the item from the inventory.
     /// </summary>
     /// <param name="item"></param>
@@ -153,5 +162,31 @@ public class Inventory : MonoBehaviour
     public void ReplaceItem(GameObject oldInstance, GameObject newInstance)
     {
         ReplaceItem(oldInstance.GetComponent<Consumable>(), newInstance.GetComponent<Consumable>());
+    }
+
+    /// <summary>
+    /// Changes the items that are currently displayed.
+    /// </summary>
+    public void UpdateUI()
+    {
+        const string ITEM_SLOT_ID = "ItemSlotUI";
+
+        // Clear the items other than the label for the inventory
+        foreach (Transform child in UIPanel.transform)
+        {
+            if (child.gameObject.name == ITEM_SLOT_ID)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        foreach (var item in items.AsEnumerable().Reverse())
+        {
+            GameObject newItemUI = Instantiate(itemUIPrefab, UIPanel.transform);
+            newItemUI.name = ITEM_SLOT_ID;
+
+            var itemUIComponent = newItemUI.GetComponent<ItemUI>();
+            itemUIComponent.item = item;
+        }
     }
 }
