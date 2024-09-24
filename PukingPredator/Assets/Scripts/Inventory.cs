@@ -182,11 +182,11 @@ public class Inventory : MonoBehaviour
 
         foreach (var item in items.AsEnumerable().Reverse())
         {
-            GameObject newItem = Instantiate(itemUIPrefab, UIPanel.transform);
-            newItem.name = ITEM_SLOT_ID;
+            GameObject newItemUI = Instantiate(itemUIPrefab, UIPanel.transform);
+            newItemUI.name = ITEM_SLOT_ID;
 
-            var itemSlotLabel = newItem.GetComponent<TextMeshProUGUI>();
-            itemSlotLabel.text = item.gameObject.name;
+            var itemUIComponent = newItemUI.GetComponent<ItemUI>();
+            itemUIComponent.item = item;
         }
     }
 }
