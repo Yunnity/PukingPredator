@@ -190,6 +190,7 @@ public class Consumable : MonoBehaviour
                 rb.isKinematic = true;
                 hitbox.enabled = false;
 
+                //TODO: swap this to be based on the initial scale, not just [1,1,1]
                 gameObject.transform.localScale = new Vector3(1f, 1f, 1f) * consumptionCutoff;
 
                 StartDecay();
