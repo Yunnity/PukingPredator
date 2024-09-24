@@ -19,13 +19,13 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// The lerp factor used when shrinking items.
     /// </summary>
-    [SerializeField]
     private float consumptionRate = 0.2f;
 
     /// <summary>
     /// The relative scale at which an object will be treated as consumed.
     /// ie 0.05 means 5% of original size.
     /// </summary>
+    [SerializeField]
     private float consumptionCutoff = 0.05f;
 
     /// <summary>
