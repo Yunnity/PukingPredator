@@ -159,8 +159,9 @@ public class Consumable : MonoBehaviour
         if (state != ItemState.inInventory) { return; }
 
         gameObject.transform.localScale = initialScale;
-        //TODO: we should probably undo this at some point OR make it so you have control over the rotation
-        gameObject.transform.rotation = Quaternion.identity;
+
+        //TODO: we should probably remove this at some point OR make it so you have control over the rotation
+        //gameObject.transform.rotation = Quaternion.identity;
 
         gameObject.transform.position = position;
         SetState(ItemState.inWorld);
