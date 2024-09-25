@@ -19,13 +19,13 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// The lerp factor used when shrinking items.
     /// </summary>
-    [SerializeField]
     private float consumptionRate = 0.2f;
 
     /// <summary>
     /// The relative scale at which an object will be treated as consumed.
     /// ie 0.05 means 5% of original size.
     /// </summary>
+    [SerializeField]
     private float consumptionCutoff = 0.05f;
 
     /// <summary>
@@ -159,8 +159,9 @@ public class Consumable : MonoBehaviour
         if (state != ItemState.inInventory) { return; }
 
         gameObject.transform.localScale = initialScale;
-        //TODO: we should probably undo this at some point OR make it so you have control over the rotation
-        gameObject.transform.rotation = Quaternion.identity;
+
+        var previousAngles = gameObject.transform.eulerAngles;
+        gameObject.transform.eulerAngles = new Vector3(0, previousAngles.y, 0);
 
         gameObject.transform.position = position;
         SetState(ItemState.inWorld);
