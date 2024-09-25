@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
 
 public class GameInput : MonoBehaviour
 {
@@ -22,17 +19,17 @@ public class GameInput : MonoBehaviour
         playerInput.Player.Reset.performed += ResetLevel_performed;
     }
 
-    private void Eat_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    private void Eat_performed(InputAction.CallbackContext obj)
     {
         onEatAction?.Invoke(this, EventArgs.Empty);
     }
 
-    private void Puke_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    private void Puke_performed(InputAction.CallbackContext obj)
     {
         onPukeAction?.Invoke(this, EventArgs.Empty);
     }
 
-    private void ResetLevel_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    private void ResetLevel_performed(InputAction.CallbackContext obj)
     {
         onResetLevelAction?.Invoke(this, EventArgs.Empty);
     }
