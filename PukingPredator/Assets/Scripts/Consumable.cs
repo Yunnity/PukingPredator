@@ -160,8 +160,8 @@ public class Consumable : MonoBehaviour
 
         gameObject.transform.localScale = initialScale;
 
-        //TODO: we should probably remove this at some point OR make it so you have control over the rotation
-        //gameObject.transform.rotation = Quaternion.identity;
+        var previousAngles = gameObject.transform.eulerAngles;
+        gameObject.transform.eulerAngles = new Vector3(0, previousAngles.y, 0);
 
         gameObject.transform.position = position;
         SetState(ItemState.inWorld);
