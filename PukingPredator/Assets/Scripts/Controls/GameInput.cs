@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GameInput : MonoBehaviour
+public class GameInput : SingletonMonobehaviour<GameInput>
 {
     /// <summary>
     /// The component that looks for control inputs.
@@ -41,8 +41,10 @@ public class GameInput : MonoBehaviour
 
 
 
-    public void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         controls = new();
         controls.Player.Enable();
 
