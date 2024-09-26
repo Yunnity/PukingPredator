@@ -64,6 +64,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""b69890cb-55bb-42e3-8626-214ff0987aa2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Reset"",
                     ""type"": ""Button"",
                     ""id"": ""4e663d58-a3a4-4679-b54a-1384e7af9c32"",
@@ -280,6 +289,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c36b9e4a-99ef-4824-b987-1ac136a9289b"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e6c8af0-0139-4241-ba9d-45482f5eb93f"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -871,6 +902,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Eat = m_Player.FindAction("Eat", throwIfNotFound: true);
         m_Player_Puke = m_Player.FindAction("Puke", throwIfNotFound: true);
+        m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Reset = m_Player.FindAction("Reset", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -949,6 +981,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Eat;
     private readonly InputAction m_Player_Puke;
+    private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Reset;
     public struct PlayerActions
     {
@@ -958,6 +991,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Eat => m_Wrapper.m_Player_Eat;
         public InputAction @Puke => m_Wrapper.m_Player_Puke;
+        public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Reset => m_Wrapper.m_Player_Reset;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -980,6 +1014,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Puke.started += instance.OnPuke;
             @Puke.performed += instance.OnPuke;
             @Puke.canceled += instance.OnPuke;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
             @Reset.started += instance.OnReset;
             @Reset.performed += instance.OnReset;
             @Reset.canceled += instance.OnReset;
@@ -999,6 +1036,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Puke.started -= instance.OnPuke;
             @Puke.performed -= instance.OnPuke;
             @Puke.canceled -= instance.OnPuke;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
             @Reset.started -= instance.OnReset;
             @Reset.performed -= instance.OnReset;
             @Reset.canceled -= instance.OnReset;
@@ -1188,6 +1228,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnEat(InputAction.CallbackContext context);
         void OnPuke(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
         void OnReset(InputAction.CallbackContext context);
     }
     public interface IUIActions

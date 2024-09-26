@@ -20,6 +20,16 @@ public class GameInput : MonoBehaviour
     public event Action onEat;
 
     /// <summary>
+    /// Triggers when the user presses the "jump" input.
+    /// </summary>
+    public event Action onJumpDown;
+
+    /// <summary>
+    /// Triggers when the user releases the "jump" input.
+    /// </summary>
+    public event Action onJumpUp;
+
+    /// <summary>
     /// Triggers when the user presses the "puke" input.
     /// </summary>
     public event Action onPuke;
@@ -37,15 +47,30 @@ public class GameInput : MonoBehaviour
         controls.Player.Enable();
 
         controls.Player.Eat.performed += PerformEat;
+
+        controls.Player.Jump.canceled += CancelJump;
+        controls.Player.Jump.performed += PerformJump;
+
         controls.Player.Puke.performed += PerformPuke;
+
         controls.Player.Reset.performed += PerformResetLevel;
     }
 
 
 
+    private void CancelJump(InputAction.CallbackContext obj)
+    {
+        onJumpUp?.Invoke();
+    }
+
     private void PerformEat(InputAction.CallbackContext obj)
     {
         onEat?.Invoke();
+    }
+
+    private void PerformJump(InputAction.CallbackContext obj)
+    {
+        onJumpDown?.Invoke();
     }
 
     private void PerformPuke(InputAction.CallbackContext obj)
