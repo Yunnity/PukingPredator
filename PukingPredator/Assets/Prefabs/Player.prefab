@@ -51,18 +51,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e786e94637a78744abcae44b87f8a06c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameInput: {fileID: 0}
-  inventory: {fileID: 8166780266706507098}
-  consumable:
+  consumableLayers:
     serializedVersion: 2
     m_Bits: 128
+  gameInput: {fileID: 0}
+  inventory: {fileID: 8166780266706507098}
   playerCamera: {fileID: 0}
-  groundCheckRadius: 0.5
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 129
-  isGrounded: 0
-  isJumpOnCooldown: 0
 --- !u!136 &2990891393853639730
 CapsuleCollider:
   m_ObjectHideFlags: 0
