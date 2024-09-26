@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,27 +8,11 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask consumable;
     [SerializeField] private GameObject playerCamera;
 
-    public float groundCheckRadius = 0.5f; // Radius of the sphere
-    public LayerMask groundLayer; // Layer of ground objects
-    private Rigidbody rigidBody;
+    private Rigidbody rb;
     private float baseMoveSpeed = 10f;
     private float moveSpeed;
-    private float baseJumpForce = 6f;
-    private float jumpForce;
 
     private Vector3 moveDir;
-
-    [SerializeField]
-    private bool isGrounded;
-    [SerializeField] bool isJumpOnCooldown = false;
-    private Coroutine ungroundedCoroutine = null;
-    //private bool isJumpOnCooldown = false;
-    private float jumpCooldown = 0.25f;
-    private float coyotteTime = 0.12f;
-    private bool canJump
-    {
-        get => isGrounded && !isJumpOnCooldown;
-    }
 
     private float pukeDistance = 2f;
 
@@ -37,12 +20,12 @@ public class Player : MonoBehaviour
     {
         gameInput.onEat += GameInput_OnEat;
         gameInput.onPuke += GameInput_OnPuke;
-        gameInput.onResetLevel += ResetLevel;
+        gameInput.onResetLevel += GameInput_ResetLevel;
 
         inventory.onChange += UpdateMovementAttributes;
         UpdateMovementAttributes();
 
-        rigidBody = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
         if (playerCamera == null) { playerCamera = GameObject.FindGameObjectsWithTag("MainCamera")[0]; }
     }
 
@@ -79,7 +62,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void ResetLevel()
+    public void GameInput_ResetLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
@@ -92,52 +75,14 @@ public class Player : MonoBehaviour
 
         float turnSpeed = 10f;
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
-
-        GroundedUpdate();
-        if (canJump && Input.GetKeyDown("space"))
-        {
-            Debug.Log($"jumpOnCooldown = {isJumpOnCooldown}, isGrounded = {isGrounded}");
-            rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            StartCoroutine(ApplyJumpCooldown());
-        }
     }
 
     private void FixedUpdate()
     {
-        rigidBody.velocity = moveDir * moveSpeed + new Vector3( 0, rigidBody.velocity.y, 0);
+        rb.velocity = moveDir * moveSpeed + new Vector3(0, rb.velocity.y, 0);
     }
 
-    private void GroundedUpdate()
-    {
-        var onGround = Physics.CheckSphere(transform.position + Vector3.down * 0.75f, groundCheckRadius, groundLayer);
-        if (onGround)
-        {
-            isGrounded = true;
-            if (ungroundedCoroutine != null)
-            {
-                StopCoroutine(ungroundedCoroutine);
-                ungroundedCoroutine = null;
-            }
-        }
-        else if (isGrounded && ungroundedCoroutine == null)
-        {
-            ungroundedCoroutine = StartCoroutine(SetGroundedFalse(coyotteTime));
-        }
 
-    }
-    private IEnumerator ApplyJumpCooldown()
-    {
-        isJumpOnCooldown = true;
-        yield return new WaitForSeconds(jumpCooldown);
-        isJumpOnCooldown = false;
-    }
-
-    private IEnumerator SetGroundedFalse(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        isGrounded = false;
-        ungroundedCoroutine = null;
-    }
 
     private void UpdateMovementAttributes()
     {
@@ -146,7 +91,6 @@ public class Player : MonoBehaviour
         var totalItemMass = inventory.totalMass;
 
         moveSpeed = baseMoveSpeed - totalItemMass;
-        jumpForce = baseJumpForce - totalItemMass;
     }
 
 }
