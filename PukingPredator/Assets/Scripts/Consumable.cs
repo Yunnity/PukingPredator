@@ -7,6 +7,8 @@ public enum ItemState
     inInventory,
     beingPuked,
 }
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Collider))]
 public class Consumable : MonoBehaviour
 {
     [SerializeField]
