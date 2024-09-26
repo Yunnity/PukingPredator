@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -23,7 +24,6 @@ public class Player : MonoBehaviour
     /// <summary>
     /// The handler for user input.
     /// </summary>
-    [SerializeField]
     private GameInput gameInput;
 
     /// <summary>
@@ -74,10 +74,6 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        gameInput.onEat += GameInput_Eat;
-        gameInput.onPuke += GameInput_Puke;
-        gameInput.onResetLevel += GameInput_ResetLevel;
-
         inventory.onChange += UpdateMovementAttributes;
         UpdateMovementAttributes();
 
@@ -86,6 +82,8 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (!TryGetGameInput()) { return; }
+
         Vector2 inputVector = gameInput.movementInput;
         moveDir = Quaternion.Euler(0, playerCamera.transform.eulerAngles.y, 0) * new Vector3(inputVector.x, 0, inputVector.y);
 
@@ -128,6 +126,24 @@ public class Player : MonoBehaviour
     public void GameInput_ResetLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    /// <summary>
+    /// Gets the GameInput instance if it hasnt already been fetched.
+    /// </summary>
+    /// <returns>If gameInput has been successfully loaded by the end of the function.</returns>
+    private bool TryGetGameInput()
+    {
+        if (gameInput != null) { return true; }
+
+        gameInput = GameInput.Instance;
+        if (gameInput == null) { return false; }
+
+        gameInput.onEat += GameInput_Eat;
+        gameInput.onPuke += GameInput_Puke;
+        gameInput.onResetLevel += GameInput_ResetLevel;
+
+        return true;
     }
 
     private void UpdateMovementAttributes()

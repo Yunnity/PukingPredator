@@ -54,7 +54,6 @@ MonoBehaviour:
   consumableLayers:
     serializedVersion: 2
     m_Bits: 128
-  gameInput: {fileID: 0}
   inventory: {fileID: 8166780266706507098}
   playerCamera: {fileID: 0}
 --- !u!136 &2990891393853639730
