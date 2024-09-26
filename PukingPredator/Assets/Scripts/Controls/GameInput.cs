@@ -1,6 +1,30 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+
+public enum EventType
+{
+    /// <summary>
+    /// Triggers when the user presses the "eat" input.
+    /// </summary>
+    onEat,
+    /// <summary>
+    /// Triggers when the user presses the "jump" input.
+    /// </summary>
+    onJumpDown,
+    /// <summary>
+    /// Triggers when the user releases the "jump" input.
+    /// </summary>
+    onJumpUp,
+    /// <summary>
+    /// Triggers when the user releases the "jump" input.
+    /// </summary>
+    onPuke,
+    /// <summary>
+    /// Triggers when the user presses the "reset level" input.
+    /// </summary>
+    onResetLevel,
+}
 
 public class GameInput : SingletonMonobehaviour<GameInput>
 {
@@ -10,34 +34,14 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     private PlayerControls controls;
 
     /// <summary>
+    /// Storage for the actions related to each event.
+    /// </summary>
+    private Dictionary<EventType, Action> events = new Dictionary<EventType, Action>();
+
+    /// <summary>
     /// The movement input vector. Has a max magnitude of 1.
     /// </summary>
     public Vector2 movementInput => controls.Player.Move.ReadValue<Vector2>();
-
-    /// <summary>
-    /// Triggers when the user presses the "eat" input.
-    /// </summary>
-    public event Action onEat;
-
-    /// <summary>
-    /// Triggers when the user presses the "jump" input.
-    /// </summary>
-    public event Action onJumpDown;
-
-    /// <summary>
-    /// Triggers when the user releases the "jump" input.
-    /// </summary>
-    public event Action onJumpUp;
-
-    /// <summary>
-    /// Triggers when the user presses the "puke" input.
-    /// </summary>
-    public event Action onPuke;
-
-    /// <summary>
-    /// Triggers when the user presses the "reset level" input.
-    /// </summary>
-    public event Action onResetLevel;
 
 
 
@@ -48,40 +52,32 @@ public class GameInput : SingletonMonobehaviour<GameInput>
         controls = new();
         controls.Player.Enable();
 
-        controls.Player.Eat.performed += PerformEat;
-
-        controls.Player.Jump.canceled += CancelJump;
-        controls.Player.Jump.performed += PerformJump;
-
-        controls.Player.Puke.performed += PerformPuke;
-
-        controls.Player.Reset.performed += PerformResetLevel;
+        //Setup empty actions for every event type
+        foreach (EventType eventType in Enum.GetValues(typeof(EventType)))
+        {
+            events.Add(eventType, null);
+        }
+        controls.Player.Eat.performed += context => TriggerEvent(EventType.onEat);
+        controls.Player.Jump.canceled += context => TriggerEvent(EventType.onJumpUp);
+        controls.Player.Jump.performed += context => TriggerEvent(EventType.onJumpDown);
+        controls.Player.Puke.performed += context => TriggerEvent(EventType.onPuke);
+        controls.Player.Reset.performed += context => TriggerEvent(EventType.onResetLevel);
     }
 
 
 
-    private void CancelJump(InputAction.CallbackContext obj)
+    public void Subscribe(EventType eventType, Action action)
     {
-        onJumpUp?.Invoke();
+        events[eventType] += action;
     }
 
-    private void PerformEat(InputAction.CallbackContext obj)
+    private void TriggerEvent(EventType eventType)
     {
-        onEat?.Invoke();
+        events[eventType]?.Invoke();
     }
 
-    private void PerformJump(InputAction.CallbackContext obj)
+    public void Unsubscribe(EventType eventType, Action action)
     {
-        onJumpDown?.Invoke();
-    }
-
-    private void PerformPuke(InputAction.CallbackContext obj)
-    {
-        onPuke?.Invoke();
-    }
-
-    private void PerformResetLevel(InputAction.CallbackContext obj)
-    {
-        onResetLevel?.Invoke();
+        events[eventType] -= action;
     }
 }

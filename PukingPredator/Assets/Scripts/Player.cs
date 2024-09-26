@@ -138,9 +138,9 @@ public class Player : MonoBehaviour
         gameInput = GameInput.Instance;
         if (gameInput == null) { return false; }
 
-        gameInput.onEat += GameInput_Eat;
-        gameInput.onPuke += GameInput_Puke;
-        gameInput.onResetLevel += GameInput_ResetLevel;
+        gameInput.Subscribe(EventType.onEat, GameInput_Eat);
+        gameInput.Subscribe(EventType.onPuke, GameInput_Puke);
+        gameInput.Subscribe(EventType.onResetLevel, GameInput_ResetLevel);
 
         return true;
     }
