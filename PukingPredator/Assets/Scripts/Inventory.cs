@@ -24,7 +24,8 @@ public class Inventory : MonoBehaviour
     /// <summary>
     /// The prefab used to create item slots in the inventory UI.
     /// </summary>
-    public GameObject itemUIPrefab;
+    [SerializeField]
+    private GameObject itemUIPrefab;
 
     /// <summary>
     /// Stack to store the items in the inventory.
