@@ -254,12 +254,6 @@ PrefabInstance:
       propertyPath: owner
       value: 
       objectReference: {fileID: 5441739923584274610}
-    - target: {fileID: 8207544996398094478, guid: c98f49f8c63534cd0ab393f2d59e152a,
-        type: 3}
-      propertyPath: itemUIPrefab
-      value: 
-      objectReference: {fileID: 8187309727088127603, guid: 3a58ade1e7dd74dd19e57bccaeef503a,
-        type: 3}
     - target: {fileID: 8244225763142743375, guid: c98f49f8c63534cd0ab393f2d59e152a,
         type: 3}
       propertyPath: m_Name

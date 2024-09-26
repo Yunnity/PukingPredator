@@ -44,3 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0070ddca36e40ed4ea0709d17b4d8575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryUIPrefab: {fileID: 150530213503905336, guid: be47eabce07a9471c971ff6d48274e78,
+    type: 3}
+  itemUIPrefab: {fileID: 8187309727088127603, guid: 3a58ade1e7dd74dd19e57bccaeef503a,
+    type: 3}
+  items: []
+  maxCount: 2
+  owner: {fileID: 0}

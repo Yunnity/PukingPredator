@@ -1,11 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    /// <summary>
+    /// The prefab for the inv.
+    /// </summary>
+    [SerializeField]
+    private GameObject inventoryUIPrefab;
+
     /// <summary>
     /// If the inventory is empty.
     /// </summary>
@@ -48,7 +53,7 @@ public class Inventory : MonoBehaviour
     /// <summary>
     /// The panel that the inventory is contained in.
     /// </summary>
-    public GameObject UIPanel;
+    private GameObject UIPanel;
 
     /// <summary>
     /// The object that owns the inventory, ie the player.
@@ -64,6 +69,9 @@ public class Inventory : MonoBehaviour
 
     private void Start()
     {
+        var canvas = GameObject.Find("Canvas");
+        UIPanel = Instantiate(inventoryUIPrefab, canvas.transform);
+
         onChange += UpdateUI;
         UpdateUI();
     }
