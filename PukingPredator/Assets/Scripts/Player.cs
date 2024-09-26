@@ -35,9 +35,9 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        gameInput.onEatAction += GameInput_OnEat;
-        gameInput.onPukeAction += GameInput_OnPuke;
-        gameInput.onResetLevelAction += ResetLevel;
+        gameInput.onEat += GameInput_OnEat;
+        gameInput.onPuke += GameInput_OnPuke;
+        gameInput.onResetLevel += ResetLevel;
 
         inventory.onChange += UpdateMovementAttributes;
         UpdateMovementAttributes();
@@ -46,7 +46,7 @@ public class Player : MonoBehaviour
         if (playerCamera == null) { playerCamera = GameObject.FindGameObjectsWithTag("MainCamera")[0]; }
     }
 
-    private void GameInput_OnPuke(object sender, System.EventArgs e)
+    private void GameInput_OnPuke()
     {
         if (inventory.isEmpty) { return; }
 
@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
         itemToPlace.PlaceAt(transform.position + pukeDir*pukeDistance);
     }
 
-    private void GameInput_OnEat(object sender, System.EventArgs e)
+    private void GameInput_OnEat()
     {
         if (inventory.isFull) { return; }
 
@@ -79,7 +79,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void ResetLevel(object sender, System.EventArgs e)
+    public void ResetLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
@@ -87,7 +87,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 inputVector = gameInput.GetInputVectorNormalized();
+        Vector2 inputVector = gameInput.movementInput;
         moveDir = Quaternion.Euler(0, playerCamera.transform.eulerAngles.y, 0) * new Vector3(inputVector.x, 0, inputVector.y);
 
         float turnSpeed = 10f;
