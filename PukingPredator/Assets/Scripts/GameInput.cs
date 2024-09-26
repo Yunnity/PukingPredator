@@ -14,7 +14,7 @@ public class GameInput : MonoBehaviour
         playerInput = new PlayerInput();
         playerInput.Player.Enable();
 
-        playerInput.Player.Action.performed += Eat_performed;
+        playerInput.Player.Eat.performed += Eat_performed;
         playerInput.Player.Puke.performed += Puke_performed;
         playerInput.Player.Reset.performed += ResetLevel_performed;
     }
