@@ -34,7 +34,7 @@ public abstract class InputBehaviour : MonoBehaviour
         getGameInputCoroutine = StartCoroutine(GetGameInput());
     }
 
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
         if (getGameInputCoroutine != null) { StopCoroutine(getGameInputCoroutine); }
 
