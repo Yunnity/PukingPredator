@@ -85,6 +85,9 @@ public class Movement : InputBehaviour
         rb = GetComponent<Rigidbody>();
 
         if (playerCamera == null) { playerCamera = GameObject.FindGameObjectsWithTag("MainCamera")[0]; }
+
+        Subscribe(EventType.onJumpDown, GameInput_JumpDown);
+        Subscribe(EventType.onJumpUp, GameInput_JumpUp);
     }
 
     private void FixedUpdate()
@@ -116,21 +119,29 @@ public class Movement : InputBehaviour
         //jumping code
         isGrounded = Physics.CheckSphere(transform.position, groundCheckRadius, groundLayer);
 
-        if (Input.GetKeyDown(KeyCode.Space) && canJump)
-        {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
-            isJumping = true;
-            isJumpCancelled = false;
-            jumpTime = 0;
-        }
-
         if (isJumping)
         {
             jumpTime += Time.deltaTime;
-            if (Input.GetKeyUp(KeyCode.Space)) { isJumpCancelled = true; }
 
             if (jumpTime > buttonTime) { isJumping = false; }
         }
+    }
+
+
+
+    public void GameInput_JumpDown()
+    {
+        if (!canJump) { return; }
+
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+        isJumping = true;
+        isJumpCancelled = false;
+        jumpTime = 0;
+    }
+
+    public void GameInput_JumpUp()
+    {
+        if (isJumping) { isJumpCancelled = true; }
     }
 }
