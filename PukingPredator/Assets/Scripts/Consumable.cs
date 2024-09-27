@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum ItemState
@@ -99,6 +101,11 @@ public class Consumable : MonoBehaviour
     /// </summary>
     public ItemState state { get; private set; } = ItemState.inWorld;
 
+    /// <summary>
+    /// The actions that get executed when entering a state.
+    /// </summary>
+    private Dictionary<ItemState, ConsumableState> stateEvents = new();
+
 
 
     private void Awake()
@@ -106,39 +113,37 @@ public class Consumable : MonoBehaviour
         initialScale = gameObject.transform.localScale;
         rb = GetComponent<Rigidbody>();
         hitbox = GetComponent<Collider>();
+
+        //Setup the state events
+        foreach (ItemState itemState in Enum.GetValues(typeof(ItemState)))
+        {
+            stateEvents.Add(itemState, new ConsumableState());
+        }
+
+        stateEvents[ItemState.inWorld].onEnter += ResetVelocity;
+
+        stateEvents[ItemState.beingConsumed].onUpdate += UpdateBeingConsumed;
+
+        stateEvents[ItemState.inInventory].onEnter += DisablePhysics;
+        stateEvents[ItemState.inInventory].onEnter += ClampShrunkScale;
+        stateEvents[ItemState.inInventory].onEnter += StartDecay;
+        stateEvents[ItemState.inInventory].onExit += EnablePhysics;
+        stateEvents[ItemState.inInventory].onUpdate += FollowOwner;
+
+        //TODO: implement gradual puking like the above examples
     }
 
     public void Update()
     {
-        if (state == ItemState.inWorld) { return; }
-
-        var ownerPosition = ownerTransform.position;
-
-        switch (state)
-        {
-            case ItemState.beingConsumed:
-                gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, ownerPosition, consumptionRate);
-                gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, Vector3.zero, consumptionRate);
-
-                var hasBeenConsumed = gameObject.transform.localScale.magnitude / initialScale.magnitude < consumptionCutoff;
-                if (hasBeenConsumed) { SetState(ItemState.inInventory); }
-
-                break;
-
-            case ItemState.inInventory:
-                //TODO: add some periodic + random offset so objects float around in you?
-                gameObject.transform.position = ownerPosition;
-
-                break;
-
-            case ItemState.beingPuked:
-                //TODO: implement gradual puking
-                break;
-        }
-
+        stateEvents[state].onUpdate?.Invoke();
     }
 
 
+
+    private void ClampShrunkScale()
+    {
+        gameObject.transform.localScale = initialScale * consumptionCutoff;
+    }
 
     private void Decay()
     {
@@ -162,6 +167,24 @@ public class Consumable : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void DisablePhysics()
+    {
+        rb.isKinematic = true;
+        hitbox.enabled = false;
+    }
+
+    private void EnablePhysics()
+    {
+        rb.isKinematic = false;
+        hitbox.enabled = true;
+    }
+
+    private void FollowOwner()
+    {
+        //TODO: add some periodic + random offset so objects float around in you?
+        gameObject.transform.position = ownerTransform.position;
+    }
+
     /// <summary>
     /// Moves the item to the position and reactivates it.
     /// </summary>
@@ -183,33 +206,20 @@ public class Consumable : MonoBehaviour
     /// Swap between states
     /// </summary>
     /// <param name="state"></param>
-    public void SetState(ItemState state)
+    public void SetState(ItemState newState)
     {
-        if (state == this.state) { return; }
+        var previousState = state;
+        if (newState == previousState) { return; }
+        state = newState;
 
-        switch (state)
-        {
-            case ItemState.inWorld:
-                rb.isKinematic = false;
-                hitbox.enabled = true;
+        stateEvents[previousState].onExit?.Invoke();
+        stateEvents[newState].onEnter?.Invoke();
+    }
 
-                //reset the velocity 
-                rb.velocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-
-                break;
-
-            case ItemState.inInventory:
-                rb.isKinematic = true;
-                hitbox.enabled = false;
-
-                //TODO: swap this to be based on the initial scale, not just [1,1,1]
-                gameObject.transform.localScale = new Vector3(1f, 1f, 1f) * consumptionCutoff;
-
-                StartDecay();
-                break;
-        }
-        this.state = state;
+    private void ResetVelocity()
+    {
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
     }
 
     /// <summary>
@@ -223,5 +233,15 @@ public class Consumable : MonoBehaviour
         decayTimer = gameObject.AddComponent<Timer>();
         decayTimer.StartTimer(decayTime);
         decayTimer.onTimerComplete += Decay;
+    }
+
+    private void UpdateBeingConsumed()
+    {
+        var ownerPosition = ownerTransform.position;
+        gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, ownerPosition, consumptionRate);
+        gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, Vector3.zero, consumptionRate);
+
+        var hasBeenConsumed = gameObject.transform.localScale.magnitude / initialScale.magnitude < consumptionCutoff;
+        if (hasBeenConsumed) { SetState(ItemState.inInventory); }
     }
 }
