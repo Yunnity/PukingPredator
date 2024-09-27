@@ -359,16 +359,6 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 672207146}
-    - target: {fileID: 772070024568196264, guid: ffe3631cc44e34b26b4730f4088425f5,
-        type: 3}
-      propertyPath: sensitivity
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 772070024568196264, guid: ffe3631cc44e34b26b4730f4088425f5,
-        type: 3}
-      propertyPath: playerTransform
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 3042836795401077674, guid: ffe3631cc44e34b26b4730f4088425f5,
         type: 3}
       propertyPath: field of view
