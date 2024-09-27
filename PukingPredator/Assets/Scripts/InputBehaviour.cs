@@ -19,7 +19,7 @@ public abstract class InputBehaviour : MonoBehaviour
     /// <summary>
     /// A list of events and the actions subscribed to them.
     /// </summary>
-    private List<(EventType eventType, Action action)> subscriptions = new();
+    private List<(InputEvent inputEvent, Action action)> subscriptions = new();
 
     /// <summary>
     /// The coroutine used to fetch the gameInput and apply the subscriptions.
@@ -72,11 +72,11 @@ public abstract class InputBehaviour : MonoBehaviour
         {
             if (isSubscribed)
             {
-                gameInput.Subscribe(subscription.eventType, subscription.action);
+                gameInput.Subscribe(subscription.inputEvent, subscription.action);
             }
             else
             {
-                gameInput.Unsubscribe(subscription.eventType, subscription.action);
+                gameInput.Unsubscribe(subscription.inputEvent, subscription.action);
             }
         }
     }
@@ -84,28 +84,28 @@ public abstract class InputBehaviour : MonoBehaviour
     /// <summary>
     /// Used to add an event binding.
     /// </summary>
-    /// <param name="eventType"></param>
+    /// <param name="inputEvent"></param>
     /// <param name="action"></param>
-    public void Subscribe(EventType eventType, Action action)
+    public void Subscribe(InputEvent inputEvent, Action action)
     {
-        subscriptions.Add((eventType, action));
+        subscriptions.Add((inputEvent, action));
         if (areSubscriptionsActive)
         {
-            gameInput.Subscribe(eventType, action);
+            gameInput.Subscribe(inputEvent, action);
         }
     }
 
     /// <summary>
     /// Used to remove an event binding.
     /// </summary>
-    /// <param name="eventType"></param>
+    /// <param name="inputEvent"></param>
     /// <param name="action"></param>
-    public void Unsubscribe(EventType eventType, Action action)
+    public void Unsubscribe(InputEvent inputEvent, Action action)
     {
-        subscriptions.RemoveAll(s => s.eventType == eventType && s.action == action);
+        subscriptions.RemoveAll(s => s.inputEvent == inputEvent && s.action == action);
         if (areSubscriptionsActive)
         {
-            gameInput.Unsubscribe(eventType, action);
+            gameInput.Unsubscribe(inputEvent, action);
         }
     }
 }
