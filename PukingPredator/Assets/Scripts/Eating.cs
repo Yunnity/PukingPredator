@@ -42,8 +42,6 @@ public class Eating : InputBehaviour
 
         Subscribe(EventType.onEat, GameInput_Eat);
         Subscribe(EventType.onPuke, GameInput_Puke);
-
-        Unsubscribe(EventType.onEat, GameInput_Eat);
     }
 
 
