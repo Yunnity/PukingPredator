@@ -43,6 +43,10 @@ public abstract class InputBehaviour : MonoBehaviour
 
 
 
+    /// <summary>
+    /// Gets the GameInput instance and then activates all subscriptions.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator GetGameInput()
     {
         while (gameInput == null)
