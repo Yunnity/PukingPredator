@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EventType
+/// <summary>
+/// The events that occur based on user inputs.
+/// </summary>
+public enum InputEvent
 {
     /// <summary>
     /// Triggers when the user presses the "eat" input.
@@ -36,7 +39,7 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     /// <summary>
     /// Storage for the actions related to each event.
     /// </summary>
-    private Dictionary<EventType, Action> events = new Dictionary<EventType, Action>();
+    private Dictionary<InputEvent, Action> events = new();
 
     /// <summary>
     /// The movement input vector. Has a max magnitude of 1.
@@ -53,31 +56,31 @@ public class GameInput : SingletonMonobehaviour<GameInput>
         controls.Player.Enable();
 
         //Setup empty actions for every event type
-        foreach (EventType eventType in Enum.GetValues(typeof(EventType)))
+        foreach (InputEvent inputEvent in Enum.GetValues(typeof(InputEvent)))
         {
-            events.Add(eventType, null);
+            events.Add(inputEvent, null);
         }
-        controls.Player.Eat.performed += context => TriggerEvent(EventType.onEat);
-        controls.Player.Jump.canceled += context => TriggerEvent(EventType.onJumpUp);
-        controls.Player.Jump.performed += context => TriggerEvent(EventType.onJumpDown);
-        controls.Player.Puke.performed += context => TriggerEvent(EventType.onPuke);
-        controls.Player.Reset.performed += context => TriggerEvent(EventType.onResetLevel);
+        controls.Player.Eat.performed += context => TriggerEvent(InputEvent.onEat);
+        controls.Player.Jump.canceled += context => TriggerEvent(InputEvent.onJumpUp);
+        controls.Player.Jump.performed += context => TriggerEvent(InputEvent.onJumpDown);
+        controls.Player.Puke.performed += context => TriggerEvent(InputEvent.onPuke);
+        controls.Player.Reset.performed += context => TriggerEvent(InputEvent.onResetLevel);
     }
 
 
 
-    public void Subscribe(EventType eventType, Action action)
+    public void Subscribe(InputEvent inputEvent, Action action)
     {
-        events[eventType] += action;
+        events[inputEvent] += action;
     }
 
-    private void TriggerEvent(EventType eventType)
+    private void TriggerEvent(InputEvent inputEvent)
     {
-        events[eventType]?.Invoke();
+        events[inputEvent]?.Invoke();
     }
 
-    public void Unsubscribe(EventType eventType, Action action)
+    public void Unsubscribe(InputEvent inputEvent, Action action)
     {
-        events[eventType] -= action;
+        events[inputEvent] -= action;
     }
 }

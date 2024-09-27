@@ -86,8 +86,8 @@ public class Movement : InputBehaviour
 
         if (playerCamera == null) { playerCamera = GameObject.FindGameObjectsWithTag("MainCamera")[0]; }
 
-        Subscribe(EventType.onJumpDown, GameInput_JumpDown);
-        Subscribe(EventType.onJumpUp, GameInput_JumpUp);
+        Subscribe(InputEvent.onJumpDown, GameInput_JumpDown);
+        Subscribe(InputEvent.onJumpUp, GameInput_JumpUp);
     }
 
     private void FixedUpdate()

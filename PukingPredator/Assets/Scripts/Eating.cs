@@ -40,8 +40,8 @@ public class Eating : InputBehaviour
 
         inventory.onChange += UpdateMass;
 
-        Subscribe(EventType.onEat, GameInput_Eat);
-        Subscribe(EventType.onPuke, GameInput_Puke);
+        Subscribe(InputEvent.onEat, GameInput_Eat);
+        Subscribe(InputEvent.onPuke, GameInput_Puke);
     }
 
 

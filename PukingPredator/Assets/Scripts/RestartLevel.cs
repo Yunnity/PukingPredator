@@ -6,7 +6,7 @@ public class RestartLevel : InputBehaviour
 
     void Start()
     {
-        Subscribe(EventType.onResetLevel, GameInput_ResetLevel);
+        Subscribe(InputEvent.onResetLevel, GameInput_ResetLevel);
     }
 
 
