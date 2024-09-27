@@ -80,6 +80,16 @@ public class Consumable : MonoBehaviour
     public float mass => 1f;
 
     /// <summary>
+    /// The game object that owns the consumable (ie the player).
+    /// </summary>
+    public GameObject owner => inventory.owner;
+
+    /// <summary>
+    /// The transform of the owner.
+    /// </summary>
+    public Transform ownerTransform => inventory.owner.transform;
+
+    /// <summary>
     /// Rigid body attached to the instance.
     /// </summary>
     private Rigidbody rb;
@@ -102,7 +112,7 @@ public class Consumable : MonoBehaviour
     {
         if (state == ItemState.inWorld) { return; }
 
-        var ownerPosition = inventory.owner.transform.position;
+        var ownerPosition = ownerTransform.position;
 
         switch (state)
         {
