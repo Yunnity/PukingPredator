@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 765137662425530369}
   - component: {fileID: 4075156915502160810}
   - component: {fileID: 1194575958544561486}
+  - component: {fileID: 1461194574326899231}
+  - component: {fileID: 9057554939570478379}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -51,11 +53,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e786e94637a78744abcae44b87f8a06c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  consumableLayers:
-    serializedVersion: 2
-    m_Bits: 128
-  inventory: {fileID: 8166780266706507098}
-  playerCamera: {fileID: 0}
 --- !u!136 &2990891393853639730
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -105,7 +102,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!82 &765137662425530369
 AudioSource:
   m_ObjectHideFlags: 0
@@ -235,12 +232,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03698c6eab8c14eb6a06f26583a8aadc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameInput: {fileID: 0}
   buttonTime: 0.4
-  cancelRate: 25
   groundLayer:
     serializedVersion: 2
     m_Bits: 129
+  jumpCancelRate: 25
   jumpForce: 6
+  playerCamera: {fileID: 0}
+--- !u!114 &1461194574326899231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5441739923584274610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c7f26f8eaf9849399a218ec7cfb8b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameInput: {fileID: 0}
+  consumableLayers:
+    serializedVersion: 2
+    m_Bits: 129
+  inventory: {fileID: 8166780266706507098}
+--- !u!114 &9057554939570478379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5441739923584274610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f71f7d57b8c3c44f78f4a26b23851fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameInput: {fileID: 0}
 --- !u!1001 &49880248143171028
 PrefabInstance:
   m_ObjectHideFlags: 0
