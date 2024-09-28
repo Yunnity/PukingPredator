@@ -89,6 +89,12 @@ public class Consumable : MonoBehaviour
     /// </summary>
     public ItemState state { get; private set; } = ItemState.inWorld;
 
+    /// <summary>
+    /// Settings for the outline of the consumable (toggled on via enable when player is near)
+    /// </summary>
+    private Outline outline;
+    private const float OUTLINEDETECTIONRADIUS = 5f;
+    private const float OUTLINERADIUS = 0.8f;
 
 
     private void Awake()
@@ -96,11 +102,16 @@ public class Consumable : MonoBehaviour
         initialScale = gameObject.transform.localScale;
         rb = GetComponent<Rigidbody>();
         hitbox = GetComponent<Collider>();
+        ConfigureOutlines();
     }
 
     public void Update()
     {
-        if (state == ItemState.inWorld) { return; }
+        if (state == ItemState.inWorld)
+        {
+            IsPlayerNear();
+            return;
+        }
 
         var ownerPosition = inventory.owner.transform.position;
 
@@ -127,8 +138,6 @@ public class Consumable : MonoBehaviour
         }
 
     }
-
-
 
     private void Decay()
     {
@@ -213,5 +222,28 @@ public class Consumable : MonoBehaviour
         decayTimer = gameObject.AddComponent<Timer>();
         decayTimer.StartTimer(decayTime);
         decayTimer.onTimerComplete += Decay;
+    }
+
+    private void ConfigureOutlines()
+    {
+        outline = gameObject.AddComponent<Outline>();
+        outline.OutlineWidth = OUTLINERADIUS;
+        outline.OutlineMode = Outline.Mode.OutlineVisible;
+    }
+
+    private void IsPlayerNear()
+    {
+        if (outline == null) return;
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, OUTLINEDETECTIONRADIUS);
+        foreach (Collider collider in hitColliders)
+        {
+            if (collider.gameObject.CompareTag("Player"))
+            {
+                outline.enabled = true;
+                return;
+            }
+        }
+        outline.enabled = false;
+        return;
     }
 }
