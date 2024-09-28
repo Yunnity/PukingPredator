@@ -104,7 +104,7 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// The actions that get executed when entering a state.
     /// </summary>
-    private Dictionary<ItemState, ConsumableState> stateEvents = new();
+    public Dictionary<ItemState, ConsumableState> stateEvents = new();
 
 
 
