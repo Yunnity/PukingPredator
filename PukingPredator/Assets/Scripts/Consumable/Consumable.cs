@@ -120,7 +120,9 @@ public class Consumable : MonoBehaviour
 
         if (rb != null) { stateEvents[ItemState.inWorld].onEnter += ResetVelocity; }
         stateEvents[ItemState.inWorld].onEnter += SetLayerToConsumable;
+        stateEvents[ItemState.inWorld].onEnter += SetGravityEnabled;
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
+        stateEvents[ItemState.inWorld].onExit += SetGravityDisabled; 
 
         stateEvents[ItemState.beingConsumed].onUpdate += UpdateBeingConsumed;
 
@@ -185,6 +187,29 @@ public class Consumable : MonoBehaviour
         gameObject.transform.position = ownerTransform.position;
     }
 
+    #region Gravity
+    private void SetGravity(bool enabled)
+    {
+        foreach (GameObject target in gameObject.GetDescendantsAndSelf())
+        {
+            var targetRB = target.GetComponent<Rigidbody>();
+            
+            if (targetRB == null) { continue; }
+            targetRB.useGravity = enabled;
+        }
+    }
+
+    private void SetGravityDisabled()
+    {
+        SetGravity(false);
+    }
+
+    private void SetGravityEnabled()
+    {
+        SetGravity(true);
+    }
+    #endregion
+
     /// <summary>
     /// Moves the item to the position and reactivates it.
     /// </summary>
@@ -218,7 +243,6 @@ public class Consumable : MonoBehaviour
         int layer = LayerMask.NameToLayer(layerName);
         foreach (GameObject target in gameObject.GetDescendantsAndSelf())
         {
-            SetLayerRecursively(childTransform, layer);
             target.layer = layer;
         }
     }
