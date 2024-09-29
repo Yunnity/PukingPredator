@@ -215,21 +215,11 @@ public class Consumable : MonoBehaviour
     /// <param name="layerName"></param>
     private void SetLayer(string layerName)
     {
-        int targetLayer = LayerMask.NameToLayer(layerName);
-        SetLayerRecursively(transform, targetLayer);
-    }
-
-    /// <summary>
-    /// Used to set the object and its children to a given layer
-    /// </summary>
-    /// <param name="transform"></param>
-    /// <param name="layer"></param>
-    private void SetLayerRecursively(Transform transform, int layer)
-    {
-        transform.gameObject.layer = layer;
-        foreach (Transform childTransform in transform)
+        int layer = LayerMask.NameToLayer(layerName);
+        foreach (GameObject target in gameObject.GetDescendantsAndSelf())
         {
             SetLayerRecursively(childTransform, layer);
+            target.layer = layer;
         }
     }
 
