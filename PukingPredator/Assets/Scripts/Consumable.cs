@@ -147,16 +147,18 @@ public class Consumable : MonoBehaviour
             var replaceConsumableData = replaceObject.GetComponent<Consumable>();
             replaceConsumableData.SetState(state);
 
-            // Ungroups once decayed
-            if (replaceConsumableData is ConsumableGroup consumableGroup)
-            {
-                consumableGroup.UnGroup();
-            }
-
+           
             //TODO: the following line doesnt work but it needs to be implemented in case an item is converted while being spit out or consumed
             //replaceObject.transform.localScale *= gameObject.transform.localScale.magnitude / initialScale.magnitude;
 
             if (inventory != null) { inventory.ReplaceItem(this, replaceConsumableData); }
+            else
+            { // Ungroups once decayed
+                if (replaceConsumableData is ConsumableGroup consumableGroup)
+                {
+                    consumableGroup.UnGroup();
+                }
+            }
         }
 
         Destroy(gameObject);

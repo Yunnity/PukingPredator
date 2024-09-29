@@ -30,9 +30,9 @@ public class ConsumableGroup : Consumable
             }
         }
 
-
-        SetState(ItemState.inWorld);
         UnGroup();
+        SetState(ItemState.inWorld);
+        Destroy(gameObject);
     }
 
 
@@ -47,6 +47,6 @@ public class ConsumableGroup : Consumable
             childTransform.SetParent(null);
         }
 
-        Destroy(gameObject);
+        
     }
 }
