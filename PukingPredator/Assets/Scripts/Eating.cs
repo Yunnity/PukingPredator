@@ -73,7 +73,8 @@ public class Eating : InputBehaviour
         Consumable itemToPlace = inventory.PopItem();
 
         var pukeDir = transform.forward;
-        itemToPlace.PlaceAt(transform.position + pukeDir * pukeDistance);
+        var targetPosition = transform.position + pukeDir * pukeDistance;
+        itemToPlace.PlaceAt(targetPosition);
     }
 
     private void UpdateMass()
