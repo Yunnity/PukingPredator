@@ -18,12 +18,11 @@ public class ConsumableGroup : Consumable
     /// </summary>
     public void Ungroup()
     {
-        for (int i = transform.childCount - 1; i >= 0; i--)
+        foreach (GameObject child in gameObject.GetChildren())
         {
-            Transform childTransform = transform.GetChild(i);
-            childTransform.SetParent(null);
+            child.transform.SetParent(null);
 
-            var childRB = childTransform.gameObject.GetComponent<Rigidbody>();
+            var childRB = child.GetComponent<Rigidbody>();
             if (childRB != null)
             {
                 childRB.velocity = Vector3.zero;

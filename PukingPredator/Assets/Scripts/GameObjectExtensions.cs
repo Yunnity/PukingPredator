@@ -4,10 +4,25 @@ using UnityEngine;
 public static class GameObjectExtensions
 {
     /// <summary>
-    /// This method will return all descendants of the GameObject.
+    /// 
     /// </summary>
     /// <param name="gameObject"></param>
-    /// <returns></returns>
+    /// <returns>The direct children of the GameObject.</returns>
+    public static List<GameObject> GetChildren(this GameObject gameObject)
+    {
+        List<GameObject> children = new List<GameObject>();
+        foreach (Transform child in gameObject.transform)
+        {
+            children.Add(child.gameObject);
+        }
+        return children;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="gameObject"></param>
+    /// <returns>All descendants of the GameObject.</returns>
     public static List<GameObject> GetDescendants(this GameObject gameObject)
     {
         List<GameObject> descendants = new List<GameObject>();
@@ -16,10 +31,10 @@ public static class GameObjectExtensions
     }
 
     /// <summary>
-    /// This method will return all descendants of the GameObject and also the game object itself.
+    /// 
     /// </summary>
     /// <param name="gameObject"></param>
-    /// <returns></returns>
+    /// <returns>All descendants of the GameObject and also the game object itself.</returns>
     public static List<GameObject> GetDescendantsAndSelf(this GameObject gameObject)
     {
         List<GameObject> descendants = new List<GameObject>
