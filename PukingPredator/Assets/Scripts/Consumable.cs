@@ -1,4 +1,7 @@
+using System;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public enum ItemState
 {
@@ -12,7 +15,7 @@ public enum ItemState
 public class Consumable : MonoBehaviour
 {
     [SerializeField]
-    private bool _canDecay = false;
+    protected bool _canDecay = false;
     /// <summary>
     /// If the instance can decay.
     /// </summary>
@@ -21,41 +24,41 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// The lerp factor used when shrinking items.
     /// </summary>
-    private float consumptionRate = 0.2f;
+    protected float consumptionRate = 0.2f;
 
     /// <summary>
     /// The relative scale at which an object will be treated as consumed.
     /// ie 0.05 means 5% of original size.
     /// </summary>
     [SerializeField]
-    private float consumptionCutoff = 0.05f;
+    protected float consumptionCutoff = 0.05f;
 
     /// <summary>
     /// The prefab the instance should become when it decays.
     /// </summary>
     [SerializeField]
-    private GameObject decayInto;
+    protected GameObject decayInto;
 
     /// <summary>
     /// The time it takes to decay.
     /// </summary>
-    private float decayTime = 5f;
+    protected float decayTime = 5f;
 
     /// <summary>
     /// The timer used to track the decay.
     /// </summary>
-    public Timer decayTimer { get; private set; }
+    public Timer decayTimer { get; protected set; }
 
     /// <summary>
     /// Collider attached to the instance.
     /// </summary>
-    private Collider hitbox;
+    protected Collider hitbox;
 
     /// <summary>
     /// The initial scale of the instance before being eaten. Used to restore
     /// its size to normal after being puked.
     /// </summary>
-    public Vector3 initialScale { get; private set; }
+    public Vector3 initialScale { get; protected set; }
 
     /// <summary>
     /// Reference to the inventory this item belongs to.
@@ -82,26 +85,26 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// Rigid body attached to the instance.
     /// </summary>
-    private Rigidbody rb;
+    protected Rigidbody rb;
 
     /// <summary>
     /// If the item is entering, leaving, or sitting in the inventory.
     /// </summary>
-    public ItemState state { get; private set; } = ItemState.inWorld;
+    public ItemState state { get; protected set; } = ItemState.inWorld;
 
-
+    protected Action swapLayerAction;
 
     private void Awake()
     {
         initialScale = gameObject.transform.localScale;
         rb = GetComponent<Rigidbody>();
         hitbox = GetComponent<Collider>();
+        swapLayerAction += SwapToLayer;
     }
 
     public void Update()
     {
         if (state == ItemState.inWorld) { return; }
-
         var ownerPosition = inventory.owner.transform.position;
 
         switch (state)
@@ -130,7 +133,7 @@ public class Consumable : MonoBehaviour
 
 
 
-    private void Decay()
+    protected void Decay()
     {
         if (decayInto == null)
         {
@@ -143,6 +146,13 @@ public class Consumable : MonoBehaviour
             //Copy the state of this object over
             var replaceConsumableData = replaceObject.GetComponent<Consumable>();
             replaceConsumableData.SetState(state);
+
+            // Ungroups once decayed
+            if (replaceConsumableData is ConsumableGroup consumableGroup)
+            {
+                consumableGroup.UnGroup();
+            }
+
             //TODO: the following line doesnt work but it needs to be implemented in case an item is converted while being spit out or consumed
             //replaceObject.transform.localScale *= gameObject.transform.localScale.magnitude / initialScale.magnitude;
 
@@ -156,7 +166,7 @@ public class Consumable : MonoBehaviour
     /// Moves the item to the position and reactivates it.
     /// </summary>
     /// <param name="position"></param>
-    public void PlaceAt(Vector3 position)
+    public virtual void PlaceAt(Vector3 position)
     {
         if (state != ItemState.inInventory) { return; }
 
@@ -180,9 +190,9 @@ public class Consumable : MonoBehaviour
         switch (state)
         {
             case ItemState.inWorld:
-                rb.isKinematic = false;
-                hitbox.enabled = true;
-
+                //rb.isKinematic = false;
+                //hitbox.enabled = true;
+                swapLayerAction?.Invoke();
                 //reset the velocity 
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
@@ -190,9 +200,9 @@ public class Consumable : MonoBehaviour
                 break;
 
             case ItemState.inInventory:
-                rb.isKinematic = true;
-                hitbox.enabled = false;
-
+                //rb.isKinematic = true;
+                //hitbox.enabled = false;
+                swapLayerAction?.Invoke();
                 //TODO: swap this to be based on the initial scale, not just [1,1,1]
                 gameObject.transform.localScale = new Vector3(1f, 1f, 1f) * consumptionCutoff;
 
@@ -214,4 +224,33 @@ public class Consumable : MonoBehaviour
         decayTimer.StartTimer(decayTime);
         decayTimer.onTimerComplete += Decay;
     }
+
+
+    /// <summary>
+    /// Swaps the layer of the current GameObject between "Consumed" and "Consumable".
+    /// Also recursively applies the same layer swap to all child Consumable objects
+    /// </summary>
+    public void SwapToLayer()
+    {
+        string currentLayerName = LayerMask.LayerToName(gameObject.layer);
+
+        if (currentLayerName == "Consumed")
+        {
+            gameObject.layer = LayerMask.NameToLayer("Consumable");
+        }
+        else if (currentLayerName == "Consumable")
+        {
+            gameObject.layer = LayerMask.NameToLayer("Consumed");
+        }
+
+        foreach (Transform childTransform in transform)
+        {
+            Consumable childConsumable = childTransform.GetComponent<Consumable>();
+            if (childConsumable != null)
+            {
+                childConsumable.SwapToLayer();
+            }
+        }
+    }
+
 }
