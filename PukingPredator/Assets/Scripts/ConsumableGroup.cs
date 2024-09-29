@@ -5,6 +5,17 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class ConsumableGroup : Consumable
 {
+    public void Start()
+    {
+        foreach (Transform childTransform in transform)
+        {
+            Consumable childConsumable = childTransform.GetComponent<Consumable>();
+            if (childConsumable != null)
+            {
+                childConsumable.SwapToLayer();
+            }
+        }
+    }
     /// <summary>
     /// Moves the group items to the position and reactivates them.
     /// </summary>
@@ -36,6 +47,19 @@ public class ConsumableGroup : Consumable
     }
 
 
+    public new void SwapToLayer()
+    {
+        base.SwapToLayer();
+        foreach (Transform childTransform in transform)
+        {
+            Consumable childConsumable = childTransform.GetComponent<Consumable>();
+            if (childConsumable != null)
+            {
+                childConsumable.SwapToLayer();
+            }
+        }
+    }
+
     /// <summary>
     /// Makes each child of the group its own consumable object
     /// </summary>
@@ -46,7 +70,5 @@ public class ConsumableGroup : Consumable
             Transform childTransform = transform.GetChild(i);
             childTransform.SetParent(null);
         }
-
-        
     }
 }

@@ -158,6 +158,7 @@ public class Consumable : MonoBehaviour
                 {
                     consumableGroup.UnGroup();
                 }
+                Destroy(replaceObject);
             }
         }
 
@@ -192,8 +193,8 @@ public class Consumable : MonoBehaviour
         switch (state)
         {
             case ItemState.inWorld:
-                //rb.isKinematic = false;
-                //hitbox.enabled = true;
+                rb.isKinematic = false;
+                hitbox.enabled = true;
                 swapLayerAction?.Invoke();
                 //reset the velocity 
                 rb.velocity = Vector3.zero;
@@ -202,8 +203,8 @@ public class Consumable : MonoBehaviour
                 break;
 
             case ItemState.inInventory:
-                //rb.isKinematic = true;
-                //hitbox.enabled = false;
+                rb.isKinematic = true;
+                hitbox.enabled = false;
                 swapLayerAction?.Invoke();
                 //TODO: swap this to be based on the initial scale, not just [1,1,1]
                 gameObject.transform.localScale = new Vector3(1f, 1f, 1f) * consumptionCutoff;
@@ -239,19 +240,12 @@ public class Consumable : MonoBehaviour
         if (currentLayerName == "Consumed")
         {
             gameObject.layer = LayerMask.NameToLayer("Consumable");
+            rb.useGravity = true;
         }
         else if (currentLayerName == "Consumable")
         {
             gameObject.layer = LayerMask.NameToLayer("Consumed");
-        }
-
-        foreach (Transform childTransform in transform)
-        {
-            Consumable childConsumable = childTransform.GetComponent<Consumable>();
-            if (childConsumable != null)
-            {
-                childConsumable.SwapToLayer();
-            }
+            rb.useGravity = false;
         }
     }
 
