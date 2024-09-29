@@ -9,8 +9,6 @@ public enum ItemState
     inInventory,
     beingPuked,
 }
-[RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(Collider))]
 public class Consumable : MonoBehaviour
 {
     [SerializeField]
@@ -108,7 +106,7 @@ public class Consumable : MonoBehaviour
 
 
 
-    private void Awake()
+    protected virtual void Awake()
     {
         initialScale = gameObject.transform.localScale;
         rb = GetComponent<Rigidbody>();
@@ -120,14 +118,16 @@ public class Consumable : MonoBehaviour
             stateEvents.Add(itemState, new ConsumableState());
         }
 
-        stateEvents[ItemState.inWorld].onEnter += ResetVelocity;
+        if (rb != null) { stateEvents[ItemState.inWorld].onEnter += ResetVelocity; }
+        stateEvents[ItemState.inWorld].onEnter += SetLayerToConsumable;
+        stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
 
         stateEvents[ItemState.beingConsumed].onUpdate += UpdateBeingConsumed;
 
-        stateEvents[ItemState.inInventory].onEnter += DisablePhysics;
+        //stateEvents[ItemState.inInventory].onEnter += DisablePhysics;
         stateEvents[ItemState.inInventory].onEnter += ClampShrunkScale;
         stateEvents[ItemState.inInventory].onEnter += StartDecay;
-        stateEvents[ItemState.inInventory].onExit += EnablePhysics;
+        //stateEvents[ItemState.inInventory].onExit += EnablePhysics;
         stateEvents[ItemState.inInventory].onUpdate += FollowOwner;
 
         //TODO: implement gradual puking like the above examples
@@ -202,6 +202,48 @@ public class Consumable : MonoBehaviour
         SetState(ItemState.inWorld);
     }
 
+    private void ResetVelocity()
+    {
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    #region Set Layer
+    /// <summary>
+    /// Set the layer of the instance and all of its children to the matching layer name.
+    /// </summary>
+    /// <param name="layerName"></param>
+    private void SetLayer(string layerName)
+    {
+        int targetLayer = LayerMask.NameToLayer(layerName);
+        SetLayerRecursively(transform, targetLayer);
+    }
+
+    /// <summary>
+    /// Used to set the object and its children to a given layer
+    /// </summary>
+    /// <param name="transform"></param>
+    /// <param name="layer"></param>
+    private void SetLayerRecursively(Transform transform, int layer)
+    {
+        transform.gameObject.layer = layer;
+        foreach (Transform childTransform in transform)
+        {
+            SetLayerRecursively(childTransform, layer);
+        }
+    }
+
+    private void SetLayerToConsumable()
+    {
+        SetLayer(ConsumableLayer.CONSUMABLE);
+    }
+
+    private void SetLayerToConsumed()
+    {
+        SetLayer(ConsumableLayer.CONSUMED);
+    }
+    #endregion
+
     /// <summary>
     /// Swap between states
     /// </summary>
@@ -214,12 +256,6 @@ public class Consumable : MonoBehaviour
 
         stateEvents[previousState].onExit?.Invoke();
         stateEvents[newState].onEnter?.Invoke();
-    }
-
-    private void ResetVelocity()
-    {
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
     }
 
     /// <summary>
