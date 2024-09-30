@@ -80,6 +80,11 @@ public class Consumable : MonoBehaviour
     public float mass => 1f;
 
     /// <summary>
+    /// The color of the outline when close to the player.
+    /// </summary>
+    private Color outlineColor = new Color(0.1f, 0.8f, 0.1f, 0.5f);
+
+    /// <summary>
     /// The range at which objects start/stop showing an outline.
     /// </summary>
     private float outlineDetectionRadius = 5f;
@@ -172,6 +177,7 @@ public class Consumable : MonoBehaviour
 
         outline.OutlineWidth = OUTLINE_RADIUS;
         outline.OutlineMode = Outline.Mode.OutlineVisible;
+        outline.OutlineColor = outlineColor;
     }
 
     private void Decay()
