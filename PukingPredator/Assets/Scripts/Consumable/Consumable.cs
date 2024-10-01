@@ -335,7 +335,7 @@ public class Consumable : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, outlineDetectionRadius);
         foreach (Collider collider in hitColliders)
         {
-            if (collider.gameObject.CompareTag("Player"))
+            if (collider.gameObject.CompareTag(GameTag.player))
             {
                 outline.enabled = true;
                 return;
