@@ -270,10 +270,9 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// Set the layer of the instance and all of its children to the matching layer name.
     /// </summary>
-    /// <param name="layerName"></param>
-    private void SetLayer(string layerName)
+    /// <param name="layer"></param>
+    private void SetLayer(int layer)
     {
-        int layer = LayerMask.NameToLayer(layerName);
         foreach (GameObject target in gameObject.GetDescendantsAndSelf())
         {
             target.layer = layer;
@@ -282,12 +281,12 @@ public class Consumable : MonoBehaviour
 
     private void SetLayerToConsumable()
     {
-        SetLayer(ConsumableLayer.CONSUMABLE);
+        SetLayer(GameLayer.consumable);
     }
 
     private void SetLayerToConsumed()
     {
-        SetLayer(ConsumableLayer.CONSUMED);
+        SetLayer(GameLayer.consumed);
     }
     #endregion
 
