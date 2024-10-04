@@ -21,7 +21,7 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// The lerp factor used when shrinking items.
     /// </summary>
-    private float consumptionRate = 0.05f;
+    private float consumptionRate = 0.2f;
 
     /// <summary>
     /// The relative scale at which an object will be treated as consumed.
@@ -286,8 +286,6 @@ public class Consumable : MonoBehaviour
 
     private void UpdateBeingConsumed()
     {
-        var ownerPosition = ownerTransform.position;
-        gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, ownerPosition, consumptionRate);
         gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, Vector3.zero, consumptionRate);
 
         var hasBeenConsumed = gameObject.transform.localScale.magnitude / initialScale.magnitude < consumptionCutoff;

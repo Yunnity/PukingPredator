@@ -94,7 +94,7 @@ public class Movement : InputBehaviour
     {
         //walking code
         //TODO: make this depend on the mass of the object
-        rb.velocity = moveDir * moveSpeed + new Vector3(0, rb.velocity.y, 0);
+        //rb.velocity = moveDir * moveSpeed + new Vector3(0, rb.velocity.y, 0);
 
         //jumping code
         //Reduce jump height if the button is released early

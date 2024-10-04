@@ -1,22 +1,61 @@
+using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+
+public enum MovementState
+{
+    eating,
+    standing
+}
 
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
 {
-    //TODO: the purpose of this class (for now) is now to handle the game state, specifically reaching end of level or falling off cliffs
+    public MovementState state { get; private set; } = MovementState.standing;
+    public Dictionary<MovementState, PlayerState> stateEvents = new();
+
+    [SerializeField]
+    private float consumptionRate = 0.2f;
 
     /// <summary>
     /// The rigidbody of the player.
     /// </summary>
     private Rigidbody rb;
 
+    private Vector3 target;
 
-
-    private void Start()
+    private void Awake()
     {
+        foreach (MovementState moveState in Enum.GetValues(typeof(MovementState)))
+        {
+            stateEvents.Add(moveState, new PlayerState());
+        }
+
+        stateEvents[MovementState.eating].onUpdate += Eating;
         //rb = GetComponent<Rigidbody>();
-        
     }
 
+    private void Update()
+    {
+        stateEvents[state].onUpdate?.Invoke();
+    }
 
+    public void SetTarget(Vector3 target)
+    {
+        this.target = target;
+    }
+
+    public void SetState(MovementState newState)
+    {
+        var previousState = state;
+        if (newState == previousState) { return; }
+        state = newState;
+    }
+
+        public void Eating()
+    {
+        gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, target, consumptionRate);
+        if (Mathf.Abs(Vector3.Distance(gameObject.transform.position, target)) < 1) state = MovementState.standing;
+    }
 }

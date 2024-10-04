@@ -30,7 +30,8 @@ public class Eating : InputBehaviour
     /// </summary>
     private Rigidbody rb;
 
-
+    [SerializeField]
+    Player player;
 
     void Start()
     {
@@ -48,12 +49,12 @@ public class Eating : InputBehaviour
 
     private void GameInput_Eat()
     {
-        if (inventory.isFull) { return; }
+        //if (inventory.isFull) { return; }
 
         // Define the ray, starting from the player's position, shooting forward
         var ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
-        if (Physics.SphereCast(ray, radius: 0.5f, out hit, maxDistance: 5f, layerMask: consumableLayers))
+        if (Physics.SphereCast(ray, radius: 2f, out hit, maxDistance: 5f, layerMask: consumableLayers))
         {
             // Get the GameObject that was hit
             GameObject hitObject = hit.collider.gameObject;
@@ -63,6 +64,10 @@ public class Eating : InputBehaviour
 
             inventory.PushItem(consumableData);
             consumableData.SetState(ItemState.beingConsumed);
+            
+            player.SetTarget(hitObject.transform.position);
+            player.SetState(MovementState.eating);
+
         }
     }
 
