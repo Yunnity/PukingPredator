@@ -80,6 +80,26 @@ public class Consumable : MonoBehaviour
     public float mass => 1f;
 
     /// <summary>
+    /// The color of the outline when close to the player.
+    /// </summary>
+    private Color outlineColor = new Color(0.1f, 0.8f, 0.1f, 0.5f);
+
+    /// <summary>
+    /// The range at which objects start/stop showing an outline.
+    /// </summary>
+    private float outlineDetectionRadius = 5f;
+
+    /// <summary>
+    /// Size of the outline visual.
+    /// </summary>
+    private const float OUTLINE_RADIUS = 1.2f;
+
+    /// <summary>
+    /// Settings for the outline of the consumable (toggled on via enable when player is near)
+    /// </summary>
+    private Outline outline;
+
+    /// <summary>
     /// The game object that owns the consumable (ie the player).
     /// </summary>
     public GameObject owner => inventory.owner;
@@ -112,6 +132,8 @@ public class Consumable : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         hitbox = GetComponent<Collider>();
 
+        ConfigureOutline();
+
         //Setup the state events
         foreach (ItemState itemState in Enum.GetValues(typeof(ItemState)))
         {
@@ -121,6 +143,7 @@ public class Consumable : MonoBehaviour
         if (rb != null) { stateEvents[ItemState.inWorld].onEnter += ResetVelocity; }
         stateEvents[ItemState.inWorld].onEnter += SetLayerToConsumable;
         stateEvents[ItemState.inWorld].onEnter += SetGravityEnabled;
+        stateEvents[ItemState.inWorld].onUpdate += UpdateProximityOutline;
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
         stateEvents[ItemState.inWorld].onExit += SetGravityDisabled; 
 
@@ -145,6 +168,16 @@ public class Consumable : MonoBehaviour
     private void ClampShrunkScale()
     {
         gameObject.transform.localScale = initialScale * consumptionCutoff;
+    }
+
+    private void ConfigureOutline()
+    {
+        outline = gameObject.GetComponent<Outline>();
+        if (outline == null) { outline = gameObject.AddComponent<Outline>(); }
+
+        outline.OutlineWidth = OUTLINE_RADIUS;
+        outline.OutlineMode = Outline.Mode.OutlineVisible;
+        outline.OutlineColor = outlineColor;
     }
 
     private void Decay()
@@ -293,4 +326,22 @@ public class Consumable : MonoBehaviour
         var hasBeenConsumed = gameObject.transform.localScale.magnitude / initialScale.magnitude < consumptionCutoff;
         if (hasBeenConsumed) { SetState(ItemState.inInventory); }
     }
+
+    private void UpdateProximityOutline()
+    {
+        if (outline == null) { return; }
+
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, outlineDetectionRadius);
+        foreach (Collider collider in hitColliders)
+        {
+            if (collider.gameObject.CompareTag(GameTag.player))
+            {
+                outline.enabled = true;
+                return;
+            }
+        }
+        outline.enabled = false;
+        return;
+    }
+
 }
