@@ -12,7 +12,7 @@ public enum InputEvent
     /// </summary>
     onEat,
     /// <summary>
-    /// Triggers when the user presses the "jump" input.
+    /// Triggers when the user presses the "mouse 0" input.
     /// </summary>
     onJumpDown,
     /// <summary>
@@ -20,7 +20,7 @@ public enum InputEvent
     /// </summary>
     onJumpUp,
     /// <summary>
-    /// Triggers when the user releases the "jump" input.
+    /// Triggers when the user releases the "mouse 1" input.
     /// </summary>
     onPuke,
     /// <summary>

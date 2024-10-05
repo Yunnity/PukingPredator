@@ -30,6 +30,9 @@ public class Eating : InputBehaviour
     /// </summary>
     private Rigidbody rb;
 
+    // Time when the right mouse button was pressed
+    private float rightMouseButtonDownTime;
+    private float pukeForce;
 
 
     void Start()
@@ -38,12 +41,26 @@ public class Eating : InputBehaviour
 
         baseMass = rb.mass;
 
+        rightMouseButtonDownTime = 0f;
+
         inventory.onChange += UpdateMass;
 
         Subscribe(InputEvent.onEat, GameInput_Eat);
         Subscribe(InputEvent.onPuke, GameInput_Puke);
     }
 
+
+    private void Update()
+    {
+        if (Input.GetKey("mouse 1"))
+        {
+            rightMouseButtonDownTime += Time.deltaTime;
+        }
+        else
+        {
+            rightMouseButtonDownTime = 0f;
+        }
+    }
 
 
     private void GameInput_Eat()
@@ -59,8 +76,12 @@ public class Eating : InputBehaviour
             GameObject hitObject = hit.collider.gameObject;
 
             var consumableData = hitObject.GetComponent<Consumable>();
-            if (consumableData == null || !consumableData.isConsumable) { return; }
+            if (consumableData == null || !consumableData.isConsumable)
+            {
+                return;
+            }
 
+            rightMouseButtonDownTime = 0f;
             inventory.PushItem(consumableData);
             consumableData.SetState(ItemState.beingConsumed);
         }
@@ -75,6 +96,21 @@ public class Eating : InputBehaviour
         var pukeDir = transform.forward;
         var targetPosition = transform.position + pukeDir * pukeDistance;
         itemToPlace.PlaceAt(targetPosition);
+
+        Rigidbody itemRb = itemToPlace.GetComponent<Rigidbody>();
+        if (itemRb != null)
+        {
+            float itemMass = itemRb.mass;
+            if (rightMouseButtonDownTime > 1f)
+            {
+                pukeForce = Mathf.Clamp(rightMouseButtonDownTime * 10, 10f, 50f);
+                Debug.Log($"pukeForce = {pukeForce}");
+                Debug.Log($"pukeForce * itemMass = {pukeForce * itemMass}");
+                itemRb.AddForce(pukeDir * pukeForce * itemMass, ForceMode.Impulse);
+                //rb.AddForce(-pukeDir * pukeForce * 20f, ForceMode.Impulse);
+            }
+        }
+        rightMouseButtonDownTime = 0f;
     }
 
     private void UpdateMass()
