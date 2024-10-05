@@ -300,11 +300,4 @@ public class Consumable : MonoBehaviour
         if (hasBeenConsumed) { SetState(ItemState.inInventory); }
     }
 
-    private void EnablePhysicsFromParent()
-    {
-        if (gameObject.transform.parent != null)
-        {
-            
-        }
-    }
 }
