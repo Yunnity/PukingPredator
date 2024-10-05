@@ -181,6 +181,11 @@ public class Consumable : MonoBehaviour
         hitbox.enabled = true;
     }
 
+    public void SetRBKinematic(bool isKinematic)
+    {
+        rb.isKinematic = isKinematic;
+    }
+
     private void FollowOwner()
     {
         //TODO: add some periodic + random offset so objects float around in you?
@@ -286,11 +291,20 @@ public class Consumable : MonoBehaviour
 
     private void UpdateBeingConsumed()
     {
+        SetRBKinematic(false);
         var ownerPosition = ownerTransform.position;
         gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, ownerPosition, consumptionRate);
         gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, Vector3.zero, consumptionRate);
 
         var hasBeenConsumed = gameObject.transform.localScale.magnitude / initialScale.magnitude < consumptionCutoff;
         if (hasBeenConsumed) { SetState(ItemState.inInventory); }
+    }
+
+    private void EnablePhysicsFromParent()
+    {
+        if (gameObject.transform.parent != null)
+        {
+            
+        }
     }
 }
