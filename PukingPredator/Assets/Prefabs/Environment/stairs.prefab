@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 1911684935459414642}
   - component: {fileID: 8516310013188519662}
   - component: {fileID: 1027589701618537780}
+  - component: {fileID: 8361830319861193323}
+  - component: {fileID: -6065880408925412385}
   m_Layer: 0
   m_Name: stairs
   m_TagString: Untagged
@@ -103,6 +105,50 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 2089124832967395528, guid: 9f86b7649429f43bb8014953e5f5e9ac, type: 3}
+--- !u!54 &8361830319861193323
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8924489932329422222}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &-6065880408925412385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8924489932329422222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dceb359917d1411f8a63078f82aa37f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _canDecay: 0
+  consumptionCutoff: 0.05
+  decayInto: {fileID: 0}
+  inventory: {fileID: 0}
+  isConsumable: 1
