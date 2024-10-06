@@ -50,7 +50,7 @@ public class Movement : InputBehaviour
     /// The force applied when jumping.
     /// </summary>
     [SerializeField]
-    public float jumpForce = 6;
+    public float jumpForce = 0.02f;
 
     /// <summary>
     /// How long a jump has been going on for.
@@ -65,7 +65,7 @@ public class Movement : InputBehaviour
     /// <summary>
     /// The speed that the player moves in any given direction.
     /// </summary>
-    private float moveSpeed = 10;
+    private float moveSpeed = 2;
 
     /// <summary>
     /// A reference to the camera, used for correcting movement direction.

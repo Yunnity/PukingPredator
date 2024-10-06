@@ -23,7 +23,7 @@ public class Eating : InputBehaviour
     /// <summary>
     /// The distance that items spawn ahead of the player when puking. (TEMP)
     /// </summary>
-    private float pukeDistance = 2f;
+    private float pukeDistance = 0.4f;
 
     /// <summary>
     /// The rigidbody of the player.
@@ -53,7 +53,8 @@ public class Eating : InputBehaviour
         // Define the ray, starting from the player's position, shooting forward
         var ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
-        if (Physics.SphereCast(ray, radius: 0.5f, out hit, maxDistance: 5f, layerMask: consumableLayers))
+        // originally radius 0.5 and maxDistance 5f
+        if (Physics.SphereCast(ray, radius: 0.1f, out hit, maxDistance: 1f, layerMask: consumableLayers))
         {
             // Get the GameObject that was hit
             GameObject hitObject = hit.collider.gameObject;
