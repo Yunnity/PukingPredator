@@ -123,7 +123,7 @@ MonoBehaviour:
   consumptionCutoff: 0.05
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
-  isConsumable: 1
+  isConsumable: 0
 --- !u!54 &-3999986824409013815
 Rigidbody:
   m_ObjectHideFlags: 0

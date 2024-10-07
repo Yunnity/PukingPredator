@@ -151,4 +151,4 @@ MonoBehaviour:
   consumptionCutoff: 0.05
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
-  isConsumable: 1
+  isConsumable: 0
