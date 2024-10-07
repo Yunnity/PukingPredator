@@ -5,12 +5,6 @@ using UnityEngine.UI;
 public class Note : MonoBehaviour
 {
     /// <summary>
-    /// The range that the note will appear inside.
-    /// </summary>
-    [SerializeField]
-    private float detectionRange = 2f;
-
-    /// <summary>
     /// The rate that the image fades in and out.
     /// </summary>
     [SerializeField]
@@ -25,11 +19,6 @@ public class Note : MonoBehaviour
     /// To store the original alpha of the image.
     /// </summary>
     private float originalAlpha;
-
-    /// <summary>
-    /// Reference to the player to check for proximity.
-    /// </summary>
-    private GameObject player;
 
     /// <summary>
     /// The image shown by the note.
@@ -47,30 +36,30 @@ public class Note : MonoBehaviour
     void Start()
     {
         CreateImageComponent();
-
-        player = GameObject.Find("Player");
     }
 
-    void Update()
+    void OnTriggerEnter(Collider other)
     {
-        // Check the distance between the player and this object
-        float distance = Vector3.Distance(transform.position, player.transform.position);
+        if (isPlayerNearby) { return; }
 
-        // If player is within the trigger distance, gradually fade in
-        if (distance < detectionRange && !isPlayerNearby)
+        if (other.gameObject.CompareTag(GameTag.player))
         {
             isPlayerNearby = true;
             StopAllCoroutines(); // Stop any ongoing fading out
             StartCoroutine(FadeImage(originalAlpha)); // Fade in to alpha = 1 * originalAlpha
         }
-        // If player is farther than the trigger distance, gradually fade out
-        else if (distance >= detectionRange && isPlayerNearby)
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (!isPlayerNearby) { return; }
+
+        if (other.gameObject.CompareTag(GameTag.player))
         {
             isPlayerNearby = false;
             StopAllCoroutines(); // Stop any ongoing fading in
             StartCoroutine(FadeImage(0f)); // Fade out to alpha = 0
         }
-
     }
 
 
