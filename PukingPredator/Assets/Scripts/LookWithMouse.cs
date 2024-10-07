@@ -7,7 +7,7 @@ public class LookWithMouse : MonoBehaviour
 {
 
     public Vector2 turn;
-    private float sens = 10f;
+    private float sens = 6f;
     private float maxY = 40;
     private float minY = -40;
     public float speed = 1;
