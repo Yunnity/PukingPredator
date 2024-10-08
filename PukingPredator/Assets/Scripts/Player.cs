@@ -41,6 +41,9 @@ public class Player : MonoBehaviour
         stateEvents[state].onUpdate?.Invoke();
     }
 
+    /// <summary>
+    /// Sets the target to dash towards
+    /// </summary>
     public void SetTarget(Vector3 target)
     {
         this.target = target;
@@ -53,7 +56,10 @@ public class Player : MonoBehaviour
         state = newState;
     }
 
-        public void Eating()
+    /// <summary>
+    /// Creates the dash effect bringing the player close to the consumed object
+    /// </summary>
+    public void Eating()
     {
         gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, target, consumptionRate);
         if (Mathf.Abs(Vector3.Distance(gameObject.transform.position, target)) < 1) state = MovementState.standing;
