@@ -148,7 +148,7 @@ public class Inventory : MonoBehaviour
     {
         items.Remove(item);
 
-        ItemAdded(item);
+        ItemRemoved(item);
     }
     public void RemoveItem(GameObject instance)
     {

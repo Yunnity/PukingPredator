@@ -65,7 +65,7 @@ public class Movement : InputBehaviour
     /// <summary>
     /// The speed that the player moves in any given direction.
     /// </summary>
-    private float moveSpeed = 2;
+    private float moveSpeed = 10f;
 
     /// <summary>
     /// A reference to the camera, used for correcting movement direction.
@@ -78,11 +78,16 @@ public class Movement : InputBehaviour
     /// </summary>
     private Rigidbody rb;
 
+    private float baseMass;
+
+    private const float MOVESPEEDFACTOR = 4f;
+
 
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        baseMass = rb.mass;
 
         if (playerCamera == null) { playerCamera = GameObject.FindGameObjectsWithTag("MainCamera")[0]; }
 
@@ -93,8 +98,9 @@ public class Movement : InputBehaviour
     private void FixedUpdate()
     {
         //walking code
-        //TODO: make this depend on the mass of the object
-        rb.velocity = moveDir * moveSpeed + new Vector3(0, rb.velocity.y, 0);
+        // moveSpeed - (rb.mass - baseMass) alters the movespeed such that we just subtract a constant (0.1f) from the movespeed for each item in the inventory
+        // kind of weird since jumping is tied directly to mass since we use forces, but horizontal movement is not
+        rb.velocity = moveDir * moveSpeed / (1 + Mathf.Exp(rb.mass - baseMass) * MOVESPEEDFACTOR) + new Vector3(0, rb.velocity.y, 0);
 
         //jumping code
         //Reduce jump height if the button is released early
