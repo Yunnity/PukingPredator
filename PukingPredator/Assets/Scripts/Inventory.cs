@@ -42,7 +42,7 @@ public class Inventory : MonoBehaviour
     /// The max number of items that can be held at once.
     /// </summary>
     [SerializeField]
-    private int maxCount = 8;
+    private int maxCount = 10;
 
     /// <summary>
     /// Triggered whenever items enter/leave the inventory or decay. This will
