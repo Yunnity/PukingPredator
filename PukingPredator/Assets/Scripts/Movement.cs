@@ -65,7 +65,7 @@ public class Movement : InputBehaviour
     /// <summary>
     /// The speed that the player moves in any given direction.
     /// </summary>
-    private float moveSpeed = 2;
+    private float moveSpeed = 10f;
 
     /// <summary>
     /// A reference to the camera, used for correcting movement direction.
@@ -80,7 +80,7 @@ public class Movement : InputBehaviour
 
     private float baseMass;
 
-    private const float MOVESPEEDFACTOR = 6f;
+    private const float MOVESPEEDFACTOR = 4f;
 
 
 
@@ -100,7 +100,7 @@ public class Movement : InputBehaviour
         //walking code
         // moveSpeed - (rb.mass - baseMass) alters the movespeed such that we just subtract a constant (0.1f) from the movespeed for each item in the inventory
         // kind of weird since jumping is tied directly to mass since we use forces, but horizontal movement is not
-        rb.velocity = moveDir * (moveSpeed - ((rb.mass - baseMass) * (rb.mass - baseMass) * MOVESPEEDFACTOR)) + new Vector3(0, rb.velocity.y, 0);
+        rb.velocity = moveDir * moveSpeed / (1 + (rb.mass - baseMass) * (rb.mass - baseMass) * MOVESPEEDFACTOR) + new Vector3(0, rb.velocity.y, 0);
 
         //jumping code
         //Reduce jump height if the button is released early
