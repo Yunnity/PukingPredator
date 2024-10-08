@@ -42,7 +42,7 @@ public class Inventory : MonoBehaviour
     /// The max number of items that can be held at once.
     /// </summary>
     [SerializeField]
-    private int maxCount = 2;
+    private int maxCount = 8;
 
     /// <summary>
     /// Triggered whenever items enter/leave the inventory or decay. This will
@@ -148,7 +148,7 @@ public class Inventory : MonoBehaviour
     {
         items.Remove(item);
 
-        ItemAdded(item);
+        ItemRemoved(item);
     }
     public void RemoveItem(GameObject instance)
     {

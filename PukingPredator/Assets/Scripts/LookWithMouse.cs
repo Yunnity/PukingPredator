@@ -33,7 +33,6 @@ public class LookWithMouse : MonoBehaviour
         {
             turn.y = maxY;
         }
-        Debug.Log(-turn.y);
         _transform.rotation = Quaternion.Euler(-turn.y, turn.x, 0);
     }
 }

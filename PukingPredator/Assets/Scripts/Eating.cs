@@ -30,13 +30,20 @@ public class Eating : InputBehaviour
     /// </summary>
     private Rigidbody rb;
 
+    /// <summary>
+    /// The scale factor for the player's mass as they eat objects
+    /// </summary>
+    private const float MASSFACTOR = 0.05f;
 
+    private Vector3 baseScale;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
 
         baseMass = rb.mass;
+
+        baseScale = gameObject.transform.localScale;
 
         inventory.onChange += UpdateMass;
 
@@ -82,6 +89,13 @@ public class Eating : InputBehaviour
         var totalItemMass = inventory.totalMass;
 
         //TODO: make this update the mass, doesnt have to be 1-1 or even linear
-        rb.mass = baseMass;
+        int currInventoryCount = inventory.itemCount;
+
+        // doing it this way would essentially add on the average of the inventory's mass to the player, prob not what we want...
+        //rb.mass = baseMass + (totalItemMass / currInventoryCount);
+
+        // just scale the mass by some factor multiplied by the number of items in the inventory, once we tweak the masses of the objects, we can care about factoring that into this calc
+        rb.mass = baseMass + currInventoryCount * MASSFACTOR;
+        gameObject.transform.localScale = baseScale + new Vector3(0.2f, 0.2f, 0.2f) * currInventoryCount;
     }
 }
