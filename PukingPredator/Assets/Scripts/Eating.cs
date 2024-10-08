@@ -15,6 +15,12 @@ public class Eating : InputBehaviour
     private LayerMask consumableLayers;
 
     /// <summary>
+    /// The layers that dashable objects can be on.
+    /// </summary>
+    [SerializeField]
+    private LayerMask dashLayers;
+
+    /// <summary>
     /// The players inventory.
     /// </summary>
     [SerializeField]
@@ -55,7 +61,7 @@ public class Eating : InputBehaviour
 
     private void GameInput_Eat()
     {
-        //if (inventory.isFull) { return; }
+        if (inventory.isFull) { return; }
 
         // Define the ray, starting from the player's position, shooting forward
         var ray = new Ray(transform.position, transform.forward);
@@ -67,7 +73,7 @@ public class Eating : InputBehaviour
             GameObject hitObject = hit.collider.gameObject;
             Process_Consumption(hitObject);
         }
-        else if (Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 5f, layerMask: consumableLayers))
+        else if (Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 2f, layerMask: dashLayers))
         {
             // Dashes if the object is far
             GameObject hitObject = hit.collider.gameObject;
@@ -87,7 +93,7 @@ public class Eating : InputBehaviour
         if (inventory.isEmpty) { return; }
 
         Consumable itemToPlace = inventory.PopItem();
-
+        if (itemToPlace == null) { return; } // case when you press puke and eat at the same time
         var pukeDir = transform.forward;
         var targetPosition = transform.position + pukeDir * pukeDistance;
         itemToPlace.PlaceAt(targetPosition);

@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     public Dictionary<MovementState, PlayerState> stateEvents = new();
 
     [SerializeField]
-    private float consumptionRate = 0.2f;
+    private float consumptionRate = 0.45f;
 
     /// <summary>
     /// The rigidbody of the player.
@@ -62,6 +62,6 @@ public class Player : MonoBehaviour
     public void Eating()
     {
         gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, target, consumptionRate);
-        if (Mathf.Abs(Vector3.Distance(gameObject.transform.position, target)) < 1) state = MovementState.standing;
+        if (Mathf.Abs(Vector3.Distance(gameObject.transform.position, target)) < 0.2) state = MovementState.standing;
     }
 }
