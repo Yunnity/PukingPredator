@@ -30,8 +30,6 @@ public class Eating : InputBehaviour
     /// </summary>
     private Rigidbody rb;
 
-    [SerializeField]
-    Player player;
 
     void Start()
     {
@@ -54,20 +52,25 @@ public class Eating : InputBehaviour
         // Define the ray, starting from the player's position, shooting forward
         var ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
-        if (Physics.SphereCast(ray, radius: 2f, out hit, maxDistance: 5f, layerMask: consumableLayers))
+
+        if (Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 1f, layerMask: consumableLayers))
         {
             // Get the GameObject that was hit
             GameObject hitObject = hit.collider.gameObject;
+            Process_Consumption(hitObject);
+        }
+        else if (Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 5f, layerMask: consumableLayers))
+        {
+            // Dashes if the object is far
+            GameObject hitObject = hit.collider.gameObject;
+            Process_Consumption(hitObject);
 
-            var consumableData = hitObject.GetComponent<Consumable>();
-            if (consumableData == null || !consumableData.isConsumable) { return; }
-
-            inventory.PushItem(consumableData);
-            consumableData.SetState(ItemState.beingConsumed);
-            
-            player.SetTarget(hitObject.transform.position);
-            player.SetState(MovementState.eating);
-
+            Player player = player = this.GetComponent<Player>();
+            if (player != null)
+            {
+                player.SetTarget(hitObject.transform.position);
+                player.SetState(MovementState.eating);
+            }
         }
     }
 
@@ -82,6 +85,18 @@ public class Eating : InputBehaviour
         itemToPlace.PlaceAt(targetPosition);
     }
 
+    /// <summary>
+    /// Consumes the object and updates the inventory
+    /// </summary>
+    private void Process_Consumption(GameObject hitObject)
+    {
+        var consumableData = hitObject.GetComponent<Consumable>();
+        if (consumableData == null || !consumableData.isConsumable) { return; }
+
+        inventory.PushItem(consumableData);
+        consumableData.SetState(ItemState.beingConsumed);
+    }
+
     private void UpdateMass()
     {
         var totalItemMass = inventory.totalMass;
@@ -89,4 +104,6 @@ public class Eating : InputBehaviour
         //TODO: make this update the mass, doesnt have to be 1-1 or even linear
         rb.mass = baseMass;
     }
+
+
 }

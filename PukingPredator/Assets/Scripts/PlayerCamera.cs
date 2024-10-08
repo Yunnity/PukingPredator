@@ -7,15 +7,12 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float sensitivity;
 
     private Vector3 finalOffset;
-    private Quaternion originalRotation;
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         player ??= GameObject.FindGameObjectsWithTag("Player")[0];
         finalOffset = transform.position - player.transform.position;
-
-        originalRotation = transform.rotation;
     }
 
     void LateUpdate()
@@ -23,13 +20,10 @@ public class PlayerCamera : MonoBehaviour
         Rotate();
         transform.position = Vector3.Lerp(transform.position, player.transform.position + finalOffset, 0.25f);
         transform.LookAt(player.transform.position);
-
-        originalRotation = transform.rotation;
     }
 
     void Rotate()
     {
         finalOffset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * sensitivity, Vector3.up) * finalOffset;
-        
     }
 }
