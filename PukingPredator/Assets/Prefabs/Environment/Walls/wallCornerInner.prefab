@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3791582827346452380}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wallCornerInner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,6 +96,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: wallShort (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2056429117184596584, guid: a736965907bd24800a03331256120cef,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -169,6 +174,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: wallShort
+      objectReference: {fileID: 0}
+    - target: {fileID: 2056429117184596584, guid: a736965907bd24800a03331256120cef,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -25,6 +25,5 @@ public class PlayerCamera : MonoBehaviour
     void Rotate()
     {
         finalOffset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * sensitivity, Vector3.up) * finalOffset;
-        
     }
 }

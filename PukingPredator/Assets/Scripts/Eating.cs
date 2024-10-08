@@ -15,6 +15,12 @@ public class Eating : InputBehaviour
     private LayerMask consumableLayers;
 
     /// <summary>
+    /// The layers that dashable objects can be on.
+    /// </summary>
+    [SerializeField]
+    private LayerMask dashLayers;
+
+    /// <summary>
     /// The players inventory.
     /// </summary>
     [SerializeField]
@@ -65,12 +71,20 @@ public class Eating : InputBehaviour
         {
             // Get the GameObject that was hit
             GameObject hitObject = hit.collider.gameObject;
+            Process_Consumption(hitObject);
+        }
+        else if (Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 2f, layerMask: dashLayers))
+        {
+            // Dashes if the object is far
+            GameObject hitObject = hit.collider.gameObject;
+            Process_Consumption(hitObject);
 
-            var consumableData = hitObject.GetComponent<Consumable>();
-            if (consumableData == null || !consumableData.isConsumable) { return; }
-
-            inventory.PushItem(consumableData);
-            consumableData.SetState(ItemState.beingConsumed);
+            Player player = player = this.GetComponent<Player>();
+            if (player != null)
+            {
+                player.SetTarget(hitObject.transform.position);
+                player.SetState(MovementState.eating);
+            }
         }
     }
 
@@ -79,10 +93,22 @@ public class Eating : InputBehaviour
         if (inventory.isEmpty) { return; }
 
         Consumable itemToPlace = inventory.PopItem();
-
+        if (itemToPlace == null) { return; } // case when you press puke and eat at the same time
         var pukeDir = transform.forward;
         var targetPosition = transform.position + pukeDir * pukeDistance;
         itemToPlace.PlaceAt(targetPosition);
+    }
+
+    /// <summary>
+    /// Consumes the object and updates the inventory
+    /// </summary>
+    private void Process_Consumption(GameObject hitObject)
+    {
+        var consumableData = hitObject.GetComponent<Consumable>();
+        if (consumableData == null || !consumableData.isConsumable) { return; }
+
+        inventory.PushItem(consumableData);
+        consumableData.SetState(ItemState.beingConsumed);
     }
 
     private void UpdateMass()
@@ -99,4 +125,6 @@ public class Eating : InputBehaviour
         rb.mass = baseMass + currInventoryCount * MASSFACTOR;
         gameObject.transform.localScale = baseScale + new Vector3(0.2f, 0.2f, 0.2f) * currInventoryCount;
     }
+
+
 }
