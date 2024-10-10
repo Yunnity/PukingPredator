@@ -33,6 +33,9 @@ public class Eating : InputBehaviour
     // Time when the right mouse button was pressed
     private float rightMouseButtonDownTime;
     private float pukeForce;
+    private const float MINPUKEFORCE = 10f;
+    private const float MAXPUKEFORCE = 50f;
+
 
 
     void Start()
@@ -103,7 +106,7 @@ public class Eating : InputBehaviour
             float itemMass = itemRb.mass;
             if (rightMouseButtonDownTime > 1f)
             {
-                pukeForce = Mathf.Clamp(rightMouseButtonDownTime * 10, 10f, 50f);
+                pukeForce = Mathf.Clamp(rightMouseButtonDownTime * 10, MINPUKEFORCE, MAXPUKEFORCE);
                 Debug.Log($"pukeForce = {pukeForce}");
                 Debug.Log($"pukeForce * itemMass = {pukeForce * itemMass}");
                 itemRb.AddForce(pukeDir * pukeForce * itemMass, ForceMode.Impulse);
