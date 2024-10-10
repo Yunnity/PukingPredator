@@ -8,7 +8,7 @@ public class Lock : MonoBehaviour
     {
         Debug.Log("Collided with " + collision.gameObject.name);
 
-        if (collision.gameObject.tag == "Key")
+        if (collision.gameObject.CompareTag(GameTag.key))
         {
             Debug.Log("Key hit door");
 
