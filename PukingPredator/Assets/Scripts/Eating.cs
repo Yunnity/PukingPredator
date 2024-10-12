@@ -132,10 +132,6 @@ public class Eating : InputBehaviour
     {
         var totalItemMass = inventory.totalMass;
 
-    private void UpdateMass()
-    {
-        var totalItemMass = inventory.totalMass;
-
         //TODO: make this update the mass, doesnt have to be 1-1 or even linear
         int currInventoryCount = inventory.itemCount;
 
