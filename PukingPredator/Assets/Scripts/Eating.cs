@@ -38,14 +38,14 @@ public class Eating : InputBehaviour
     /// <summary>
     /// Force applied to object when puked as a projectile
     /// </summary>
-    private float pukeForce;
-    private const float MinPukeForce = 10f;
-    private const float MaxPukeForce = 50f;
+    private float pukeForce { get => Mathf.Clamp(rightMouseButtonDownTime * 10, MIN_PUKE_FORCE, MAX_PUKE_FORCE); }
+    private const float MIN_PUKE_FORCE = 10f;
+    private const float MAX_PUKE_FORCE = 50f;
     
     /// <summary>
     /// The scale factor for the player's mass as they eat objects
     /// </summary>
-    private const float MASSFACTOR = 0.05f;
+    private const float MASS_FACTOR = 0.05f;
     
     /// <summary>
     /// Default size of the character
@@ -121,7 +121,6 @@ public class Eating : InputBehaviour
             float itemMass = itemRb.mass;
             if (rightMouseButtonDownTime > 1f)
             {
-                pukeForce = Mathf.Clamp(rightMouseButtonDownTime * 10, MinPukeForce, MaxPukeForce);
                 itemRb.AddForce(pukeDir * pukeForce * itemMass, ForceMode.Impulse);
             }
         }
@@ -139,7 +138,7 @@ public class Eating : InputBehaviour
         //rb.mass = baseMass + (totalItemMass / currInventoryCount);
 
         // just scale the mass by some factor multiplied by the number of items in the inventory, once we tweak the masses of the objects, we can care about factoring that into this calc
-        rb.mass = baseMass + currInventoryCount * MASSFACTOR;
+        rb.mass = baseMass + currInventoryCount * MASS_FACTOR;
         gameObject.transform.localScale = baseScale + new Vector3(0.2f, 0.2f, 0.2f) * currInventoryCount;
     }
 }
