@@ -9,7 +9,7 @@ public class Eating : InputBehaviour
     private float baseMass;
 
     /// <summary>
-    /// Default size of the character
+    /// Default size of the character.
     /// </summary>
     private Vector3 baseScale;
 
@@ -26,7 +26,8 @@ public class Eating : InputBehaviour
     private Inventory inventory;
 
     /// <summary>
-    /// The scale factor for the player's mass as they eat objects
+    /// Multiplier for the mass of items in the players inventory. 0.05 means 5%
+    /// of the weight of items is added to the players mass when consumed.
     /// </summary>
     private const float MASS_FACTOR = 0.05f;
 
@@ -36,7 +37,8 @@ public class Eating : InputBehaviour
     private float pukeDistance = 2f;
 
     /// <summary>
-    /// Force applied to object when puked as a projectile
+    /// Force applied to object when puked. Depends on how long the puke button
+    /// was held down for.
     /// </summary>
     private float pukeForce { get => Mathf.Clamp(rightMouseButtonDownTime * 10, MIN_PUKE_FORCE, MAX_PUKE_FORCE); }
     private const float MIN_PUKE_FORCE = 10f;
