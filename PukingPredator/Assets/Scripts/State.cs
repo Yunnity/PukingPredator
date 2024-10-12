@@ -1,7 +1,7 @@
 
 using System;
 
-public class PlayerState
+public class State
 {
     /// <summary>
     /// Triggered when entering this state.

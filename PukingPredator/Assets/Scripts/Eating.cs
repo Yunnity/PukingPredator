@@ -27,6 +27,11 @@ public class Eating : InputBehaviour
     private Inventory inventory;
 
     /// <summary>
+    /// The player component.
+    /// </summary>
+    Player player;
+
+    /// <summary>
     /// The distance that items spawn ahead of the player when puking. (TEMP)
     /// </summary>
     private float pukeDistance = 0.4f;
@@ -46,6 +51,7 @@ public class Eating : InputBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        player = GetComponent<Player>();
 
         baseMass = rb.mass;
 
@@ -71,19 +77,18 @@ public class Eating : InputBehaviour
         {
             // Get the GameObject that was hit
             GameObject hitObject = hit.collider.gameObject;
-            Process_Consumption(hitObject);
+            ConsumeObject(hitObject);
         }
         else if (Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 2f, layerMask: dashLayers))
         {
             // Dashes if the object is far
             GameObject hitObject = hit.collider.gameObject;
-            Process_Consumption(hitObject);
+            ConsumeObject(hitObject);
 
-            Player player = player = this.GetComponent<Player>();
             if (player != null)
             {
                 player.SetTarget(hitObject.transform.position);
-                player.SetState(MovementState.eating);
+                player.SetState(PlayerState.eating);
             }
         }
     }
@@ -102,9 +107,9 @@ public class Eating : InputBehaviour
     /// <summary>
     /// Consumes the object and updates the inventory
     /// </summary>
-    private void Process_Consumption(GameObject hitObject)
+    private void ConsumeObject(GameObject obj)
     {
-        var consumableData = hitObject.GetComponent<Consumable>();
+        var consumableData = obj.GetComponent<Consumable>();
         if (consumableData == null || !consumableData.isConsumable) { return; }
 
         inventory.PushItem(consumableData);

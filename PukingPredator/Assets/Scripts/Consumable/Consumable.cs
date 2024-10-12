@@ -122,7 +122,7 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// The actions that get executed when entering a state.
     /// </summary>
-    public Dictionary<ItemState, ConsumableState> stateEvents = new();
+    public Dictionary<ItemState, State> stateEvents = new();
 
 
 
@@ -137,7 +137,7 @@ public class Consumable : MonoBehaviour
         //Setup the state events
         foreach (ItemState itemState in Enum.GetValues(typeof(ItemState)))
         {
-            stateEvents.Add(itemState, new ConsumableState());
+            stateEvents.Add(itemState, new State());
         }
 
         if (rb != null) { stateEvents[ItemState.inWorld].onEnter += ResetVelocity; }

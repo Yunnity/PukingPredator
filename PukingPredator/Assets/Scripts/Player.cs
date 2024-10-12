@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public enum MovementState
+public enum PlayerState
 {
     eating,
     standing
@@ -12,8 +12,8 @@ public enum MovementState
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
 {
-    public MovementState state { get; private set; } = MovementState.standing;
-    public Dictionary<MovementState, PlayerState> stateEvents = new();
+    public PlayerState state { get; private set; } = PlayerState.standing;
+    public Dictionary<PlayerState, State> stateEvents = new();
 
     [SerializeField]
     private float consumptionRate = 0.45f;
@@ -27,12 +27,12 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        foreach (MovementState moveState in Enum.GetValues(typeof(MovementState)))
+        foreach (PlayerState state in Enum.GetValues(typeof(PlayerState)))
         {
-            stateEvents.Add(moveState, new PlayerState());
+            stateEvents.Add(state, new State());
         }
 
-        stateEvents[MovementState.eating].onUpdate += Eating;
+        stateEvents[PlayerState.eating].onUpdate += Eating;
         //rb = GetComponent<Rigidbody>();
     }
 
@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
         this.target = target;
     }
 
-    public void SetState(MovementState newState)
+    public void SetState(PlayerState newState)
     {
         var previousState = state;
         if (newState == previousState) { return; }
@@ -62,6 +62,6 @@ public class Player : MonoBehaviour
     public void Eating()
     {
         gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, target, consumptionRate);
-        if (Mathf.Abs(Vector3.Distance(gameObject.transform.position, target)) < 0.2) state = MovementState.standing;
+        if (Mathf.Abs(Vector3.Distance(gameObject.transform.position, target)) < 0.2) state = PlayerState.standing;
     }
 }
