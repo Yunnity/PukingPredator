@@ -9,6 +9,11 @@ public class Eating : InputBehaviour
     private float baseMass;
 
     /// <summary>
+    /// Default size of the character
+    /// </summary>
+    private Vector3 baseScale;
+
+    /// <summary>
     /// The layers that consumable objects can be on.
     /// </summary>
     [SerializeField]
@@ -21,9 +26,21 @@ public class Eating : InputBehaviour
     private Inventory inventory;
 
     /// <summary>
+    /// The scale factor for the player's mass as they eat objects
+    /// </summary>
+    private const float MASS_FACTOR = 0.05f;
+
+    /// <summary>
     /// The distance that items spawn ahead of the player when puking. (TEMP)
     /// </summary>
     private float pukeDistance = 2f;
+
+    /// <summary>
+    /// Force applied to object when puked as a projectile
+    /// </summary>
+    private float pukeForce { get => Mathf.Clamp(rightMouseButtonDownTime * 10, MIN_PUKE_FORCE, MAX_PUKE_FORCE); }
+    private const float MIN_PUKE_FORCE = 10f;
+    private const float MAX_PUKE_FORCE = 50f;
 
     /// <summary>
     /// The rigidbody of the player.
@@ -35,22 +52,7 @@ public class Eating : InputBehaviour
     /// </summary>
     private float rightMouseButtonDownTime;
     
-    /// <summary>
-    /// Force applied to object when puked as a projectile
-    /// </summary>
-    private float pukeForce { get => Mathf.Clamp(rightMouseButtonDownTime * 10, MIN_PUKE_FORCE, MAX_PUKE_FORCE); }
-    private const float MIN_PUKE_FORCE = 10f;
-    private const float MAX_PUKE_FORCE = 50f;
     
-    /// <summary>
-    /// The scale factor for the player's mass as they eat objects
-    /// </summary>
-    private const float MASS_FACTOR = 0.05f;
-    
-    /// <summary>
-    /// Default size of the character
-    /// </summary>
-    private Vector3 baseScale;
 
     void Start()
     {
