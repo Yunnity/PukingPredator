@@ -117,12 +117,7 @@ public class Eating : InputBehaviour
         var viewedObject = viewedConsumable.gameObject;
         ConsumeObject(viewedObject);
 
-        var distance = (transform.position - viewedObject.transform.position).magnitude;
-        if (distance >= 1f)
-        {
-            player.SetTarget(viewedObject.transform.position);
-            player.SetState(PlayerState.eating);
-        }
+        player.EatObject(viewedObject);
     }
 
     private void GameInput_Puke()

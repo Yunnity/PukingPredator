@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public enum PlayerState
@@ -15,15 +14,24 @@ public class Player : MonoBehaviour
     public PlayerState state { get; private set; } = PlayerState.standing;
     public Dictionary<PlayerState, State> stateEvents = new();
 
+    /// <summary>
+    /// The speed that the player dashes towards an object (using lerp * deltatime).
+    /// </summary>
     [SerializeField]
-    private float consumptionRate = 0.45f;
+    private float eatingSpeed = 4f;
+
+    /// <summary>
+    /// The object being consumed.
+    /// </summary>
+    private GameObject eatingTarget;
 
     /// <summary>
     /// The rigidbody of the player.
     /// </summary>
     private Rigidbody rb;
 
-    private Vector3 target;
+
+
 
     private void Awake()
     {
@@ -32,7 +40,8 @@ public class Player : MonoBehaviour
             stateEvents.Add(state, new State());
         }
 
-        stateEvents[PlayerState.eating].onUpdate += Eating;
+        stateEvents[PlayerState.eating].onUpdate += UpdateEating;
+
         //rb = GetComponent<Rigidbody>();
     }
 
@@ -41,12 +50,18 @@ public class Player : MonoBehaviour
         stateEvents[state].onUpdate?.Invoke();
     }
 
+
+
     /// <summary>
-    /// Sets the target to dash towards
+    /// Makes the player dash towards the target.
     /// </summary>
-    public void SetTarget(Vector3 target)
+    /// <param name="obj"></param>
+    public void EatObject(GameObject obj)
     {
-        this.target = target;
+        //var distance = (transform.position - viewedObject.transform.position).magnitude;
+
+        SetState(PlayerState.eating);
+        eatingTarget = obj;
     }
 
     public void SetState(PlayerState newState)
@@ -59,9 +74,15 @@ public class Player : MonoBehaviour
     /// <summary>
     /// Creates the dash effect bringing the player close to the consumed object
     /// </summary>
-    public void Eating()
+    private void UpdateEating()
     {
-        gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, target, consumptionRate);
-        if (Mathf.Abs(Vector3.Distance(gameObject.transform.position, target)) < 0.2) state = PlayerState.standing;
+        var previousPosition = gameObject.transform.position;
+        var targetPosition = eatingTarget.transform.position;
+        gameObject.transform.position = Vector3.Lerp(previousPosition, targetPosition, eatingSpeed * Time.deltaTime);
+
+        if (Vector3.Distance(gameObject.transform.position, targetPosition) < 0.1)
+        {
+            SetState(PlayerState.standing);
+        }
     }
 }
