@@ -40,9 +40,16 @@ public class Eating : InputBehaviour
     /// Force applied to object when puked. Depends on how long the puke button
     /// was held down for.
     /// </summary>
-    private float pukeForce { get => Mathf.Clamp(gameInput.pukeHoldDuration * 10, MIN_PUKE_FORCE, MAX_PUKE_FORCE); }
+    private float pukeForce
+    {
+        get {
+            float holdPercent = Mathf.Clamp(gameInput.pukeHoldDuration / MAX_PUKE_DURATION, 0, 1);
+            return Mathf.Lerp(MIN_PUKE_FORCE, MAX_PUKE_FORCE, holdPercent);
+        }
+    }
     private const float MIN_PUKE_FORCE = 10f;
     private const float MAX_PUKE_FORCE = 50f;
+    private const float MAX_PUKE_DURATION = 2f;
 
     /// <summary>
     /// The rigidbody of the player.
@@ -103,11 +110,10 @@ public class Eating : InputBehaviour
         Rigidbody itemRb = itemToPlace.GetComponent<Rigidbody>();
         if (itemRb != null)
         {
-            float itemMass = itemRb.mass;
-            if (gameInput.pukeHoldDuration > 1f)
-            {
-                itemRb.AddForce(pukeDir * pukeForce * itemMass, ForceMode.Impulse);
-            }
+            //TODO: make this code work if there is no rigid body. perhaps just set
+            //...the velocity and if there was a rigid body then we can reduce the velocity
+            //...while calculating it based on the mass?
+            itemRb.AddForce(pukeDir * pukeForce * itemRb.mass, ForceMode.Impulse);
         }
     }
 
