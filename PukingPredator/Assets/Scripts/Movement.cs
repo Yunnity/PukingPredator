@@ -58,6 +58,11 @@ public class Movement : InputBehaviour
     private float jumpTime;
 
     /// <summary>
+    /// Can be used to disable the movement code so velocity is not reset.
+    /// </summary>
+    public bool isManualMovementEnabled = true;
+
+    /// <summary>
     /// The direction of the players recent movement input with the camera rotation applied.
     /// </summary>
     private Vector3 moveDir;
@@ -100,7 +105,10 @@ public class Movement : InputBehaviour
         //walking code
         // moveSpeed - (rb.mass - baseMass) alters the movespeed such that we just subtract a constant (0.1f) from the movespeed for each item in the inventory
         // kind of weird since jumping is tied directly to mass since we use forces, but horizontal movement is not
-        rb.velocity = moveDir * moveSpeed / (1 + Mathf.Exp(rb.mass - baseMass) * MOVESPEEDFACTOR) + new Vector3(0, rb.velocity.y, 0);
+        if (isManualMovementEnabled)
+        {
+            rb.velocity = moveDir * moveSpeed / (1 + Mathf.Exp(rb.mass - baseMass) * MOVESPEEDFACTOR) + new Vector3(0, rb.velocity.y, 0);
+        }
 
         //jumping code
         //Reduce jump height if the button is released early
@@ -117,7 +125,9 @@ public class Movement : InputBehaviour
 
         //walking code
         Vector2 inputVector = gameInput.movementInput;
-        moveDir = Quaternion.Euler(0, playerCamera.transform.eulerAngles.y, 0) * new Vector3(inputVector.x, 0, inputVector.y);
+        moveDir =   isManualMovementEnabled
+                ?   Quaternion.Euler(0, playerCamera.transform.eulerAngles.y, 0) * new Vector3(inputVector.x, 0, inputVector.y)
+                :   rb.velocity.HorizontalProjection().normalized;
 
         float turnSpeed = 10f;
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 1194575958544561486}
   - component: {fileID: 1461194574326899231}
   - component: {fileID: 9057554939570478379}
+  - component: {fileID: 8543201992326126533}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -239,6 +240,7 @@ MonoBehaviour:
     m_Bits: 129
   jumpCancelRate: 25
   jumpForce: 6
+  isManualMovementEnabled: 1
   playerCamera: {fileID: 0}
 --- !u!114 &1461194574326899231
 MonoBehaviour:
@@ -256,6 +258,9 @@ MonoBehaviour:
   consumableLayers:
     serializedVersion: 2
     m_Bits: 129
+  dashLayers:
+    serializedVersion: 2
+    m_Bits: 0
   inventory: {fileID: 8166780266706507098}
 --- !u!114 &9057554939570478379
 MonoBehaviour:
@@ -270,6 +275,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameInput: {fileID: 0}
+  yLimit: -50
+--- !u!114 &8543201992326126533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5441739923584274610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4297ab2fcd83e40b29c11a363b8d445a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &49880248143171028
 PrefabInstance:
   m_ObjectHideFlags: 0
