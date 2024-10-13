@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Eating : InputBehaviour
@@ -32,6 +33,11 @@ public class Eating : InputBehaviour
     Player player;
 
     /// <summary>
+    /// The previously outlined object.
+    /// </summary>
+    private Outline prevOutline;
+
+    /// <summary>
     /// The distance that items spawn ahead of the player when puking. (TEMP)
     /// </summary>
     private float pukeDistance = 0.4f;
@@ -63,7 +69,28 @@ public class Eating : InputBehaviour
         Subscribe(InputEvent.onPuke, GameInput_Puke);
     }
 
+    private void Update()
+    {
+        var ray = new Ray(transform.position, transform.forward);
+        RaycastHit hit;
 
+        if (Physics.SphereCast(ray, radius: 0.1f, out hit, maxDistance: 1f, layerMask: consumableLayers) ||
+            (Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 2f, layerMask: dashLayers)))
+        {
+            if (prevOutline) prevOutline.enabled = false;
+
+            GameObject hitObject = hit.collider.gameObject;
+            Consumable consumableData = hitObject.GetComponent<Consumable>();
+
+            if (consumableData == null || !consumableData.isConsumable) { return; }
+            prevOutline = consumableData.outline;
+            consumableData.outline.enabled = true;
+        } else
+        {
+            if (prevOutline) prevOutline.enabled = false;
+            prevOutline = null;
+        }
+    }
 
     private void GameInput_Eat()
     {

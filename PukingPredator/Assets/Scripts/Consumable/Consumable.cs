@@ -82,7 +82,7 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// The color of the outline when close to the player.
     /// </summary>
-    private Color outlineColor = new Color(0.1f, 0.8f, 0.1f, 0.5f);
+    private Color outlineColor = Color.white;
 
     /// <summary>
     /// The range at which objects start/stop showing an outline.
@@ -92,12 +92,12 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// Size of the outline visual.
     /// </summary>
-    private const float OUTLINE_RADIUS = 1.2f;
+    private const float OUTLINE_RADIUS = 2.2f;
 
     /// <summary>
     /// Settings for the outline of the consumable (toggled on via enable when player is near)
     /// </summary>
-    private Outline outline;
+    public Outline outline;
 
     /// <summary>
     /// The game object that owns the consumable (ie the player).
@@ -178,6 +178,7 @@ public class Consumable : MonoBehaviour
         outline.OutlineWidth = OUTLINE_RADIUS;
         outline.OutlineMode = Outline.Mode.OutlineVisible;
         outline.OutlineColor = outlineColor;
+        outline.enabled = false;
     }
 
     private void Decay()
@@ -335,19 +336,19 @@ public class Consumable : MonoBehaviour
 
     private void UpdateProximityOutline()
     {
-        if (outline == null) { return; }
+        //if (outline == null) { return; }
 
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, outlineDetectionRadius);
-        foreach (Collider collider in hitColliders)
-        {
-            if (collider.gameObject.CompareTag(GameTag.player))
-            {
-                outline.enabled = true;
-                return;
-            }
-        }
-        outline.enabled = false;
-        return;
+        //Collider[] hitColliders = Physics.OverlapSphere(transform.position, outlineDetectionRadius);
+        //foreach (Collider collider in hitColliders)
+        //{
+        //    if (collider.gameObject.CompareTag(GameTag.player))
+        //    {
+        //        outline.enabled = true;
+        //        return;
+        //    }
+        //}
+        //outline.enabled = false;
+        //return;
     }
 
 }
