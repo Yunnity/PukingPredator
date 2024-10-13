@@ -47,8 +47,8 @@ public class Eating : InputBehaviour
             return Mathf.Lerp(MIN_PUKE_FORCE, MAX_PUKE_FORCE, holdPercent);
         }
     }
-    private const float MIN_PUKE_FORCE = 10f;
-    private const float MAX_PUKE_FORCE = 50f;
+    private const float MIN_PUKE_FORCE = 4f;
+    private const float MAX_PUKE_FORCE = 20f;
     private const float MAX_PUKE_DURATION = 2f;
 
     /// <summary>
@@ -103,7 +103,9 @@ public class Eating : InputBehaviour
 
         Consumable itemToPlace = inventory.PopItem();
 
-        var pukeDir = transform.forward;
+        //puke forward and with a little force upwards
+        var pukeDir = transform.forward + Vector3.up * 0.2f;
+
         var targetPosition = transform.position + pukeDir * pukeDistance;
         itemToPlace.PlaceAt(targetPosition);
 
