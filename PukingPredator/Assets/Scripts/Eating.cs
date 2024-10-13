@@ -1,6 +1,8 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Player))]
 public class Eating : InputBehaviour
 {
     /// <summary>
@@ -20,6 +22,12 @@ public class Eating : InputBehaviour
     private LayerMask consumableLayers;
 
     /// <summary>
+    /// The layers that dashable objects can be on.
+    /// </summary>
+    [SerializeField]
+    private LayerMask dashLayers;
+
+    /// <summary>
     /// The players inventory.
     /// </summary>
     [SerializeField]
@@ -32,9 +40,14 @@ public class Eating : InputBehaviour
     private const float MASS_FACTOR = 0.05f;
 
     /// <summary>
+    /// The player component.
+    /// </summary>
+    private Player player;
+
+    /// <summary>
     /// The distance that items spawn ahead of the player when puking. (TEMP)
     /// </summary>
-    private float pukeDistance = 2f;
+    private float pukeDistance = 0.4f;
 
     /// <summary>
     /// Force applied to object when puked. Depends on how long the puke button
@@ -56,11 +69,17 @@ public class Eating : InputBehaviour
     /// </summary>
     private Rigidbody rb;
 
+    /// <summary>
+    /// The object that the player is looking at to eat.
+    /// </summary>
+    private Consumable viewedConsumable = null;
+
     
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        player = GetComponent<Player>();
 
         baseMass = rb.mass;
 
@@ -72,31 +91,56 @@ public class Eating : InputBehaviour
         Subscribe(InputEvent.onPuke, GameInput_Puke);
     }
 
+    private void Update()
+    {
+        var previousViewedConsumable = viewedConsumable;
+
+        //TODO: revisit this code. it is probably better to do a square cast shape and
+        //... sort collisions based on distance to the center of the cast, then
+        //... pick the best object based on that
+
+        var ray = new Ray(transform.position, transform.forward);
+        RaycastHit hit;
+        if (Physics.SphereCast(ray, radius: 0.1f, out hit, maxDistance: 1f, layerMask: consumableLayers) ||
+            Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 2f, layerMask: dashLayers))
+        {
+            GameObject hitObject = hit.collider.gameObject;
+
+            // if looking at the same object, no changes needed
+            if (hitObject == previousViewedConsumable) { return; }
+
+            var consumableData = hitObject.GetComponent<Consumable>();
+            var canConsumeTarget = consumableData != null && consumableData.isConsumable;
+            viewedConsumable = canConsumeTarget ? consumableData : null;
+        }
+        else
+        {
+            viewedConsumable = null;
+        }
+
+        if (previousViewedConsumable != null)
+        {
+            previousViewedConsumable.outline.enabled = false;
+        }
+        if (viewedConsumable != null)
+        {
+            viewedConsumable.outline.enabled = true;
+        }
+    }
+
 
 
     private void GameInput_Eat()
     {
         if (inventory.isFull) { return; }
+        if (viewedConsumable == null) { return; }
 
-        // Define the ray, starting from the player's position, shooting forward
-        var ray = new Ray(transform.position, transform.forward);
-        RaycastHit hit;
-        if (Physics.SphereCast(ray, radius: 0.5f, out hit, maxDistance: 5f, layerMask: consumableLayers))
-        {
-            // Get the GameObject that was hit
-            GameObject hitObject = hit.collider.gameObject;
+        var viewedObject = viewedConsumable.gameObject;
+        ConsumeObject(viewedObject);
 
-            var consumableData = hitObject.GetComponent<Consumable>();
-            if (consumableData == null || !consumableData.isConsumable)
-            {
-                return;
-            }
-
-            inventory.PushItem(consumableData);
-            consumableData.SetState(ItemState.beingConsumed);
-        }
+        player.EatObject(viewedObject);
     }
-
+    
     private void GameInput_Puke()
     {
         if (inventory.isEmpty) { return; }
@@ -119,6 +163,18 @@ public class Eating : InputBehaviour
         }
     }
 
+    /// <summary>
+    /// Consumes the object and updates the inventory
+    /// </summary>
+    private void ConsumeObject(GameObject obj)
+    {
+        var consumableData = obj.GetComponent<Consumable>();
+        if (consumableData == null || !consumableData.isConsumable) { return; }
+
+        inventory.PushItem(consumableData);
+        consumableData.SetState(ItemState.beingConsumed);
+    }
+
     private void UpdateMass()
     {
         var totalItemMass = inventory.totalMass;
@@ -128,4 +184,5 @@ public class Eating : InputBehaviour
         rb.mass = baseMass + currInventoryCount * MASS_FACTOR;
         gameObject.transform.localScale = baseScale + new Vector3(0.2f, 0.2f, 0.2f) * currInventoryCount;
     }
+
 }

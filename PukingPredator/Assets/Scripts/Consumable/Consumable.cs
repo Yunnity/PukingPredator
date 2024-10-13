@@ -21,7 +21,7 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// The lerp factor used when shrinking items.
     /// </summary>
-    private float consumptionRate = 0.25f;
+    private float consumptionRate = 7f;
 
     /// <summary>
     /// The relative scale at which an object will be treated as consumed.
@@ -76,13 +76,12 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// The mass of the instance.
     /// </summary>
-    //TODO: make this use the mass of the game object (swap "1f" to "rb.mass")
-    public float mass => 1f;
+    public float mass => rb != null ? rb.mass : 1;
 
     /// <summary>
     /// The color of the outline when close to the player.
     /// </summary>
-    private Color outlineColor = new Color(0.1f, 0.8f, 0.1f, 0.5f);
+    private Color outlineColor = Color.white;
 
     /// <summary>
     /// The range at which objects start/stop showing an outline.
@@ -92,12 +91,12 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// Size of the outline visual.
     /// </summary>
-    private const float OUTLINE_RADIUS = 1.2f;
+    private const float OUTLINE_RADIUS = 2.2f;
 
     /// <summary>
     /// Settings for the outline of the consumable (toggled on via enable when player is near)
     /// </summary>
-    private Outline outline;
+    public Outline outline;
 
     /// <summary>
     /// The game object that owns the consumable (ie the player).
@@ -122,7 +121,7 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// The actions that get executed when entering a state.
     /// </summary>
-    public Dictionary<ItemState, ConsumableState> stateEvents = new();
+    public Dictionary<ItemState, State> stateEvents = new();
 
 
 
@@ -137,13 +136,13 @@ public class Consumable : MonoBehaviour
         //Setup the state events
         foreach (ItemState itemState in Enum.GetValues(typeof(ItemState)))
         {
-            stateEvents.Add(itemState, new ConsumableState());
+            stateEvents.Add(itemState, new State());
         }
 
         if (rb != null) { stateEvents[ItemState.inWorld].onEnter += ResetVelocity; }
         stateEvents[ItemState.inWorld].onEnter += SetLayerToConsumable;
         stateEvents[ItemState.inWorld].onEnter += SetGravityEnabled;
-        stateEvents[ItemState.inWorld].onUpdate += UpdateProximityOutline;
+        //stateEvents[ItemState.inWorld].onUpdate += UpdateProximityOutline;
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
         stateEvents[ItemState.inWorld].onExit += SetGravityDisabled; 
 
@@ -178,6 +177,7 @@ public class Consumable : MonoBehaviour
         outline.OutlineWidth = OUTLINE_RADIUS;
         outline.OutlineMode = Outline.Mode.OutlineVisible;
         outline.OutlineColor = outlineColor;
+        outline.enabled = false;
     }
 
     private void Decay()
@@ -326,8 +326,9 @@ public class Consumable : MonoBehaviour
     {
         SetRBKinematic(false);
         var ownerPosition = ownerTransform.position;
-        gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, ownerPosition, consumptionRate);
-        gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, Vector3.zero, consumptionRate);
+        var currRate = consumptionRate * Time.deltaTime;
+        gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, ownerPosition, currRate);
+        gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, Vector3.zero, currRate);
 
         var hasBeenConsumed = gameObject.transform.localScale.magnitude / initialScale.magnitude < consumptionCutoff;
         if (hasBeenConsumed) { SetState(ItemState.inInventory); }
