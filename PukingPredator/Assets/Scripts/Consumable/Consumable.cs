@@ -146,6 +146,7 @@ public class Consumable : MonoBehaviour
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
         stateEvents[ItemState.inWorld].onExit += SetGravityDisabled; 
 
+        stateEvents[ItemState.beingConsumed].onEnter += EnablePhysicsFromEventListener;
         stateEvents[ItemState.beingConsumed].onUpdate += UpdateBeingConsumed;
 
         //stateEvents[ItemState.inInventory].onEnter += DisablePhysics;
@@ -202,6 +203,7 @@ public class Consumable : MonoBehaviour
         Destroy(gameObject);
     }
 
+    // DisablePhysics/EnablePhysics are deprecated, and maybe unused
     private void DisablePhysics()
     {
         rb.isKinematic = true;
@@ -214,9 +216,16 @@ public class Consumable : MonoBehaviour
         hitbox.enabled = true;
     }
 
+    // Deprecated
     public void SetRBKinematic(bool isKinematic)
     {
         rb.isKinematic = isKinematic;
+    }
+
+    public void EnablePhysicsFromEventListener()
+    {
+        PhysicsEventListener eventListener = GetComponent<PhysicsEventListener>();
+        eventListener.onEnablePhysics?.Invoke();
     }
 
     private void FollowOwner()
@@ -324,7 +333,6 @@ public class Consumable : MonoBehaviour
 
     private void UpdateBeingConsumed()
     {
-        SetRBKinematic(false);
         var ownerPosition = ownerTransform.position;
         var currRate = consumptionRate * Time.deltaTime;
         gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, ownerPosition, currRate);
