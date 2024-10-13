@@ -40,7 +40,7 @@ public class Eating : InputBehaviour
     /// Force applied to object when puked. Depends on how long the puke button
     /// was held down for.
     /// </summary>
-    private float pukeForce { get => Mathf.Clamp(rightMouseButtonDownTime * 10, MIN_PUKE_FORCE, MAX_PUKE_FORCE); }
+    private float pukeForce { get => Mathf.Clamp(gameInput.pukeHoldDuration * 10, MIN_PUKE_FORCE, MAX_PUKE_FORCE); }
     private const float MIN_PUKE_FORCE = 10f;
     private const float MAX_PUKE_FORCE = 50f;
 
@@ -49,11 +49,6 @@ public class Eating : InputBehaviour
     /// </summary>
     private Rigidbody rb;
 
-    /// <summary>
-    /// How long the right mouse button was pressed
-    /// </summary>
-    private float rightMouseButtonDownTime;
-    
     
 
     void Start()
@@ -61,8 +56,6 @@ public class Eating : InputBehaviour
         rb = GetComponent<Rigidbody>();
 
         baseMass = rb.mass;
-
-        rightMouseButtonDownTime = 0f;
 
         inventory.onChange += UpdateMass;
         
@@ -72,17 +65,6 @@ public class Eating : InputBehaviour
         Subscribe(InputEvent.onPuke, GameInput_Puke);
     }
 
-    private void Update()
-    {
-        if (Input.GetButton("Fire2"))
-        {
-            rightMouseButtonDownTime += Time.deltaTime;
-        }
-        else
-        {
-            rightMouseButtonDownTime = 0f;
-        }
-    }
 
 
     private void GameInput_Eat()
@@ -103,7 +85,6 @@ public class Eating : InputBehaviour
                 return;
             }
 
-            rightMouseButtonDownTime = 0f;
             inventory.PushItem(consumableData);
             consumableData.SetState(ItemState.beingConsumed);
         }
@@ -123,12 +104,11 @@ public class Eating : InputBehaviour
         if (itemRb != null)
         {
             float itemMass = itemRb.mass;
-            if (rightMouseButtonDownTime > 1f)
+            if (gameInput.pukeHoldDuration > 1f)
             {
                 itemRb.AddForce(pukeDir * pukeForce * itemMass, ForceMode.Impulse);
             }
         }
-        rightMouseButtonDownTime = 0f;
     }
 
     private void UpdateMass()

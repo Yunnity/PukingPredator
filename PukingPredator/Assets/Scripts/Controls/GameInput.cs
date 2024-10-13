@@ -46,6 +46,18 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     /// </summary>
     public Vector2 movementInput => controls.Player.Move.ReadValue<Vector2>();
 
+    /// <summary>
+    /// Used to track when the button was first pressed to determine how long
+    /// it was held.
+    /// </summary>
+    private float pukePressTime = 0f;
+
+    /// <summary>
+    /// The amount of time that the puke button has been held. Only meaningful
+    /// at the time that the puke event is triggered.
+    /// </summary>
+    public float pukeHoldDuration { get; private set; } = 0f;
+
 
 
     protected override void Awake()
@@ -61,9 +73,17 @@ public class GameInput : SingletonMonobehaviour<GameInput>
             events.Add(inputEvent, null);
         }
         controls.Player.Eat.performed += context => TriggerEvent(InputEvent.onEat);
+
         controls.Player.Jump.canceled += context => TriggerEvent(InputEvent.onJumpUp);
         controls.Player.Jump.performed += context => TriggerEvent(InputEvent.onJumpDown);
-        controls.Player.Puke.performed += context => TriggerEvent(InputEvent.onPuke);
+
+        controls.Player.Puke.canceled += context =>
+        {
+            pukeHoldDuration = Time.time - pukePressTime;
+            TriggerEvent(InputEvent.onPuke);
+        };
+        controls.Player.Puke.performed += context => pukePressTime = Time.time;
+
         controls.Player.Reset.performed += context => TriggerEvent(InputEvent.onResetLevel);
     }
 
