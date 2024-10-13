@@ -143,7 +143,7 @@ public class Consumable : MonoBehaviour
         if (rb != null) { stateEvents[ItemState.inWorld].onEnter += ResetVelocity; }
         stateEvents[ItemState.inWorld].onEnter += SetLayerToConsumable;
         stateEvents[ItemState.inWorld].onEnter += SetGravityEnabled;
-        stateEvents[ItemState.inWorld].onUpdate += UpdateProximityOutline;
+        //stateEvents[ItemState.inWorld].onUpdate += UpdateProximityOutline;
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
         stateEvents[ItemState.inWorld].onExit += SetGravityDisabled; 
 
@@ -336,19 +336,19 @@ public class Consumable : MonoBehaviour
 
     private void UpdateProximityOutline()
     {
-        //if (outline == null) { return; }
+        if (outline == null) { return; }
 
-        //Collider[] hitColliders = Physics.OverlapSphere(transform.position, outlineDetectionRadius);
-        //foreach (Collider collider in hitColliders)
-        //{
-        //    if (collider.gameObject.CompareTag(GameTag.player))
-        //    {
-        //        outline.enabled = true;
-        //        return;
-        //    }
-        //}
-        //outline.enabled = false;
-        //return;
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, outlineDetectionRadius);
+        foreach (Collider collider in hitColliders)
+        {
+            if (collider.gameObject.CompareTag(GameTag.player))
+            {
+                outline.enabled = true;
+                return;
+            }
+        }
+        outline.enabled = false;
+        return;
     }
 
 }
