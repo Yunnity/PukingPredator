@@ -11,6 +11,11 @@ public class Eating : InputBehaviour
     private float baseMass;
 
     /// <summary>
+    /// Default size of the character.
+    /// </summary>
+    private Vector3 baseScale;
+
+    /// <summary>
     /// The layers that consumable objects can be on.
     /// </summary>
     [SerializeField]
@@ -29,9 +34,10 @@ public class Eating : InputBehaviour
     private Inventory inventory;
 
     /// <summary>
-    /// The object that the player is looking at to eat.
+    /// Multiplier for the mass of items in the players inventory. 0.05 means 5%
+    /// of the weight of items is added to the players mass when consumed.
     /// </summary>
-    private Consumable viewedConsumable = null;
+    private const float MASS_FACTOR = 0.05f;
 
     /// <summary>
     /// The player component.
@@ -44,16 +50,31 @@ public class Eating : InputBehaviour
     private float pukeDistance = 0.4f;
 
     /// <summary>
+    /// Force applied to object when puked. Depends on how long the puke button
+    /// was held down for.
+    /// </summary>
+    private float pukeForce
+    {
+        get {
+            float holdPercent = Mathf.Clamp(gameInput.pukeHoldDuration / MAX_PUKE_DURATION, 0, 1);
+            return Mathf.Lerp(MIN_PUKE_FORCE, MAX_PUKE_FORCE, holdPercent);
+        }
+    }
+    private const float MIN_PUKE_FORCE = 4f;
+    private const float MAX_PUKE_FORCE = 20f;
+    private const float MAX_PUKE_DURATION = 2f;
+
+    /// <summary>
     /// The rigidbody of the player.
     /// </summary>
     private Rigidbody rb;
 
     /// <summary>
-    /// The scale factor for the player's mass as they eat objects
+    /// The object that the player is looking at to eat.
     /// </summary>
-    private const float MASSFACTOR = 0.05f;
+    private Consumable viewedConsumable = null;
 
-    private Vector3 baseScale;
+    
 
     void Start()
     {
@@ -62,9 +83,9 @@ public class Eating : InputBehaviour
 
         baseMass = rb.mass;
 
-        baseScale = gameObject.transform.localScale;
-
         inventory.onChange += UpdateMass;
+        
+        baseScale = gameObject.transform.localScale;
 
         Subscribe(InputEvent.onEat, GameInput_Eat);
         Subscribe(InputEvent.onPuke, GameInput_Puke);
@@ -119,16 +140,27 @@ public class Eating : InputBehaviour
 
         player.EatObject(viewedObject);
     }
-
+    
     private void GameInput_Puke()
     {
         if (inventory.isEmpty) { return; }
 
         Consumable itemToPlace = inventory.PopItem();
-        if (itemToPlace == null) { return; } // case when you press puke and eat at the same time
-        var pukeDir = transform.forward;
+
+        //puke forward and with a little force upwards
+        var pukeDir = transform.forward + Vector3.up * 0.2f;
+
         var targetPosition = transform.position + pukeDir * pukeDistance;
         itemToPlace.PlaceAt(targetPosition);
+
+        Rigidbody itemRb = itemToPlace.GetComponent<Rigidbody>();
+        if (itemRb != null)
+        {
+            //TODO: make this code work if there is no rigid body. perhaps just set
+            //...the velocity and if there was a rigid body then we can reduce the velocity
+            //...while calculating it based on the mass?
+            itemRb.AddForce(pukeDir * pukeForce * itemRb.mass, ForceMode.Impulse);
+        }
     }
 
     /// <summary>
@@ -146,17 +178,11 @@ public class Eating : InputBehaviour
     private void UpdateMass()
     {
         var totalItemMass = inventory.totalMass;
-
-        //TODO: make this update the mass, doesnt have to be 1-1 or even linear
         int currInventoryCount = inventory.itemCount;
 
-        // doing it this way would essentially add on the average of the inventory's mass to the player, prob not what we want...
-        //rb.mass = baseMass + (totalItemMass / currInventoryCount);
-
-        // just scale the mass by some factor multiplied by the number of items in the inventory, once we tweak the masses of the objects, we can care about factoring that into this calc
-        rb.mass = baseMass + currInventoryCount * MASSFACTOR;
+        //TODO: change this to use totalItemMass instead of the count once masses are fine tuned
+        rb.mass = baseMass + currInventoryCount * MASS_FACTOR;
         gameObject.transform.localScale = baseScale + new Vector3(0.2f, 0.2f, 0.2f) * currInventoryCount;
     }
-
 
 }
