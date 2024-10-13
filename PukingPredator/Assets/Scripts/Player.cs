@@ -11,9 +11,6 @@ public enum PlayerState
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
 {
-    public PlayerState state { get; private set; } = PlayerState.standing;
-    public Dictionary<PlayerState, State> stateEvents = new();
-
     /// <summary>
     /// The speed that the player dashes towards an object (using lerp * deltatime).
     /// </summary>
@@ -30,6 +27,8 @@ public class Player : MonoBehaviour
     /// </summary>
     private Rigidbody rb;
 
+    public PlayerState state { get; private set; } = PlayerState.standing;
+    public Dictionary<PlayerState, State> stateEvents = new();
 
 
 
