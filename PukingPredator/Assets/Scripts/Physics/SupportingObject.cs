@@ -13,14 +13,16 @@ public class SupportingObject : MonoBehaviour
 
     private PhysicsEventListener eventListener;
 
+    private bool attemptedUpdate = false;
+
     // Start is called before the first frame update
     void Start()
     {
         eventListener = GetComponent<PhysicsEventListener>();
-        eventListener.onEnablePhysics += UpdateParent;
+        eventListener.onEnablePhysics += UpdateSupportedObjects;
     }
 
-    private void UpdateParent()
+    private void UpdateSupportedObjects()
     {
         foreach (GameObject obj in supportedObjects)
         {
@@ -30,5 +32,6 @@ public class SupportingObject : MonoBehaviour
                 so.ReduceSupportsByOne();
             }
         }
+        eventListener.onEnablePhysics -= UpdateSupportedObjects;
     }
 }

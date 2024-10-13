@@ -13,6 +13,7 @@ public class SupportedObject : MonoBehaviour
     private int nSupportsThreshold; // if this many supports break, then we break this object
 
     private int nSupportsLeft;
+    private bool broken = false;
     private PhysicsEventListener physicsEventListener;
 
     private void Start()
@@ -25,8 +26,9 @@ public class SupportedObject : MonoBehaviour
     {
         nSupportsLeft--;
 
-        if (nSupportsLeft <= 0)
+        if (nSupportsLeft <= 0 && !broken)
         {
+            broken = true;
             physicsEventListener.onEnablePhysics?.Invoke();
         }
     }
