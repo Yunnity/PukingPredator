@@ -36,7 +36,7 @@ public class Eating : InputBehaviour
     /// <summary>
     /// The player component.
     /// </summary>
-    Player player;
+    private Player player;
 
     /// <summary>
     /// The distance that items spawn ahead of the player when puking. (TEMP)
