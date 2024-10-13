@@ -21,7 +21,7 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// The lerp factor used when shrinking items.
     /// </summary>
-    private float consumptionRate = 10f;
+    private float consumptionRate = 7f;
 
     /// <summary>
     /// The relative scale at which an object will be treated as consumed.
