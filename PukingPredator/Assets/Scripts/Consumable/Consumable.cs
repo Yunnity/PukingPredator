@@ -76,8 +76,7 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// The mass of the instance.
     /// </summary>
-    //TODO: make this use the mass of the game object (swap "1f" to "rb.mass")
-    public float mass => 1f;
+    public float mass => rb != null ? rb.mass : 1;
 
     /// <summary>
     /// The color of the outline when close to the player.
