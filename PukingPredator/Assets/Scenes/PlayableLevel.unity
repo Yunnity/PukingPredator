@@ -8056,6 +8056,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: floor1_Consumable (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 294608142189295484, guid: 54b9a1d96fa034c4583e0b9f36e074f3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3638162155622525859, guid: 54b9a1d96fa034c4583e0b9f36e074f3,
         type: 3}
       propertyPath: isConsumable
@@ -10044,6 +10049,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: brokenFloor_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 7854405574558361323, guid: 048da2f62070c4c2c91d9b0cd5f7bff3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 9135995392418444064, guid: 048da2f62070c4c2c91d9b0cd5f7bff3,
         type: 3}
@@ -14302,6 +14312,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: floor1_Consumable (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 294608142189295484, guid: 54b9a1d96fa034c4583e0b9f36e074f3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3638162155622525859, guid: 54b9a1d96fa034c4583e0b9f36e074f3,
         type: 3}
       propertyPath: isConsumable
@@ -14963,7 +14978,8 @@ PrefabInstance:
         type: 3}
       propertyPath: inventoryUIPrefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 150530213503905336, guid: be47eabce07a9471c971ff6d48274e78,
+        type: 3}
     - target: {fileID: 2026944692292734854, guid: acf9e99f95aaaa443a419775f59a9067,
         type: 3}
       propertyPath: m_Mass
@@ -15014,6 +15030,16 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1074571698}
+    - target: {fileID: 8963049067386234749, guid: acf9e99f95aaaa443a419775f59a9067,
+        type: 3}
+      propertyPath: dashLayers.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963049067386234749, guid: acf9e99f95aaaa443a419775f59a9067,
+        type: 3}
+      propertyPath: consumableLayers.m_Bits
+      value: 640
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17485,6 +17511,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: floor1_Consumable (21)
       objectReference: {fileID: 0}
+    - target: {fileID: 294608142189295484, guid: 54b9a1d96fa034c4583e0b9f36e074f3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3638162155622525859, guid: 54b9a1d96fa034c4583e0b9f36e074f3,
         type: 3}
       propertyPath: isConsumable
@@ -19678,6 +19709,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: floor1_Consumable (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 294608142189295484, guid: 54b9a1d96fa034c4583e0b9f36e074f3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3638162155622525859, guid: 54b9a1d96fa034c4583e0b9f36e074f3,
         type: 3}
       propertyPath: isConsumable
@@ -21832,6 +21868,7 @@ MonoBehaviour:
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
   isConsumable: 1
+  outline: {fileID: 0}
 --- !u!54 &1526959074
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -28606,6 +28643,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: floor1_Consumable (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 294608142189295484, guid: 54b9a1d96fa034c4583e0b9f36e074f3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3638162155622525859, guid: 54b9a1d96fa034c4583e0b9f36e074f3,
         type: 3}
