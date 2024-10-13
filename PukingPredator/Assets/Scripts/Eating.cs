@@ -29,14 +29,14 @@ public class Eating : InputBehaviour
     private Inventory inventory;
 
     /// <summary>
+    /// The object that the player is looking at to eat.
+    /// </summary>
+    private Consumable viewedConsumable = null;
+
+    /// <summary>
     /// The player component.
     /// </summary>
     Player player;
-
-    /// <summary>
-    /// The previously outlined object.
-    /// </summary>
-    private Outline prevOutline;
 
     /// <summary>
     /// The distance that items spawn ahead of the player when puking. (TEMP)
@@ -72,52 +72,56 @@ public class Eating : InputBehaviour
 
     private void Update()
     {
+        var previousViewedConsumable = viewedConsumable;
+
+        //TODO: revisit this code. it is probably better to do a square cast shape and
+        //... sort collisions based on distance to the center of the cast, then
+        //... pick the best object based on that
+
         var ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
-
         if (Physics.SphereCast(ray, radius: 0.1f, out hit, maxDistance: 1f, layerMask: consumableLayers) ||
-            (Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 2f, layerMask: dashLayers)))
+            Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 2f, layerMask: dashLayers))
         {
-            if (prevOutline) prevOutline.enabled = false;
-
             GameObject hitObject = hit.collider.gameObject;
-            Consumable consumableData = hitObject.GetComponent<Consumable>();
 
-            if (consumableData == null || !consumableData.isConsumable) { return; }
-            prevOutline = consumableData.outline;
-            consumableData.outline.enabled = true;
-        } else
+            // if looking at the same object, no changes needed
+            if (hitObject == previousViewedConsumable) { return; }
+
+            var consumableData = hitObject.GetComponent<Consumable>();
+            var canConsumeTarget = consumableData != null && consumableData.isConsumable;
+            viewedConsumable = canConsumeTarget ? consumableData : null;
+        }
+        else
         {
-            if (prevOutline) prevOutline.enabled = false;
-            prevOutline = null;
+            viewedConsumable = null;
+        }
+
+        if (previousViewedConsumable != null)
+        {
+            previousViewedConsumable.outline.enabled = false;
+        }
+        if (viewedConsumable != null)
+        {
+            viewedConsumable.outline.enabled = true;
         }
     }
+
+
 
     private void GameInput_Eat()
     {
         if (inventory.isFull) { return; }
+        if (viewedConsumable == null) { return; }
 
-        // Define the ray, starting from the player's position, shooting forward
-        var ray = new Ray(transform.position, transform.forward);
-        RaycastHit hit;
-        // originally radius 0.5 and maxDistance 5f
-        if (Physics.SphereCast(ray, radius: 0.1f, out hit, maxDistance: 1f, layerMask: consumableLayers))
-        {
-            // Get the GameObject that was hit
-            GameObject hitObject = hit.collider.gameObject;
-            ConsumeObject(hitObject);
-        }
-        else if (Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 2f, layerMask: dashLayers))
-        {
-            // Dashes if the object is far
-            GameObject hitObject = hit.collider.gameObject;
-            ConsumeObject(hitObject);
+        var viewedObject = viewedConsumable.gameObject;
+        ConsumeObject(viewedObject);
 
-            if (player != null)
-            {
-                player.SetTarget(hitObject.transform.position);
-                player.SetState(PlayerState.eating);
-            }
+        var distance = (transform.position - viewedObject.transform.position).magnitude;
+        if (distance >= 1f)
+        {
+            player.SetTarget(viewedObject.transform.position);
+            player.SetState(PlayerState.eating);
         }
     }
 
