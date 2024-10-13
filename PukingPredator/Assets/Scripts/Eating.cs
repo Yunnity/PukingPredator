@@ -114,14 +114,9 @@ public class Eating : InputBehaviour
     private void UpdateMass()
     {
         var totalItemMass = inventory.totalMass;
-
-        //TODO: make this update the mass, doesnt have to be 1-1 or even linear
         int currInventoryCount = inventory.itemCount;
 
-        // doing it this way would essentially add on the average of the inventory's mass to the player, prob not what we want...
-        //rb.mass = baseMass + (totalItemMass / currInventoryCount);
-
-        // just scale the mass by some factor multiplied by the number of items in the inventory, once we tweak the masses of the objects, we can care about factoring that into this calc
+        //TODO: change this to use totalItemMass instead of the count once masses are fine tuned
         rb.mass = baseMass + currInventoryCount * MASS_FACTOR;
         gameObject.transform.localScale = baseScale + new Vector3(0.2f, 0.2f, 0.2f) * currInventoryCount;
     }
