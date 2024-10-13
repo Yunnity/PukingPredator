@@ -147,7 +147,7 @@ public class Consumable : MonoBehaviour
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
         stateEvents[ItemState.inWorld].onExit += SetGravityDisabled;
 
-        stateEvents[ItemState.beingConsumed].onEnter += DisableKinematicRB;
+        stateEvents[ItemState.beingConsumed].onEnter += EnablePhysicsEventListener;
         stateEvents[ItemState.beingConsumed].onUpdate += UpdateBeingConsumed;
 
         //stateEvents[ItemState.inInventory].onEnter += DisablePhysics;
@@ -203,6 +203,7 @@ public class Consumable : MonoBehaviour
         Destroy(gameObject);
     }
 
+    // Deprecated, hopefully these aren't being used
     private void DisablePhysics()
     {
         rb.isKinematic = true;
@@ -221,9 +222,10 @@ public class Consumable : MonoBehaviour
         rb.isKinematic = isKinematic;
     }
 
-    public void DisableKinematicRB()
+    public void EnablePhysicsEventListener()
     {
-        rb.isKinematic = false;
+        PhysicsEventListener eventListener = GetComponent<PhysicsEventListener>();
+        eventListener.onEnablePhysics?.Invoke();
     }
 
     private void FollowOwner()
