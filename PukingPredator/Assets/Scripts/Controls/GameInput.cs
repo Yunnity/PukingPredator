@@ -42,6 +42,12 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     private Dictionary<InputEvent, Action> events = new();
 
     /// <summary>
+    /// The minimum time for something to be held for. A tap will still be
+    /// registered as this much time.
+    /// </summary>
+    private float minHoldTime = 0.1f;
+
+    /// <summary>
     /// The movement input vector. Has a max magnitude of 1.
     /// </summary>
     public Vector2 movementInput => controls.Player.Move.ReadValue<Vector2>();
@@ -79,7 +85,7 @@ public class GameInput : SingletonMonobehaviour<GameInput>
 
         controls.Player.Puke.canceled += context =>
         {
-            pukeHoldDuration = Time.time - pukePressTime;
+            pukeHoldDuration = Mathf.Max(minHoldTime, Time.time - pukePressTime);
             TriggerEvent(InputEvent.onPuke);
         };
         controls.Player.Puke.performed += context => pukePressTime = Time.time;
