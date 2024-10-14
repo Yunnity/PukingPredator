@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a71a6e5bd668d49499cd397bf3296bf9
+guid: 43a7d8256722f49c8a3e3b0089917260
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: standardSurface1
-    second: {fileID: 2100000, guid: c928a1821b17e4c7fba3cda0f6f847ad, type: 2}
+      name: TX_FloorBroken_001
+    second: {fileID: 2100000, guid: 072b67cfc001441668e706aeab4d8e50, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
