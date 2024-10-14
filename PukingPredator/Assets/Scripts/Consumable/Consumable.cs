@@ -151,6 +151,7 @@ public class Consumable : MonoBehaviour
         //stateEvents[ItemState.inWorld].onUpdate += UpdateProximityOutline;
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
         stateEvents[ItemState.inWorld].onExit += SetGravityDisabled; 
+        stateEvents[ItemState.inWorld].onExit += DisableKinematic;
 
         stateEvents[ItemState.beingConsumed].onUpdate += UpdateBeingConsumed;
 
@@ -220,11 +221,6 @@ public class Consumable : MonoBehaviour
         hitbox.enabled = true;
     }
 
-    public void SetRBKinematic(bool isKinematic)
-    {
-        rb.isKinematic = isKinematic;
-    }
-
     private void FollowOwner()
     {
         //TODO: add some periodic + random offset so objects float around in you?
@@ -251,6 +247,18 @@ public class Consumable : MonoBehaviour
     private void SetGravityEnabled()
     {
         SetGravity(true);
+    }
+    #endregion
+
+    #region Kinematic
+    public void SetRBKinematic(bool isKinematic)
+    {
+        rb.isKinematic = isKinematic;
+    }
+
+    public void DisableKinematic()
+    {
+        SetRBKinematic(false);
     }
     #endregion
 
@@ -330,7 +338,6 @@ public class Consumable : MonoBehaviour
 
     private void UpdateBeingConsumed()
     {
-        SetRBKinematic(false);
         var ownerPosition = ownerTransform.position;
         var currRate = consumptionRate * Time.deltaTime;
         gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, ownerPosition, currRate);
