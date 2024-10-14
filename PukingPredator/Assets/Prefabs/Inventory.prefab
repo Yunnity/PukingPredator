@@ -49,5 +49,5 @@ MonoBehaviour:
   itemUIPrefab: {fileID: 8187309727088127603, guid: 3a58ade1e7dd74dd19e57bccaeef503a,
     type: 3}
   items: []
-  maxCount: 2
+  maxCount: 10
   owner: {fileID: 0}
