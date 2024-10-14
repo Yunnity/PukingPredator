@@ -52,6 +52,11 @@ public class Consumable : MonoBehaviour
     private Collider hitbox;
 
     /// <summary>
+    /// The layer that the object started out on.
+    /// </summary>
+    private int initialLayer;
+
+    /// <summary>
     /// The initial scale of the instance before being eaten. Used to restore
     /// its size to normal after being puked.
     /// </summary>
@@ -127,6 +132,7 @@ public class Consumable : MonoBehaviour
 
     protected virtual void Awake()
     {
+        initialLayer = gameObject.layer;
         initialScale = gameObject.transform.localScale;
         rb = GetComponent<Rigidbody>();
         hitbox = GetComponent<Collider>();
@@ -140,7 +146,7 @@ public class Consumable : MonoBehaviour
         }
 
         if (rb != null) { stateEvents[ItemState.inWorld].onEnter += ResetVelocity; }
-        stateEvents[ItemState.inWorld].onEnter += SetLayerToConsumable;
+        stateEvents[ItemState.inWorld].onEnter += ResetLayer;
         stateEvents[ItemState.inWorld].onEnter += SetGravityEnabled;
         //stateEvents[ItemState.inWorld].onUpdate += UpdateProximityOutline;
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
@@ -284,9 +290,9 @@ public class Consumable : MonoBehaviour
         }
     }
 
-    private void SetLayerToConsumable()
+    private void ResetLayer()
     {
-        SetLayer(GameLayer.consumable);
+        SetLayer(initialLayer);
     }
 
     private void SetLayerToConsumed()
