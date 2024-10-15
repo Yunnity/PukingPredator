@@ -10,12 +10,24 @@ public class AudioManager : MonoBehaviour
 
     private Dictionary<string, AudioClip> sfxDictionary = new Dictionary<string, AudioClip>();
 
+    public static AudioManager Instance { get; private set; }
+
     private void Awake()
     {
-        // Loads sfx into a dictionary
-        foreach (AudioClip clip in sfxClips)
+        if (Instance == null)
         {
-            sfxDictionary[clip.name] = clip;
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            // Loads sfx into a dictionary
+            foreach (AudioClip clip in sfxClips)
+            {
+                sfxDictionary[clip.name] = clip;
+            }
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -36,6 +48,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySFX(string clipName, float volume = 1.0f)
     {
+        // sample usage AudioManager.Instance.PlaySFX("vomit", 1.0f);
         if (sfxDictionary.ContainsKey(clipName))
         {
             sfxSource.PlayOneShot(sfxDictionary[clipName], volume);

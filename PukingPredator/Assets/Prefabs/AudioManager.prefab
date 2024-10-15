@@ -46,4 +46,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundMusic: {fileID: 0}
   sfxSource: {fileID: 0}
-  sfxClips: []
+  sfxClips:
+  - {fileID: 8300000, guid: 4559a85cfa19c984a977c1e4f685aec8, type: 3}
+  - {fileID: 8300000, guid: 6dd9ab6eb801390489281812ce9343ea, type: 3}
+  - {fileID: 8300000, guid: 690992c61d8a6664f9a2f957bf943b00, type: 3}
+  - {fileID: 8300000, guid: 49f104c4e6c1bfe48910e632019e8a4d, type: 3}
+  - {fileID: 8300000, guid: 32f691e2cbe7d7a4cada1de866221555, type: 3}
