@@ -1,12 +1,17 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 public class AudioManager : MonoBehaviour
 {
     [SerializeField]
-    public AudioSource backgroundMusic;
-    public AudioSource sfxSource;
-    public List<AudioClip> sfxClips;
+    private List<AudioClip> sfxClips;
+
+    [SerializeField]
+    private AudioClip backgroundTrack;
+
+    private AudioSource backgroundSource;
+    private AudioSource sfxSource;
 
     private Dictionary<string, AudioClip> sfxDictionary = new Dictionary<string, AudioClip>();
 
@@ -24,6 +29,9 @@ public class AudioManager : MonoBehaviour
             {
                 sfxDictionary[clip.name] = clip;
             }
+
+            backgroundSource = gameObject.AddComponent<AudioSource>();
+            sfxSource = gameObject.AddComponent<AudioSource>();
         }
         else
         {
@@ -32,17 +40,17 @@ public class AudioManager : MonoBehaviour
     }
 
 
-    public void PlayBackground(AudioClip clip, float volume = 1.0f, bool loop = true)
+    public void PlayBackground(float volume = 1.0f, bool loop = true)
     {
-        backgroundMusic.clip = clip;
-        backgroundMusic.volume = volume;
-        backgroundMusic.loop = loop;
-        backgroundMusic.Play();
+        backgroundSource.clip = backgroundTrack;
+        backgroundSource.volume = volume;
+        backgroundSource.loop = loop;
+        backgroundSource.Play();
     }
 
     public void StopMusic()
     {
-        backgroundMusic.Stop();
+        backgroundSource.Stop();
         sfxSource.Stop();
     }
 
@@ -51,12 +59,13 @@ public class AudioManager : MonoBehaviour
         // sample usage AudioManager.Instance.PlaySFX("vomit", 1.0f);
         if (sfxDictionary.ContainsKey(clipName))
         {
+            sfxSource.Stop();
             sfxSource.PlayOneShot(sfxDictionary[clipName], volume);
         }
     }
 
     public void SetMusicVolume(float volume)
     {
-        backgroundMusic.volume = volume;
+        backgroundSource.volume = volume;
     }
 }
