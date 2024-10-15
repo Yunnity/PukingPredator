@@ -55,7 +55,7 @@ public class Eating : InputBehaviour
             return Mathf.Lerp(MIN_PUKE_FORCE, MAX_PUKE_FORCE, holdPercent);
         }
     }
-    private const float MIN_PUKE_FORCE = 4f;
+    private const float MIN_PUKE_FORCE = 1f;
     private const float MAX_PUKE_FORCE = 20f;
     private const float MAX_PUKE_DURATION = 2f;
 
