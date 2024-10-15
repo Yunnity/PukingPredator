@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class AudioManager : MonoBehaviour
 {
+    [SerializeField]
     public AudioSource backgroundMusic;
     public AudioSource sfxSource;
     public List<AudioClip> sfxClips;
@@ -17,6 +18,7 @@ public class AudioManager : MonoBehaviour
             sfxDictionary[clip.name] = clip;
         }
     }
+
 
     public void PlayBackground(AudioClip clip, float volume = 1.0f, bool loop = true)
     {
