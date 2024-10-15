@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6195899681940428681}
   - component: {fileID: 3299440441184594365}
+  - component: {fileID: 2775544574471214521}
+  - component: {fileID: 167457421336500056}
   m_Layer: 7
   m_Name: crateStack
   m_TagString: Untagged
@@ -53,6 +55,31 @@ MonoBehaviour:
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
   isConsumable: 1
+  outline: {fileID: 0}
+--- !u!114 &2775544574471214521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3123010547383111968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cd6cca4a61842f47bf25e5993a3016d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &167457421336500056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3123010547383111968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a43fcac740fb01449315ee73f965810, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1093562734587321531
 PrefabInstance:
   m_ObjectHideFlags: 0

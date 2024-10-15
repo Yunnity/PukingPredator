@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class GroupPhysicsObject : MonoBehaviour
 {
@@ -14,11 +15,14 @@ public class GroupPhysicsObject : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        PhysicsEventListener ownListener = GetComponent<PhysicsEventListener>();
+        ownListener.AddToListener(EnablePhysicsInChildren);
         foreach (Transform child in transform)
         {
             PhysicsEventListener c = child.GetComponent<PhysicsEventListener>();
             if (c != null)
             {
+                Debug.Log("Added EnablePhysicsInChildren");
                 c.AddToListener(EnablePhysicsInChildren);
             }
         }
