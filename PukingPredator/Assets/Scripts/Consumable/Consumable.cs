@@ -114,6 +114,11 @@ public class Consumable : MonoBehaviour
     public Transform ownerTransform => inventory.owner.transform;
 
     /// <summary>
+    /// The lerp factor used when growing items.
+    /// </summary>
+    private float pukeRate = 12f;
+
+    /// <summary>
     /// Rigid body attached to the instance.
     /// </summary>
     private Rigidbody rb;
@@ -145,9 +150,9 @@ public class Consumable : MonoBehaviour
             stateEvents.Add(itemState, new State());
         }
 
-        if (rb != null) { stateEvents[ItemState.inWorld].onEnter += ResetVelocity; }
         stateEvents[ItemState.inWorld].onEnter += ResetLayer;
         stateEvents[ItemState.inWorld].onEnter += SetGravityEnabled;
+        stateEvents[ItemState.inWorld].onEnter += ResetScale;
         //stateEvents[ItemState.inWorld].onUpdate += UpdateProximityOutline;
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
         stateEvents[ItemState.inWorld].onExit += SetGravityDisabled; 
@@ -161,7 +166,8 @@ public class Consumable : MonoBehaviour
         //stateEvents[ItemState.inInventory].onExit += EnablePhysics;
         stateEvents[ItemState.inInventory].onUpdate += FollowOwner;
 
-        //TODO: implement gradual puking like the above examples
+        if (rb != null) { stateEvents[ItemState.beingPuked].onEnter += ResetVelocity; }
+        stateEvents[ItemState.beingPuked].onUpdate += UpdateBeingPuked;
     }
 
     public void Update()
@@ -270,13 +276,16 @@ public class Consumable : MonoBehaviour
     {
         if (state != ItemState.inInventory) { return; }
 
-        gameObject.transform.localScale = initialScale;
-
         var previousAngles = gameObject.transform.eulerAngles;
         gameObject.transform.eulerAngles = new Vector3(0, previousAngles.y, 0);
 
         gameObject.transform.position = position;
         SetState(ItemState.inWorld);
+    }
+
+    private void ResetScale()
+    {
+        gameObject.transform.localScale = initialScale;
     }
 
     private void ResetVelocity()
@@ -345,6 +354,16 @@ public class Consumable : MonoBehaviour
 
         var hasBeenConsumed = gameObject.transform.localScale.magnitude / initialScale.magnitude < consumptionCutoff;
         if (hasBeenConsumed) { SetState(ItemState.inInventory); }
+    }
+
+    private void UpdateBeingPuked()
+    {
+        var currRate = pukeRate * Time.deltaTime;
+        //lerp towards a number slightly bigger than the original scale
+        gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, initialScale * 1.05f, currRate);
+
+        var hasFinishedPuking = gameObject.transform.localScale.magnitude >= initialScale.magnitude;
+        if (hasFinishedPuking) { SetState(ItemState.inWorld); }
     }
 
     private void UpdateProximityOutline()
