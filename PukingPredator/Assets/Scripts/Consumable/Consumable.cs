@@ -69,6 +69,17 @@ public class Consumable : MonoBehaviour
     public Inventory inventory;
 
     /// <summary>
+    /// The position that this object should be in if its in an inventory.
+    /// </summary>
+    private Vector3 inventoryTargetPosition
+    {
+        get
+        {
+            return inventory.transform.position;
+        }
+    }
+
+    /// <summary>
     /// Can be used to lock an item.
     /// </summary>
     public bool isConsumable = true;
@@ -164,7 +175,7 @@ public class Consumable : MonoBehaviour
         stateEvents[ItemState.inInventory].onEnter += ClampShrunkScale;
         stateEvents[ItemState.inInventory].onEnter += StartDecay;
         //stateEvents[ItemState.inInventory].onExit += EnablePhysics;
-        stateEvents[ItemState.inInventory].onUpdate += FollowOwner;
+        stateEvents[ItemState.inInventory].onUpdate += FollowInventory;
 
         if (rb != null) { stateEvents[ItemState.beingPuked].onEnter += ResetVelocity; }
         stateEvents[ItemState.beingPuked].onUpdate += UpdateBeingPuked;
@@ -227,10 +238,10 @@ public class Consumable : MonoBehaviour
         hitbox.enabled = true;
     }
 
-    private void FollowOwner()
+    private void FollowInventory()
     {
         //TODO: add some periodic + random offset so objects float around in you?
-        gameObject.transform.position = ownerTransform.position;
+        gameObject.transform.position = inventoryTargetPosition;
     }
 
     #region Gravity
@@ -347,9 +358,8 @@ public class Consumable : MonoBehaviour
 
     private void UpdateBeingConsumed()
     {
-        var ownerPosition = ownerTransform.position;
         var currRate = consumptionRate * Time.deltaTime;
-        gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, ownerPosition, currRate);
+        gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, inventoryTargetPosition, currRate);
         gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, Vector3.zero, currRate);
 
         var hasBeenConsumed = gameObject.transform.localScale.magnitude / initialScale.magnitude < consumptionCutoff;
