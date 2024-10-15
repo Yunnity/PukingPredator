@@ -37,9 +37,10 @@ public class GroupPhysicsObject : MonoBehaviour
         }
         foreach (Transform child in transform)
         {
-            SinglePhysicsObject c = child.GetComponent<SinglePhysicsObject>();
+            PhysicsEventListener c = child.GetComponent<PhysicsEventListener>();
             if (c != null)
             {
+                c.RemoveFromListener(EnablePhysicsInChildren); // cleanup
                 c.EnablePhysics();
             }
         }
