@@ -15,7 +15,7 @@ public class ItemUI : MonoBehaviour
         {
             _item = value;
             labelUI.text = _item.gameObject.name;
-            labelUI.fontSize = 16;
+            labelUI.fontSize = 20;
         }
     }
 
