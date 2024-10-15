@@ -19,7 +19,7 @@ public class SupportingObject : MonoBehaviour
     void Start()
     {
         eventListener = GetComponent<PhysicsEventListener>();
-        eventListener.onEnablePhysics += UpdateSupportedObjects;
+        eventListener.AddToListener(UpdateSupportedObjects);
     }
 
     private void UpdateSupportedObjects()
@@ -32,6 +32,6 @@ public class SupportingObject : MonoBehaviour
                 so.ReduceSupportsByOne();
             }
         }
-        eventListener.onEnablePhysics -= UpdateSupportedObjects;
+        eventListener.RemoveFromListener(UpdateSupportedObjects);
     }
 }

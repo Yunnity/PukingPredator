@@ -19,13 +19,14 @@ public class GroupPhysicsObject : MonoBehaviour
             PhysicsEventListener c = child.GetComponent<PhysicsEventListener>();
             if (c != null)
             {
-                c.onEnablePhysics += EnablePhysicsInChildren;
+                c.AddToListener(EnablePhysicsInChildren);
             }
         }
     }
 
     private void EnablePhysicsInChildren()
     {
+        // maybe we don't need this check
         if (childrenPhysicsEnabled)
         {
             return;

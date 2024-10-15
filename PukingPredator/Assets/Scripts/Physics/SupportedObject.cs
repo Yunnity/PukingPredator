@@ -29,7 +29,7 @@ public class SupportedObject : MonoBehaviour
         if (nSupportsLeft <= 0 && !broken)
         {
             broken = true;
-            physicsEventListener.onEnablePhysics?.Invoke();
+            physicsEventListener.EnablePhysics();
         }
     }
 }

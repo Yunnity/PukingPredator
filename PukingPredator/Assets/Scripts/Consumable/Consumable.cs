@@ -225,7 +225,7 @@ public class Consumable : MonoBehaviour
     public void EnablePhysicsFromEventListener()
     {
         PhysicsEventListener eventListener = GetComponent<PhysicsEventListener>();
-        eventListener.onEnablePhysics?.Invoke();
+        eventListener.EnablePhysics();
     }
 
     private void FollowOwner()

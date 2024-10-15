@@ -15,7 +15,7 @@ public class SinglePhysicsObject : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         po = GetComponent<PhysicsEventListener>();
 
-        po.onEnablePhysics += EnablePhysics;
+        po.AddToListener(EnablePhysics);
     }
 
     public void EnablePhysics()
