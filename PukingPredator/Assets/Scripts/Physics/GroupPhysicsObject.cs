@@ -10,40 +10,63 @@ public class GroupPhysicsObject : MonoBehaviour
     if physics are enabled in any of the children
      */
     private PhysicsEventListener po;
-    private bool childrenPhysicsEnabled = false;
+
+    private PhysicsEventListener ownListener;
 
     // Start is called before the first frame update
     void Start()
     {
-        PhysicsEventListener ownListener = GetComponent<PhysicsEventListener>();
+        ownListener = GetComponent<PhysicsEventListener>();
         ownListener.AddToListener(EnablePhysicsInChildren);
-        foreach (Transform child in transform)
+
+        // If this group is not being SUPPORTED, then enabling physics on one item in the group will cause physics to enable in all items.
+        // Otherwise, we wait until this group is no long supported to enable physics in all children
+        SupportedObject supportedObject = GetComponent<SupportedObject>();
+        if (supportedObject == null)
         {
-            PhysicsEventListener c = child.GetComponent<PhysicsEventListener>();
-            if (c != null)
-            {
-                Debug.Log("Added EnablePhysicsInChildren");
-                c.AddToListener(EnablePhysicsInChildren);
-            }
+            AddListenersToChildren();
         }
     }
 
     private void EnablePhysicsInChildren()
     {
-        // maybe we don't need this check
-        if (childrenPhysicsEnabled)
-        {
-            return;
-        }
         foreach (Transform child in transform)
         {
             PhysicsEventListener c = child.GetComponent<PhysicsEventListener>();
             if (c != null)
             {
-                c.RemoveFromListener(EnablePhysicsInChildren); // cleanup
                 c.EnablePhysics();
             }
         }
-        childrenPhysicsEnabled = true;
+    }
+
+    private void RemoveListenersFromChildren()
+    {
+        foreach (Transform child in transform)
+        {
+            PhysicsEventListener c = child.GetComponent<PhysicsEventListener>();
+            if (c != null)
+            {
+                c.RemoveFromListener(InvokeSelf);
+            }
+        }
+    }
+
+    private void AddListenersToChildren()
+    {
+        foreach (Transform child in transform)
+        {
+            PhysicsEventListener c = child.GetComponent<PhysicsEventListener>();
+            if (c != null)
+            {
+                c.AddToListener(InvokeSelf);
+            }
+        }
+    }
+
+    private void InvokeSelf()
+    {
+        RemoveListenersFromChildren();
+        ownListener.EnablePhysics();
     }
 }

@@ -13,8 +13,6 @@ public class SupportingObject : MonoBehaviour
 
     private PhysicsEventListener eventListener;
 
-    private bool attemptedUpdate = false;
-
     // Start is called before the first frame update
     void Start()
     {
