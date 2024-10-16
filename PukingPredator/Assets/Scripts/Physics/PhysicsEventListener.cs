@@ -1,16 +1,16 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// An event listener for enabling physics in an object.
+/// </summary>
 public class PhysicsEventListener : MonoBehaviour
 {
-    /*
-     An event listener for enabling physics in an object
-     */
+    private bool isPhysicsEnabled = false;
+
     private Action onEnablePhysics;
 
-    private bool physicsEnabled = false;
+
 
     public void AddToListener(Action item)
     {
@@ -24,10 +24,9 @@ public class PhysicsEventListener : MonoBehaviour
 
     public void EnablePhysics()
     {
-        if (!physicsEnabled)
-        {
-            onEnablePhysics?.Invoke();
-            physicsEnabled = true;
-        }
+        if (isPhysicsEnabled) { return; }
+        isPhysicsEnabled = true;
+
+        onEnablePhysics?.Invoke();
     }
 }

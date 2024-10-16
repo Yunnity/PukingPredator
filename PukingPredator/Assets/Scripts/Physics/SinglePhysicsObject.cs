@@ -1,22 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A single object that can enable physics.
+/// </summary>
 public class SinglePhysicsObject : MonoBehaviour
 {
-    /*
-     A single object that can enable physics
-     */
+    private PhysicsEventListener physicsEventListener;
+
     private Rigidbody rb;
-    private PhysicsEventListener po;
+
+
+
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        po = GetComponent<PhysicsEventListener>();
 
-        po.AddToListener(EnablePhysics);
+        physicsEventListener = GetComponent<PhysicsEventListener>();
+        physicsEventListener.AddToListener(EnablePhysics);
     }
+
+
 
     public void EnablePhysics()
     {

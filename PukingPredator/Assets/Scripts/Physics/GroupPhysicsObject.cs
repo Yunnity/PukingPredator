@@ -1,17 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
+/// <summary>
+/// A group of SinglePhysicsObjects where the physics should be enabled
+/// simultaneously if physics are enabled in any of the children.
+/// </summary>
 public class GroupPhysicsObject : MonoBehaviour
 {
-    /*
-     A group of SinglePhysicsObjects where the physics should be enabled simultaneously 
-    if physics are enabled in any of the children
-     */
-    private PhysicsEventListener po;
-
     private PhysicsEventListener ownListener;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +24,8 @@ public class GroupPhysicsObject : MonoBehaviour
             AddListenersToChildren();
         }
     }
+
+
 
     private void EnablePhysicsInChildren()
     {

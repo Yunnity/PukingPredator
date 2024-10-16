@@ -1,24 +1,30 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// An object that may be supporting multiple other objects. It notifies all
+/// supported objects if its physics gets enabled.
+/// </summary>
 public class SupportingObject : MonoBehaviour
 {
-    /*
-     An object that may be supporting multiple other objects. It notifies all supported objects if its physics gets enabled.
-     */
+    private PhysicsEventListener physicsEventListener;
 
+    /// <summary>
+    /// Other objects supported by this one.
+    /// </summary>
     [SerializeField]
-    private GameObject[] supportedObjects;
+    private List<GameObject> supportedObjects;
 
-    private PhysicsEventListener eventListener;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        eventListener = GetComponent<PhysicsEventListener>();
-        eventListener.AddToListener(UpdateSupportedObjects);
+        physicsEventListener = GetComponent<PhysicsEventListener>();
+        physicsEventListener.AddToListener(UpdateSupportedObjects);
     }
+
+
 
     private void UpdateSupportedObjects()
     {
@@ -30,6 +36,6 @@ public class SupportingObject : MonoBehaviour
                 so.ReduceSupportsByOne();
             }
         }
-        eventListener.RemoveFromListener(UpdateSupportedObjects);
+        physicsEventListener.RemoveFromListener(UpdateSupportedObjects);
     }
 }
