@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
         dash.onComplete += DashFinished;
 
         movement = GetComponent<Movement>();
+        AudioManager.Instance.PlayBackground();
     }
 
     private void Update()
