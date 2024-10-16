@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.SearchService;
 using UnityEngine;
 
-public class LookWithMouse : MonoBehaviour
+public class CameraControls : MonoBehaviour
 {
 
     public Vector2 turn;
