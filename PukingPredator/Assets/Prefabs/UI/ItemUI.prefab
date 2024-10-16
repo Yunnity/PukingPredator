@@ -145,6 +145,7 @@ GameObject:
   - component: {fileID: 3545790865954431065}
   - component: {fileID: 2110105247988281319}
   - component: {fileID: 2737787757179564134}
+  - component: {fileID: 390582519233718722}
   m_Layer: 5
   m_Name: ItemUI
   m_TagString: Untagged
@@ -195,6 +196,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   labelUI: {fileID: 6667367257424127939}
   timerUI: {fileID: 848087472561722879}
+--- !u!114 &390582519233718722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8187309727088127603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1001 &1638284892248850408
 PrefabInstance:
   m_ObjectHideFlags: 0

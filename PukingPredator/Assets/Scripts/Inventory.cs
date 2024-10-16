@@ -56,6 +56,11 @@ public class Inventory : MonoBehaviour
     private GameObject UIPanel;
 
     /// <summary>
+    /// The script associated with the inventory UI
+    /// </summary>
+    private InventoryUI inventoryUI;
+
+    /// <summary>
     /// The object that owns the inventory, ie the player.
     /// </summary>
     public GameObject owner;
@@ -71,6 +76,7 @@ public class Inventory : MonoBehaviour
     {
         var canvas = GameObject.Find("Canvas");
         UIPanel = Instantiate(inventoryUIPrefab, canvas.transform);
+        inventoryUI = UIPanel.GetComponent<InventoryUI>();
 
         onChange += UpdateUI;
         UpdateUI();
@@ -197,5 +203,7 @@ public class Inventory : MonoBehaviour
             var itemUIComponent = newItemUI.GetComponent<ItemUI>();
             itemUIComponent.item = item;
         }
+
+        inventoryUI.UpdateText(items.Count, maxCount);
     }
 }

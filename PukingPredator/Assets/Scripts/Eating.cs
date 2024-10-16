@@ -96,7 +96,11 @@ public class Eating : InputBehaviour
 
         var ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
-        if (Physics.SphereCast(ray, radius: 0.1f, out hit, maxDistance: 1f, layerMask: consumableLayers) ||
+        if (inventory.isFull)
+        {
+            viewedConsumable = null;
+        }
+        else if (Physics.SphereCast(ray, radius: 0.1f, out hit, maxDistance: 1f, layerMask: consumableLayers) ||
             Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 2f, layerMask: dashLayers))
         {
             GameObject hitObject = hit.collider.gameObject;
