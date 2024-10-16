@@ -135,6 +135,7 @@ MonoBehaviour:
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
   isConsumable: 1
+  outline: {fileID: 0}
 --- !u!54 &4120550483726816496
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -181,5 +182,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.9, y: 0.18, z: 5.7}
+  m_Size: {x: 0.36, y: 0.06, z: 2.26}
   m_Center: {x: 0, y: 0, z: 0}
