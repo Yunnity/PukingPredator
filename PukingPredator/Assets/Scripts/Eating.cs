@@ -45,11 +45,6 @@ public class Eating : InputBehaviour
     private Player player;
 
     /// <summary>
-    /// The distance that items spawn ahead of the player when puking. (TEMP)
-    /// </summary>
-    private float pukeDistance = 0.4f;
-
-    /// <summary>
     /// Force applied to object when puked. Depends on how long the puke button
     /// was held down for.
     /// </summary>
@@ -60,7 +55,7 @@ public class Eating : InputBehaviour
             return Mathf.Lerp(MIN_PUKE_FORCE, MAX_PUKE_FORCE, holdPercent);
         }
     }
-    private const float MIN_PUKE_FORCE = 4f;
+    private const float MIN_PUKE_FORCE = 1f;
     private const float MAX_PUKE_FORCE = 20f;
     private const float MAX_PUKE_DURATION = 2f;
 
@@ -145,15 +140,13 @@ public class Eating : InputBehaviour
     {
         if (inventory.isEmpty) { return; }
 
-        Consumable itemToPlace = inventory.PopItem();
+        Consumable itemToPuke = inventory.PopItem();
+        itemToPuke.SetState(ItemState.beingPuked);
 
         //puke forward and with a little force upwards
-        var pukeDir = transform.forward + Vector3.up * 0.2f;
+        var pukeDir = transform.forward + Vector3.up * 0.1f;
 
-        var targetPosition = transform.position + pukeDir * pukeDistance;
-        itemToPlace.PlaceAt(targetPosition);
-
-        Rigidbody itemRb = itemToPlace.GetComponent<Rigidbody>();
+        Rigidbody itemRb = itemToPuke.GetComponent<Rigidbody>();
         if (itemRb != null)
         {
             //TODO: make this code work if there is no rigid body. perhaps just set
