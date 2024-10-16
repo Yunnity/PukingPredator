@@ -15,6 +15,7 @@ public class ItemUI : MonoBehaviour
         {
             _item = value;
             labelUI.text = _item.gameObject.name;
+            labelUI.fontSize = 20;
         }
     }
 
@@ -29,8 +30,6 @@ public class ItemUI : MonoBehaviour
     /// </summary>
     [SerializeField]
     private Image timerUI;
-
-
 
     private void Start()
     {

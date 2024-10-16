@@ -52,6 +52,11 @@ public class Consumable : MonoBehaviour
     private Collider hitbox;
 
     /// <summary>
+    /// The layer that the object started out on.
+    /// </summary>
+    private int initialLayer;
+
+    /// <summary>
     /// The initial scale of the instance before being eaten. Used to restore
     /// its size to normal after being puked.
     /// </summary>
@@ -62,6 +67,17 @@ public class Consumable : MonoBehaviour
     /// </summary>
     [HideInInspector]
     public Inventory inventory;
+
+    /// <summary>
+    /// The position that this object should be in if its in an inventory.
+    /// </summary>
+    private Vector3 inventoryTargetPosition
+    {
+        get
+        {
+            return inventory.transform.position;
+        }
+    }
 
     /// <summary>
     /// Can be used to lock an item.
@@ -109,6 +125,11 @@ public class Consumable : MonoBehaviour
     public Transform ownerTransform => inventory.owner.transform;
 
     /// <summary>
+    /// The lerp factor used when growing items.
+    /// </summary>
+    private float pukeRate = 12f;
+
+    /// <summary>
     /// Rigid body attached to the instance.
     /// </summary>
     private Rigidbody rb;
@@ -127,6 +148,7 @@ public class Consumable : MonoBehaviour
 
     protected virtual void Awake()
     {
+        initialLayer = gameObject.layer;
         initialScale = gameObject.transform.localScale;
         rb = GetComponent<Rigidbody>();
         hitbox = GetComponent<Collider>();
@@ -139,23 +161,25 @@ public class Consumable : MonoBehaviour
             stateEvents.Add(itemState, new State());
         }
 
-        if (rb != null) { stateEvents[ItemState.inWorld].onEnter += ResetVelocity; }
-        stateEvents[ItemState.inWorld].onEnter += SetLayerToConsumable;
+        stateEvents[ItemState.inWorld].onEnter += ResetLayer;
         stateEvents[ItemState.inWorld].onEnter += SetGravityEnabled;
+        stateEvents[ItemState.inWorld].onEnter += ResetScale;
         //stateEvents[ItemState.inWorld].onUpdate += UpdateProximityOutline;
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
         stateEvents[ItemState.inWorld].onExit += SetGravityDisabled; 
-
         stateEvents[ItemState.beingConsumed].onEnter += EnablePhysicsFromEventListener;
+        // stateEvents[ItemState.inWorld].onExit += DisableKinematic; TODO we gotta rethink this
+
         stateEvents[ItemState.beingConsumed].onUpdate += UpdateBeingConsumed;
 
         //stateEvents[ItemState.inInventory].onEnter += DisablePhysics;
         stateEvents[ItemState.inInventory].onEnter += ClampShrunkScale;
         stateEvents[ItemState.inInventory].onEnter += StartDecay;
         //stateEvents[ItemState.inInventory].onExit += EnablePhysics;
-        stateEvents[ItemState.inInventory].onUpdate += FollowOwner;
+        stateEvents[ItemState.inInventory].onUpdate += FollowInventory;
 
-        //TODO: implement gradual puking like the above examples
+        if (rb != null) { stateEvents[ItemState.beingPuked].onEnter += ResetVelocity; }
+        stateEvents[ItemState.beingPuked].onUpdate += UpdateBeingPuked;
     }
 
     public void Update()
@@ -228,10 +252,10 @@ public class Consumable : MonoBehaviour
         eventListener.EnablePhysics();
     }
 
-    private void FollowOwner()
+    private void FollowInventory()
     {
         //TODO: add some periodic + random offset so objects float around in you?
-        gameObject.transform.position = ownerTransform.position;
+        gameObject.transform.position = inventoryTargetPosition;
     }
 
     #region Gravity
@@ -257,6 +281,18 @@ public class Consumable : MonoBehaviour
     }
     #endregion
 
+    #region Kinematic
+    public void SetRBKinematic(bool isKinematic)
+    {
+        rb.isKinematic = isKinematic;
+    }
+
+    public void DisableKinematic()
+    {
+        SetRBKinematic(false);
+    }
+    #endregion
+
     /// <summary>
     /// Moves the item to the position and reactivates it.
     /// </summary>
@@ -265,13 +301,16 @@ public class Consumable : MonoBehaviour
     {
         if (state != ItemState.inInventory) { return; }
 
-        gameObject.transform.localScale = initialScale;
-
         var previousAngles = gameObject.transform.eulerAngles;
         gameObject.transform.eulerAngles = new Vector3(0, previousAngles.y, 0);
 
         gameObject.transform.position = position;
         SetState(ItemState.inWorld);
+    }
+
+    private void ResetScale()
+    {
+        gameObject.transform.localScale = initialScale;
     }
 
     private void ResetVelocity()
@@ -293,9 +332,9 @@ public class Consumable : MonoBehaviour
         }
     }
 
-    private void SetLayerToConsumable()
+    private void ResetLayer()
     {
-        SetLayer(GameLayer.consumable);
+        SetLayer(initialLayer);
     }
 
     private void SetLayerToConsumed()
@@ -333,13 +372,22 @@ public class Consumable : MonoBehaviour
 
     private void UpdateBeingConsumed()
     {
-        var ownerPosition = ownerTransform.position;
         var currRate = consumptionRate * Time.deltaTime;
-        gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, ownerPosition, currRate);
+        gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, inventoryTargetPosition, currRate);
         gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, Vector3.zero, currRate);
 
         var hasBeenConsumed = gameObject.transform.localScale.magnitude / initialScale.magnitude < consumptionCutoff;
         if (hasBeenConsumed) { SetState(ItemState.inInventory); }
+    }
+
+    private void UpdateBeingPuked()
+    {
+        var currRate = pukeRate * Time.deltaTime;
+        //lerp towards a number slightly bigger than the original scale
+        gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, initialScale * 1.05f, currRate);
+
+        var hasFinishedPuking = gameObject.transform.localScale.magnitude >= initialScale.magnitude;
+        if (hasFinishedPuking) { SetState(ItemState.inWorld); }
     }
 
     private void UpdateProximityOutline()
