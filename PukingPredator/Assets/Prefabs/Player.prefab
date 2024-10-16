@@ -141,7 +141,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 129
-  jumpCancelRate: 25
+  jumpCancelRate: 0.4
   jumpForce: 6
   isManualMovementEnabled: 1
   playerCamera: {fileID: 0}
