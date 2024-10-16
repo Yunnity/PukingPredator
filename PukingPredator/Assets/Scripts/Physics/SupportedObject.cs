@@ -27,7 +27,7 @@ public class SupportedObject : MonoBehaviour
 
     public void ReduceSupportsByOne()
     {
-        if (acceptableSupportFailures > 0)
+        if (acceptableSupportFailures > 1)
         {
             acceptableSupportFailures--;
             return;
