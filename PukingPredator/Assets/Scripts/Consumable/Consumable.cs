@@ -167,7 +167,9 @@ public class Consumable : MonoBehaviour
         //stateEvents[ItemState.inWorld].onUpdate += UpdateProximityOutline;
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
         stateEvents[ItemState.inWorld].onExit += SetGravityDisabled; 
-        stateEvents[ItemState.inWorld].onExit += DisableKinematic;
+        
+        stateEvents[ItemState.beingConsumed].onEnter += EnablePhysicsFromEventListener;
+        // stateEvents[ItemState.inWorld].onExit += DisableKinematic; TODO we gotta rethink this
 
         stateEvents[ItemState.beingConsumed].onUpdate += UpdateBeingConsumed;
 
@@ -226,6 +228,7 @@ public class Consumable : MonoBehaviour
         Destroy(gameObject);
     }
 
+    // DisablePhysics/EnablePhysics are deprecated, and maybe unused
     private void DisablePhysics()
     {
         rb.isKinematic = true;
@@ -236,6 +239,12 @@ public class Consumable : MonoBehaviour
     {
         rb.isKinematic = false;
         hitbox.enabled = true;
+    }
+
+    public void EnablePhysicsFromEventListener()
+    {
+        PhysicsEventListener eventListener = GetComponent<PhysicsEventListener>();
+        eventListener.EnablePhysics();
     }
 
     private void FollowInventory()
@@ -267,6 +276,8 @@ public class Consumable : MonoBehaviour
     }
     #endregion
 
+    // Actual enabling/disabling of physics should use the PhysicsEventListener system
+    // This should only be used to help with consumption-related mechanics
     #region Kinematic
     public void SetRBKinematic(bool isKinematic)
     {

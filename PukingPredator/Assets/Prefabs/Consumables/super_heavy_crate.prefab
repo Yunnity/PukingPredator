@@ -510,6 +510,8 @@ GameObject:
   - component: {fileID: 796160764811511378}
   - component: {fileID: 7237663328440303165}
   - component: {fileID: 5857807636898864315}
+  - component: {fileID: 6094119255388127496}
+  - component: {fileID: 5483063424903438320}
   m_Layer: 7
   m_Name: super_heavy_crate
   m_TagString: Untagged
@@ -599,6 +601,30 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.55, y: 1.5, z: 1.55}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6094119255388127496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659491961435734660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cd6cca4a61842f47bf25e5993a3016d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5483063424903438320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659491961435734660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2531af01babb6e4993f0f50c35db1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &787549186124256106
 GameObject:
   m_ObjectHideFlags: 0
