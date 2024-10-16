@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// A group of SinglePhysicsObjects where the physics should be enabled
+/// A group of <c>SinglePhysicsObjects</c> where the physics should be enabled
 /// simultaneously if physics are enabled in any of the children.
 /// </summary>
 public class GroupPhysicsObject : MonoBehaviour
