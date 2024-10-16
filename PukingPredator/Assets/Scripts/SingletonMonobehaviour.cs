@@ -37,6 +37,9 @@ public abstract class SingletonMonobehaviour<T> : MonoBehaviour where T : MonoBe
                 if (this) { Destroy(gameObject); }
             }
 
+            //detach from parent to make DontDestroyOnLoad work
+            gameObject.transform.SetParent(null);
+
             DontDestroyOnLoad(gameObject);
         }
     }

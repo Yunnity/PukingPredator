@@ -32,6 +32,11 @@ public enum InputEvent
 public class GameInput : SingletonMonobehaviour<GameInput>
 {
     /// <summary>
+    /// The input vector for the camera. Has a max magnitude of 1.
+    /// </summary>
+    public Vector2 cameraInput => controls.Player.Look.ReadValue<Vector2>();
+
+    /// <summary>
     /// The component that looks for control inputs.
     /// </summary>
     private PlayerControls controls;

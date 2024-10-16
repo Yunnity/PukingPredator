@@ -11223,6 +11223,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameInput
       objectReference: {fileID: 0}
+    - target: {fileID: 4827343226904451183, guid: 4c680af80c98a41f18197d91ae56325b,
+        type: 3}
+      propertyPath: m_TagString
+      value: EditorOnly
+      objectReference: {fileID: 0}
     - target: {fileID: 7408823004121313412, guid: 4c680af80c98a41f18197d91ae56325b,
         type: 3}
       propertyPath: m_LocalPosition.x
