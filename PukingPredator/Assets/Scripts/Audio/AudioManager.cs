@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : SingletonMonobehaviour<AudioManager>
 {
     [SerializeField]
     private List<AudioClip> sfxClips;
@@ -15,28 +15,19 @@ public class AudioManager : MonoBehaviour
 
     private Dictionary<string, AudioClip> sfxDictionary = new Dictionary<string, AudioClip>();
 
-    public static AudioManager Instance { get; private set; }
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+        base.Awake();
 
-            // Loads sfx into a dictionary
-            foreach (AudioClip clip in sfxClips)
-            {
-                sfxDictionary[clip.name] = clip;
-            }
-
-            backgroundSource = gameObject.AddComponent<AudioSource>();
-            sfxSource = gameObject.AddComponent<AudioSource>();
-        }
-        else
+        // Loads sfx into a dictionary
+        foreach (AudioClip clip in sfxClips)
         {
-            Destroy(gameObject);
+            sfxDictionary[clip.name] = clip;
         }
+
+        backgroundSource = gameObject.AddComponent<AudioSource>();
+        sfxSource = gameObject.AddComponent<AudioSource>();
     }
 
 
