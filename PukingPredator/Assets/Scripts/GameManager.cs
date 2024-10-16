@@ -9,9 +9,18 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     [SerializeField]
     private string sceneToLoad;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
-        SceneManager.LoadScene(sceneToLoad);
+        TransitionToScene(sceneToLoad);
+    }
+
+
+
+    public static void TransitionToScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
     }
 }
