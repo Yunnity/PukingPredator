@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7563cf486856a44492657adf35f2a54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 1
   sfxClips:
   - {fileID: 8300000, guid: 4559a85cfa19c984a977c1e4f685aec8, type: 3}
   - {fileID: 8300000, guid: 6dd9ab6eb801390489281812ce9343ea, type: 3}
