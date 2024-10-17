@@ -44,11 +44,11 @@ public class ObjectiveTracker : MonoBehaviour
 
     private void setRemainingText()
     {
-        objectsLeftText.text = "Remaining Objects: " + remainingCollectionObjects;
+        objectsLeftText.text = "Remaining Collectables: " + remainingCollectionObjects;
 
         if (remainingCollectionObjects <= 0)
         {
-            objectsLeftText.text = "LEVEL COMPLETED";
+            objectsLeftText.text = "Collected Everything";
         }
     }
 
