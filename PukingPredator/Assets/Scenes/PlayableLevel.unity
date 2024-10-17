@@ -15060,7 +15060,7 @@ PrefabInstance:
     - target: {fileID: 4675187398879541319, guid: acf9e99f95aaaa443a419775f59a9067,
         type: 3}
       propertyPath: m_Name
-      value: PlayerAndCamera
+      value: LevelKit
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
