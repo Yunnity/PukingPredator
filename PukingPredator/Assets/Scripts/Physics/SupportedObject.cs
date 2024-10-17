@@ -7,12 +7,10 @@ using UnityEngine;
 public class SupportedObject : MonoBehaviour
 {
     /// <summary>
-    /// How many supports can fail without a collapse.
+    /// If this many supports fail, the structure will collapse
     /// </summary>
     [SerializeField]
-    private int acceptableSupportFailures = 0;
-
-    private bool hasCollapsed = false;
+    private int supportsBeforeCollapse = 1;
 
     private PhysicsEventListener physicsEventListener;
 
@@ -27,15 +25,10 @@ public class SupportedObject : MonoBehaviour
 
     public void ReduceSupportsByOne()
     {
-        if (acceptableSupportFailures > 0)
+        supportsBeforeCollapse--;
+        if (supportsBeforeCollapse <= 0)
         {
-            acceptableSupportFailures--;
-            return;
+            physicsEventListener.EnablePhysics();
         }
-
-        if (hasCollapsed) { return; }
-        hasCollapsed = true;
-
-        physicsEventListener.EnablePhysics();
     }
 }
