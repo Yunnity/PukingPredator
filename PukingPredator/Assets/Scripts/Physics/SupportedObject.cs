@@ -12,8 +12,6 @@ public class SupportedObject : MonoBehaviour
     [SerializeField]
     private int acceptableSupportFailures = 0;
 
-    private bool hasCollapsed = false;
-
     private PhysicsEventListener physicsEventListener;
 
 
@@ -28,14 +26,9 @@ public class SupportedObject : MonoBehaviour
     public void ReduceSupportsByOne()
     {
         acceptableSupportFailures--;
-        if (acceptableSupportFailures > 0)
+        if (acceptableSupportFailures <= 0)
         {
-            return;
+            physicsEventListener.EnablePhysics();
         }
-
-        if (hasCollapsed) { return; }
-        hasCollapsed = true;
-
-        physicsEventListener.EnablePhysics();
     }
 }
