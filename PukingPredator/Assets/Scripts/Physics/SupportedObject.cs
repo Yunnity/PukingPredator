@@ -10,7 +10,7 @@ public class SupportedObject : MonoBehaviour
     /// If this many supports fail, the structure will collapse
     /// </summary>
     [SerializeField]
-    private int acceptableSupportFailures = 1;
+    private int supportsBeforeCollapse = 1;
 
     private PhysicsEventListener physicsEventListener;
 
@@ -25,8 +25,8 @@ public class SupportedObject : MonoBehaviour
 
     public void ReduceSupportsByOne()
     {
-        acceptableSupportFailures--;
-        if (acceptableSupportFailures <= 0)
+        supportsBeforeCollapse--;
+        if (supportsBeforeCollapse <= 0)
         {
             physicsEventListener.EnablePhysics();
         }
