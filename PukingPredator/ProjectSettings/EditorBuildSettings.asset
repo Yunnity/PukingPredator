@@ -11,7 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StartScreen.unity
     guid: 3a53ada92fc322b42a10a52deb193b62
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/PlayableLevel.unity
     guid: 5ddc72b83d851084dbaa161e4e8ac803
+  - enabled: 1
+    path: Assets/Scenes/PlayableLevelRemake.unity
+    guid: 18f869be58a146640bbdded9e4be1c21
   m_configObjects: {}
