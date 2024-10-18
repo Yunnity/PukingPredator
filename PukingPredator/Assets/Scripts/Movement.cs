@@ -43,14 +43,13 @@ public class Movement : InputBehaviour
     /// <summary>
     /// Force applied downwards to reduce jump height if you let go early.
     /// </summary>
-    [SerializeField]
-    private float jumpCancelRate = 25;
+    private float jumpCancelRate = 0.4f;
 
     /// <summary>
     /// The force applied when jumping.
     /// </summary>
     [SerializeField]
-    public float jumpForce = 0.02f;
+    private float jumpForce;
 
     /// <summary>
     /// How long a jump has been going on for.
@@ -114,7 +113,10 @@ public class Movement : InputBehaviour
         //Reduce jump height if the button is released early
         if (isJumpCancelled && isJumping && rb.velocity.y > 0)
         {
-            rb.AddForce(Vector3.down * jumpCancelRate);
+            var vel = rb.velocity;
+            vel.y = rb.velocity.y * jumpCancelRate;
+            rb.velocity = vel;
+
             if (rb.velocity.y <= 0) { isJumping = false; }
         }
     }
