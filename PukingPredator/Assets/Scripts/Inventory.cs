@@ -195,8 +195,10 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        foreach (var item in items.AsEnumerable().Reverse())
+        //foreach (var item in items.AsEnumerable().Reverse())
+        if (items.Count > 0)
         {
+            var item = items[0];
             GameObject newItemUI = Instantiate(itemUIPrefab, UIPanel.transform);
             newItemUI.name = ITEM_SLOT_ID;
 
