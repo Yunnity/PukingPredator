@@ -9,7 +9,7 @@ public enum ItemState
     inInventory,
     beingPuked,
 }
-public class Consumable : MonoBehaviour
+public class Consumable : Interactable
 {
     [SerializeField]
     private bool _canDecay = false;
@@ -89,30 +89,12 @@ public class Consumable : MonoBehaviour
     /// </summary>
     public bool isDecaying => decayTimer != null;
 
+    public override bool isInteractable => isConsumable;
+
     /// <summary>
     /// The mass of the instance.
     /// </summary>
     public float mass => rb != null ? rb.mass : 1;
-
-    /// <summary>
-    /// The color of the outline when close to the player.
-    /// </summary>
-    private Color outlineColor = Color.white;
-
-    /// <summary>
-    /// The range at which objects start/stop showing an outline.
-    /// </summary>
-    private float outlineDetectionRadius = 5f;
-
-    /// <summary>
-    /// Size of the outline visual.
-    /// </summary>
-    private const float OUTLINE_RADIUS = 2.2f;
-
-    /// <summary>
-    /// Settings for the outline of the consumable (toggled on via enable when player is near)
-    /// </summary>
-    public Outline outline;
 
     /// <summary>
     /// The game object that owns the consumable (ie the player).
@@ -146,14 +128,14 @@ public class Consumable : MonoBehaviour
 
 
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         initialLayer = gameObject.layer;
         initialScale = gameObject.transform.localScale;
         rb = GetComponent<Rigidbody>();
         hitbox = GetComponent<Collider>();
-
-        ConfigureOutline();
 
         //Setup the state events
         foreach (ItemState itemState in Enum.GetValues(typeof(ItemState)))
@@ -192,17 +174,6 @@ public class Consumable : MonoBehaviour
     private void ClampShrunkScale()
     {
         gameObject.transform.localScale = initialScale * consumptionCutoff;
-    }
-
-    private void ConfigureOutline()
-    {
-        outline = gameObject.GetComponent<Outline>();
-        if (outline == null) { outline = gameObject.AddComponent<Outline>(); }
-
-        outline.OutlineWidth = OUTLINE_RADIUS;
-        outline.OutlineMode = Outline.Mode.OutlineVisible;
-        outline.OutlineColor = outlineColor;
-        outline.enabled = false;
     }
 
     private void Decay()

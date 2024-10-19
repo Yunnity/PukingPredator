@@ -67,7 +67,7 @@ public class Eating : InputBehaviour
     /// <summary>
     /// The object that the player is looking at to eat.
     /// </summary>
-    private Consumable viewedConsumable = null;
+    private Interactable viewedInteractable = null;
 
     
 
@@ -88,7 +88,7 @@ public class Eating : InputBehaviour
 
     private void Update()
     {
-        var previousViewedConsumable = viewedConsumable;
+        var previousViewedInteractable = viewedInteractable;
 
         //TODO: revisit this code. it is probably better to do a square cast shape and
         //... sort collisions based on distance to the center of the cast, then
@@ -98,7 +98,7 @@ public class Eating : InputBehaviour
         RaycastHit hit;
         if (inventory.isFull)
         {
-            viewedConsumable = null;
+            viewedInteractable = null;
         }
         else if (Physics.SphereCast(ray, radius: 0.1f, out hit, maxDistance: 1f, layerMask: consumableLayers) ||
             Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 2f, layerMask: dashLayers))
@@ -106,24 +106,24 @@ public class Eating : InputBehaviour
             GameObject hitObject = hit.collider.gameObject;
 
             // if looking at the same object, no changes needed
-            if (hitObject == previousViewedConsumable) { return; }
+            if (hitObject == previousViewedInteractable) { return; }
 
-            var consumableData = hitObject.GetComponent<Consumable>();
-            var canConsumeTarget = consumableData != null && consumableData.isConsumable;
-            viewedConsumable = canConsumeTarget ? consumableData : null;
+            var interactableData = hitObject.GetComponent<Interactable>();
+            var canInteract = interactableData != null && interactableData.isInteractable;
+            viewedInteractable = canInteract ? interactableData : null;
         }
         else
         {
-            viewedConsumable = null;
+            viewedInteractable = null;
         }
 
-        if (previousViewedConsumable != null)
+        if (previousViewedInteractable != null)
         {
-            previousViewedConsumable.outline.enabled = false;
+            previousViewedInteractable.outline.enabled = false;
         }
-        if (viewedConsumable != null)
+        if (viewedInteractable != null)
         {
-            viewedConsumable.outline.enabled = true;
+            viewedInteractable.outline.enabled = true;
         }
     }
 
@@ -132,9 +132,9 @@ public class Eating : InputBehaviour
     private void GameInput_Eat()
     {
         if (inventory.isFull) { return; }
-        if (viewedConsumable == null) { return; }
+        if (viewedInteractable == null) { return; }
 
-        var viewedObject = viewedConsumable.gameObject;
+        var viewedObject = viewedInteractable.gameObject;
         ConsumeObject(viewedObject);
 
         player.EatObject(viewedObject);

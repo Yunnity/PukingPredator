@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public class Collectable : MonoBehaviour
+public class Collectable : Interactable
 {
+    public override bool isInteractable => true;
+
     public CollectableTracker tracker;
 
 
