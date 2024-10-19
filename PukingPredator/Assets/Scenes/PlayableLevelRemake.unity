@@ -8359,11 +8359,27 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelKit
       objectReference: {fileID: 0}
+    - target: {fileID: 5982933556563915568, guid: acf9e99f95aaaa443a419775f59a9067,
+        type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1075925130}
+    - target: {fileID: 5982933556563915568, guid: acf9e99f95aaaa443a419775f59a9067,
+        type: 3}
+      propertyPath: obstructionMask.m_Bits
+      value: 1024
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: acf9e99f95aaaa443a419775f59a9067, type: 3}
+--- !u!4 &1075925130 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3508630820767293871, guid: acf9e99f95aaaa443a419775f59a9067,
+    type: 3}
+  m_PrefabInstance: {fileID: 1075925129}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1088188676 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8346230885965490542, guid: 515b8fbccb9274059a250a572e4178bb,
