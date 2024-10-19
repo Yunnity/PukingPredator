@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Player))]
@@ -16,22 +15,9 @@ public class Eating : InputBehaviour
     private Vector3 baseScale;
 
     /// <summary>
-    /// The layers that consumable objects can be on.
-    /// </summary>
-    [SerializeField]
-    private LayerMask consumableLayers;
-
-    /// <summary>
-    /// The layers that dashable objects can be on.
-    /// </summary>
-    [SerializeField]
-    private LayerMask dashLayers;
-
-    /// <summary>
     /// The players inventory.
     /// </summary>
-    [SerializeField]
-    private Inventory inventory;
+    private Inventory inventory => player.inventory;
 
     /// <summary>
     /// Multiplier for the mass of items in the players inventory. 0.05 means 5%
@@ -64,11 +50,6 @@ public class Eating : InputBehaviour
     /// </summary>
     private Rigidbody rb;
 
-    /// <summary>
-    /// The object that the player is looking at to eat.
-    /// </summary>
-    private Interactable viewedInteractable = null;
-
     
 
     void Start()
@@ -86,51 +67,12 @@ public class Eating : InputBehaviour
         Subscribe(InputEvent.onPuke, GameInput_Puke);
     }
 
-    private void Update()
-    {
-        var previousViewedInteractable = viewedInteractable;
-
-        //TODO: revisit this code. it is probably better to do a square cast shape and
-        //... sort collisions based on distance to the center of the cast, then
-        //... pick the best object based on that
-
-        var ray = new Ray(transform.position, transform.forward);
-        RaycastHit hit;
-        if (inventory.isFull)
-        {
-            viewedInteractable = null;
-        }
-        else if (Physics.SphereCast(ray, radius: 0.1f, out hit, maxDistance: 1f, layerMask: consumableLayers) ||
-            Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 2f, layerMask: dashLayers))
-        {
-            GameObject hitObject = hit.collider.gameObject;
-
-            // if looking at the same object, no changes needed
-            if (hitObject == previousViewedInteractable) { return; }
-
-            var interactableData = hitObject.GetComponent<Interactable>();
-            var canInteract = interactableData != null && interactableData.isInteractable;
-            viewedInteractable = canInteract ? interactableData : null;
-        }
-        else
-        {
-            viewedInteractable = null;
-        }
-
-        if (previousViewedInteractable != null)
-        {
-            previousViewedInteractable.outline.enabled = false;
-        }
-        if (viewedInteractable != null)
-        {
-            viewedInteractable.outline.enabled = true;
-        }
-    }
-
 
 
     private void GameInput_Eat()
     {
+        var viewedInteractable = player.viewedInteractable;
+
         if (inventory.isFull) { return; }
         if (viewedInteractable == null) { return; }
 
