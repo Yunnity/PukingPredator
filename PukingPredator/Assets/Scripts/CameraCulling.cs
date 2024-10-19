@@ -9,7 +9,7 @@ public class CameraCulling : MonoBehaviour
     private GameObject previousObstructed = null;
 
     private RaycastHit hit;
-    private const string OBSTRUCTION = "obstruction";
+    private const string OBSTRUCTION = "Obstruction";
 
     void LateUpdate()
     {
