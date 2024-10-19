@@ -5,7 +5,16 @@ using UnityEngine;
 public class Objective : MonoBehaviour
 {
 
-    private ObjectiveTracker tracker;    
+    private ObjectiveTracker tracker;
+    private Consumable consumable;
+    private bool isCollected = false; // to prevent bugs from repeated calls
+
+    private void Start()
+    {
+        consumable = GetComponent<Consumable>();
+        consumable.stateEvents[ItemState.inInventory].onEnter += RemoveCollectionObject;
+        consumable.stateEvents[ItemState.inInventory].onExit += AddCollectionObject;
+    }
 
     // Register this objective with the objective tracker
     public void registerObjectiveTracker(ObjectiveTracker ot)
@@ -14,12 +23,21 @@ public class Objective : MonoBehaviour
         tracker.addCollectionObject();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void RemoveCollectionObject()
     {
-        if (collision.collider.tag == "Player")
+        if (!isCollected)
         {
             tracker.removeCollectionObject();
-            Destroy(this.gameObject);
+            isCollected = true;
+        }
+    }
+
+    private void AddCollectionObject()
+    {
+        if ( isCollected )
+        {
+            tracker.addCollectionObject();
+            isCollected = false;
         }
     }
 }

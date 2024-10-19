@@ -39,6 +39,7 @@ public class Consumable : MonoBehaviour
     /// <summary>
     /// The time it takes to decay.
     /// </summary>
+    [SerializeField]
     private float decayTime = 5f;
 
     /// <summary>
