@@ -164,7 +164,6 @@ public class Consumable : MonoBehaviour
         stateEvents[ItemState.inWorld].onEnter += ResetLayer;
         stateEvents[ItemState.inWorld].onEnter += SetGravityEnabled;
         stateEvents[ItemState.inWorld].onEnter += ResetScale;
-        //stateEvents[ItemState.inWorld].onUpdate += UpdateProximityOutline;
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
         stateEvents[ItemState.inWorld].onExit += SetGravityDisabled; 
         
@@ -386,23 +385,6 @@ public class Consumable : MonoBehaviour
 
         var hasFinishedPuking = gameObject.transform.localScale.magnitude >= initialScale.magnitude;
         if (hasFinishedPuking) { SetState(ItemState.inWorld); }
-    }
-
-    private void UpdateProximityOutline()
-    {
-        if (outline == null) { return; }
-
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, outlineDetectionRadius);
-        foreach (Collider collider in hitColliders)
-        {
-            if (collider.gameObject.CompareTag(GameTag.player))
-            {
-                outline.enabled = true;
-                return;
-            }
-        }
-        outline.enabled = false;
-        return;
     }
 
 }
