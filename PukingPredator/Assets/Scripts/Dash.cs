@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -8,7 +6,8 @@ using UnityEngine;
 /// for the height curve, and it uses a fixed horizontal velocity.
 /// https://www.desmos.com/calculator/mu4bgefbi2
 /// </summary>
-public class Dash : MonoBehaviour
+[RequireComponent(typeof(Player))]
+public class Dash : InputBehaviour
 {
     /// <summary>
     /// The vector for the horizontal direction of the dash.
@@ -45,6 +44,11 @@ public class Dash : MonoBehaviour
     public Action onComplete = null;
 
     /// <summary>
+    /// The player component.
+    /// </summary>
+    private Player player;
+
+    /// <summary>
     /// The rigidbody of the player.
     /// </summary>
     private Rigidbody rb;
@@ -64,6 +68,9 @@ public class Dash : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        player = GetComponent<Player>();
+
+        Subscribe(InputEvent.onEat, GameInput_Eat);
     }
 
     // Update is called once per frame
@@ -86,10 +93,25 @@ public class Dash : MonoBehaviour
 
 
 
+    private void GameInput_Eat()
+    {
+        var viewedInteractable = player.viewedInteractable;
+
+        if (viewedInteractable == null) { return; }
+
+        var viewedObject = viewedInteractable.gameObject;
+        DashTo(viewedObject);
+    }
+
+
+
     public void DashTo(GameObject target)
     {
         isDashing = true;
         timeElapsed = 0;
+
+        player.SetState(PlayerState.dashing);
+        player.movement.isManualMovementEnabled = false;
 
         var targetPosition = target.transform.position;
         var deltaPosition = targetPosition - transform.position;
@@ -104,6 +126,9 @@ public class Dash : MonoBehaviour
     private void OnComplete()
     {
         isDashing = false;
+
+        player.SetState(PlayerState.standing);
+        player.movement.isManualMovementEnabled = true;
 
         var vel = rb.velocity;
         vel.y = 0;

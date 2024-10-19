@@ -4,15 +4,13 @@ using UnityEngine;
 
 public enum PlayerState
 {
-    eating,
+    dashing,
     standing
 }
 
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
 {
-    private Dash dash;
-
     /// <summary>
     /// The layers that interactable objects can be on.
     /// </summary>
@@ -23,7 +21,7 @@ public class Player : MonoBehaviour
     private Inventory _inventory;
     public Inventory inventory => _inventory;
 
-    private Movement movement;
+    public Movement movement { get; private set; }
 
     /// <summary>
     /// The rigidbody of the player.
@@ -49,9 +47,6 @@ public class Player : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
 
-        dash = GetComponent<Dash>();
-        dash.onComplete += DashFinished;
-
         movement = GetComponent<Movement>();
         AudioManager.Instance.PlayBackground();
     }
@@ -63,26 +58,6 @@ public class Player : MonoBehaviour
     }
 
 
-
-    private void DashFinished()
-    {
-        SetState(PlayerState.standing);
-        movement.isManualMovementEnabled = true;
-    }
-
-    /// <summary>
-    /// Makes the player dash towards the target.
-    /// </summary>
-    /// <param name="obj"></param>
-    public void EatObject(GameObject obj)
-    {
-        var deltaPosition = obj.transform.position - transform.position;
-        var distance = deltaPosition.magnitude;
-
-        SetState(PlayerState.eating);
-        movement.isManualMovementEnabled = false;
-        dash.DashTo(obj);
-    }
 
     public void SetState(PlayerState newState)
     {

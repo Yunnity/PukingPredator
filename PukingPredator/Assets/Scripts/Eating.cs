@@ -78,8 +78,6 @@ public class Eating : InputBehaviour
 
         var viewedObject = viewedInteractable.gameObject;
         ConsumeObject(viewedObject);
-
-        player.EatObject(viewedObject);
     }
     
     private void GameInput_Puke()
