@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraCulling : MonoBehaviour
@@ -5,38 +6,55 @@ public class CameraCulling : MonoBehaviour
     public Transform player;
     public LayerMask obstructionMask;
     
-    private LayerMask previousLayerMask;
-    private GameObject previousObstructed = null;
+    private List<LayerMask> previousLayerMasks;
+    private List<GameObject> previousObstructed;
+    List<GameObject> currentHits;
 
     private RaycastHit hit;
     private const string OBSTRUCTION = "Obstruction";
+
+    private void Start()
+    {
+        previousLayerMasks = new List<LayerMask>();
+        previousObstructed = new List<GameObject>();
+        currentHits = new List<GameObject>();
+    }
 
     void LateUpdate()
     {
         Vector3 directionToPlayer = (player.position - transform.position).normalized;
         float distanceBetween = Vector3.Distance(player.position, transform.position);
-        float cullingDistance = 2 * distanceBetween / 3;
+        float cullingDistance = 4 * distanceBetween / 5;
 
 
-        if (Physics.Raycast(transform.position, directionToPlayer, out hit, cullingDistance))
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, directionToPlayer, cullingDistance);
+        currentHits.Clear();
+
+        foreach (RaycastHit hit in hits)
         {
+
             GameObject hitObject = hit.collider.gameObject;
-            if (hitObject == previousObstructed) { return; }
-            if (previousObstructed != null && previousObstructed != hitObject)
-            {
-                SetLayerRecursively(previousObstructed, previousLayerMask);
-            }
+            if (hitObject == player) continue;
 
-            previousLayerMask = hitObject.layer;
+            // Stores the currenthits in a list so it can easily be checked for non-hit previous objects
+            currentHits.Add(hitObject);
+            if (previousObstructed.Contains(hitObject)) continue;
+
+            previousLayerMasks.Add(hitObject.layer);
             SetLayerRecursively(hitObject, LayerMask.NameToLayer(OBSTRUCTION));
-            previousObstructed = hitObject;
+            previousObstructed.Add(hitObject);  
         }
-        else if (previousObstructed != null)
+        
+        for (int i = previousObstructed.Count - 1; i >= 0; i--)
         {
-            SetLayerRecursively(previousObstructed, previousLayerMask);
-            previousObstructed = null;
+            GameObject previous = previousObstructed[i];
+            if (!currentHits.Contains(previous))
+            {
+                SetLayerRecursively(previous, previousLayerMasks[i]);
+                previousObstructed.RemoveAt(i);
+                previousLayerMasks.RemoveAt(i);
+            }
         }
-
     }
 
     void SetLayerRecursively(GameObject obj, int layer)
