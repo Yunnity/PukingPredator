@@ -185,15 +185,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3489702610983306386}
     m_Modifications:
-    - target: {fileID: 772070024568196264, guid: ffe3631cc44e34b26b4730f4088425f5,
+    - target: {fileID: 3042836795401077674, guid: ffe3631cc44e34b26b4730f4088425f5,
         type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 2567298882619119056}
-    - target: {fileID: 772070024568196264, guid: ffe3631cc44e34b26b4730f4088425f5,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
+      propertyPath: m_CullingMask.m_Bits
+      value: 1015
       objectReference: {fileID: 0}
     - target: {fileID: 4224338608034013212, guid: ffe3631cc44e34b26b4730f4088425f5,
         type: 3}
@@ -251,10 +246,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 772070024568196264, guid: ffe3631cc44e34b26b4730f4088425f5, type: 3}
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4224338608034013212, guid: ffe3631cc44e34b26b4730f4088425f5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2002233690032977766}
   m_SourcePrefab: {fileID: 100100000, guid: ffe3631cc44e34b26b4730f4088425f5, type: 3}
 --- !u!1 &1568324978897028777 stripped
 GameObject:
@@ -262,6 +261,22 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3412623333698725557}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2002233690032977766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568324978897028777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03189c881c63ac64fac6943c001cc6fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 3508630820767293871}
+  obstructionMask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!4 &7692896652790546021 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5016651992623044816, guid: ffe3631cc44e34b26b4730f4088425f5,
