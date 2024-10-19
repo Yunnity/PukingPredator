@@ -80,11 +80,7 @@ public class Player : MonoBehaviour
 
         var ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
-        if (inventory.isFull)
-        {
-            viewedInteractable = null;
-        }
-        else if (Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 2f, layerMask: interactableLayers))
+        if (Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 2f, layerMask: interactableLayers))
         {
             GameObject hitObject = hit.collider.gameObject;
 
@@ -93,6 +89,9 @@ public class Player : MonoBehaviour
 
             var interactableData = hitObject.GetComponent<Interactable>();
             var canInteract = interactableData != null && interactableData.isInteractable;
+            //dont let it interact with consumables if youre full
+            if (inventory.isFull && interactableData is Consumable) { canInteract = false; }
+
             viewedInteractable = canInteract ? interactableData : null;
         }
         else
