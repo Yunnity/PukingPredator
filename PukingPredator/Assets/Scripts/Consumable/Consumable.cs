@@ -47,11 +47,6 @@ public class Consumable : Interactable
     public Timer decayTimer { get; private set; }
 
     /// <summary>
-    /// Collider attached to the instance.
-    /// </summary>
-    private Collider hitbox;
-
-    /// <summary>
     /// The layer that the object started out on.
     /// </summary>
     private int initialLayer;
@@ -135,7 +130,6 @@ public class Consumable : Interactable
         initialLayer = gameObject.layer;
         initialScale = gameObject.transform.localScale;
         rb = GetComponent<Rigidbody>();
-        hitbox = GetComponent<Collider>();
 
         //Setup the state events
         foreach (ItemState itemState in Enum.GetValues(typeof(ItemState)))
