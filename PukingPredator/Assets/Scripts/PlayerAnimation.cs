@@ -34,6 +34,7 @@ public class PlayerAnimation : MonoBehaviour
     // Currently, we only have moving and idle
     void updateStates()
     {
+        // TODO WE NEED TO CHANGE THIS but we can do it when we have more animations
         bool horizontalMovement = Mathf.Abs(rb.velocity.x) + Mathf.Abs(rb.velocity.z) > MOVING_THRESHOLD;
         animator.SetBool(isMovingHash, horizontalMovement);
     }
