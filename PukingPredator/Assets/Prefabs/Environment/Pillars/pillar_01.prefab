@@ -14,9 +14,8 @@ GameObject:
   - component: {fileID: 4394072820166482323}
   - component: {fileID: 8011492674872224175}
   - component: {fileID: 746564775240780054}
-  - component: {fileID: 6923272449494060953}
   - component: {fileID: 2430368266442918376}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pillar_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,24 +147,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dceb359917d1411f8a63078f82aa37f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
   _canDecay: 0
   consumptionCutoff: 0.05
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
   isConsumable: 1
-  outline: {fileID: 0}
---- !u!114 &6923272449494060953
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7865183289869538773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cd6cca4a61842f47bf25e5993a3016d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2430368266442918376
 MonoBehaviour:
   m_ObjectHideFlags: 0
