@@ -316,6 +316,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2531af01babb6e4993f0f50c35db1ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4417507 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1153806134079652316, guid: acf9e99f95aaaa443a419775f59a9067,
+    type: 3}
+  m_PrefabInstance: {fileID: 1075925129}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &10685348
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13252,6 +13258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 375ce16540aa0ff46935276ab5473e6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioManagerObject: {fileID: 4417507}
 --- !u!4 &1825147256
 Transform:
   m_ObjectHideFlags: 0
