@@ -149,18 +149,16 @@ public class Consumable : Interactable
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
         stateEvents[ItemState.inWorld].onExit += SetGravityDisabled; 
         
-        stateEvents[ItemState.beingConsumed].onEnter += EnablePhysicsFromEventListener;
-        // stateEvents[ItemState.inWorld].onExit += DisableKinematic; TODO we gotta rethink this
+        stateEvents[ItemState.beingConsumed].onEnter += EnablePhysics;
 
         stateEvents[ItemState.beingConsumed].onUpdate += UpdateBeingConsumed;
 
-        //stateEvents[ItemState.inInventory].onEnter += DisablePhysics;
         stateEvents[ItemState.inInventory].onEnter += ClampShrunkScale;
         stateEvents[ItemState.inInventory].onEnter += StartDecay;
-        //stateEvents[ItemState.inInventory].onExit += EnablePhysics;
         stateEvents[ItemState.inInventory].onUpdate += FollowInventory;
 
         if (rb != null) { stateEvents[ItemState.beingPuked].onEnter += ResetVelocity; }
+        stateEvents[ItemState.beingPuked].onEnter += SetLayerToBeingPuked;
         stateEvents[ItemState.beingPuked].onUpdate += UpdateBeingPuked;
     }
 
@@ -198,24 +196,17 @@ public class Consumable : Interactable
         Destroy(gameObject);
     }
 
-    // DisablePhysics/EnablePhysics are deprecated, and maybe unused
-    private void DisablePhysics()
-    {
-        rb.isKinematic = true;
-        hitbox.enabled = false;
-    }
-
     private void EnablePhysics()
     {
-        rb.isKinematic = false;
-        hitbox.enabled = true;
-    }
-
-    public void EnablePhysicsFromEventListener()
-    {
-        PhysicsEventListener eventListener = GetComponent<PhysicsEventListener>();
-        if (eventListener == null) { return; }
-        eventListener.EnablePhysics();
+        var physicsObject = GetComponent<PhysicsBehaviour>();
+        if (physicsObject != null)
+        {
+            physicsObject.EnablePhysics();
+        }
+        else if (rb != null)
+        {
+            rb.isKinematic = false;
+        }
     }
 
     private void FollowInventory()
@@ -244,20 +235,6 @@ public class Consumable : Interactable
     private void SetGravityEnabled()
     {
         SetGravity(true);
-    }
-    #endregion
-
-    // Actual enabling/disabling of physics should use the PhysicsEventListener system
-    // This should only be used to help with consumption-related mechanics
-    #region Kinematic
-    public void SetRBKinematic(bool isKinematic)
-    {
-        rb.isKinematic = isKinematic;
-    }
-
-    public void DisableKinematic()
-    {
-        SetRBKinematic(false);
     }
     #endregion
 
@@ -303,6 +280,11 @@ public class Consumable : Interactable
     private void ResetLayer()
     {
         SetLayer(initialLayer);
+    }
+
+    private void SetLayerToBeingPuked()
+    {
+        SetLayer(GameLayer.beingPuked);
     }
 
     private void SetLayerToConsumed()
