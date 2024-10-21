@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 3639959504917380254}
   - component: {fileID: 6698104178932905743}
   - component: {fileID: 1344614747827553786}
-  - component: {fileID: 5411725122850696112}
   - component: {fileID: 8889761039833129108}
   m_Layer: 7
   m_Name: wallShort (2)
@@ -148,24 +147,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dceb359917d1411f8a63078f82aa37f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
   _canDecay: 0
   consumptionCutoff: 0.05
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
   isConsumable: 1
-  outline: {fileID: 0}
---- !u!114 &5411725122850696112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 803188475209230698}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cd6cca4a61842f47bf25e5993a3016d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8889761039833129108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,7 +216,6 @@ GameObject:
   - component: {fileID: 8066875726600790708}
   - component: {fileID: 7775510541246615931}
   - component: {fileID: 8911588600670275614}
-  - component: {fileID: 8453537254028131328}
   - component: {fileID: 1783775214140365477}
   m_Layer: 7
   m_Name: wallShort
@@ -363,24 +349,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dceb359917d1411f8a63078f82aa37f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
   _canDecay: 0
   consumptionCutoff: 0.05
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
   isConsumable: 1
-  outline: {fileID: 0}
---- !u!114 &8453537254028131328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5241460524746131648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cd6cca4a61842f47bf25e5993a3016d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1783775214140365477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -407,7 +381,6 @@ GameObject:
   - component: {fileID: 1466923431371129496}
   - component: {fileID: 3299592314225359679}
   - component: {fileID: 1831255540639885953}
-  - component: {fileID: 4751574080487766897}
   - component: {fileID: 5853402946526155827}
   m_Layer: 7
   m_Name: wallLong (2)
@@ -514,12 +487,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dceb359917d1411f8a63078f82aa37f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
   _canDecay: 0
   consumptionCutoff: 0.05
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
   isConsumable: 1
-  outline: {fileID: 0}
 --- !u!54 &1831255540639885953
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -547,18 +520,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4751574080487766897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5738439686580841781}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cd6cca4a61842f47bf25e5993a3016d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5853402946526155827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -585,7 +546,6 @@ GameObject:
   - component: {fileID: 4087330976799254761}
   - component: {fileID: 8367540318037540283}
   - component: {fileID: 8990669215530430421}
-  - component: {fileID: 6586302374928948975}
   - component: {fileID: 1643819993371530523}
   m_Layer: 7
   m_Name: wallLong (4)
@@ -692,12 +652,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dceb359917d1411f8a63078f82aa37f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
   _canDecay: 0
   consumptionCutoff: 0.05
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
   isConsumable: 1
-  outline: {fileID: 0}
 --- !u!54 &8990669215530430421
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -725,18 +685,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &6586302374928948975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6667525914271666476}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cd6cca4a61842f47bf25e5993a3016d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1643819993371530523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763,7 +711,6 @@ GameObject:
   - component: {fileID: 2557564831643287647}
   - component: {fileID: 7251787048770562717}
   - component: {fileID: 7299574821645765614}
-  - component: {fileID: 7449219108098577596}
   - component: {fileID: 2874393155972731377}
   m_Layer: 7
   m_Name: wallShort (1)
@@ -897,24 +844,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dceb359917d1411f8a63078f82aa37f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
   _canDecay: 0
   consumptionCutoff: 0.05
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
   isConsumable: 1
-  outline: {fileID: 0}
---- !u!114 &7449219108098577596
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8747431535151281031}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cd6cca4a61842f47bf25e5993a3016d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2874393155972731377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -941,7 +876,6 @@ GameObject:
   - component: {fileID: 4747473201747718051}
   - component: {fileID: 5344406511126562068}
   - component: {fileID: 4325380694553759751}
-  - component: {fileID: 4226215227076979070}
   - component: {fileID: 35965762020563723}
   m_Layer: 7
   m_Name: wallLong (3)
@@ -1048,12 +982,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dceb359917d1411f8a63078f82aa37f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
   _canDecay: 0
   consumptionCutoff: 0.05
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
   isConsumable: 1
-  outline: {fileID: 0}
 --- !u!54 &4325380694553759751
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1081,18 +1015,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4226215227076979070
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9087105048734231534}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cd6cca4a61842f47bf25e5993a3016d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &35965762020563723
 MonoBehaviour:
   m_ObjectHideFlags: 0
