@@ -12,9 +12,8 @@ GameObject:
   - component: {fileID: 1189200298499467061}
   - component: {fileID: 4458615890105084796}
   - component: {fileID: 6751218444667029348}
-  - component: {fileID: 9172224938627434395}
   - component: {fileID: 5652651632931513697}
-  - component: {fileID: 1737096300468938544}
+  - component: {fileID: 9172224938627434395}
   - component: {fileID: 2956449903107434265}
   m_Layer: 7
   m_Name: wallColumn
@@ -109,24 +108,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.19999999, y: 0.6605694, z: 0.19999999}
   m_Center: {x: 0, y: 0.3302847, z: 0}
---- !u!114 &9172224938627434395
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 131247741759775178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7dceb359917d1411f8a63078f82aa37f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _canDecay: 0
-  consumptionCutoff: 0.05
-  decayInto: {fileID: 0}
-  inventory: {fileID: 0}
-  isConsumable: 1
-  outline: {fileID: 0}
 --- !u!54 &5652651632931513697
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -154,7 +135,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1737096300468938544
+--- !u!114 &9172224938627434395
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -163,9 +144,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 131247741759775178}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cd6cca4a61842f47bf25e5993a3016d, type: 3}
+  m_Script: {fileID: 11500000, guid: 7dceb359917d1411f8a63078f82aa37f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
+  _canDecay: 0
+  consumptionCutoff: 0.05
+  decayInto: {fileID: 0}
+  inventory: {fileID: 0}
+  isConsumable: 1
 --- !u!114 &2956449903107434265
 MonoBehaviour:
   m_ObjectHideFlags: 0
