@@ -158,6 +158,7 @@ public class Consumable : Interactable
         stateEvents[ItemState.inInventory].onUpdate += FollowInventory;
 
         if (rb != null) { stateEvents[ItemState.beingPuked].onEnter += ResetVelocity; }
+        stateEvents[ItemState.beingPuked].onEnter += SetLayerToBeingPuked;
         stateEvents[ItemState.beingPuked].onUpdate += UpdateBeingPuked;
     }
 
@@ -279,6 +280,11 @@ public class Consumable : Interactable
     private void ResetLayer()
     {
         SetLayer(initialLayer);
+    }
+
+    private void SetLayerToBeingPuked()
+    {
+        SetLayer(GameLayer.beingPuked);
     }
 
     private void SetLayerToConsumed()
