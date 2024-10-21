@@ -30,12 +30,27 @@ public class PlayerAnimation : MonoBehaviour
         updateStates();
     }
 
+    private void PrintAnimatorState()
+    {
+        AnimatorClipInfo[] clipInfo = animator.GetCurrentAnimatorClipInfo(0);
+
+        if (clipInfo.Length > 0)
+        {
+            // Print the name of the animation clip currently playing
+            Debug.Log("Current Animation State: " + clipInfo[0].clip.name);
+        }
+    }
+
     // Check animation state
     // Currently, we only have moving and idle
-    void updateStates()
+    private void updateStates()
     {
         // TODO WE NEED TO CHANGE THIS but we can do it when we have more animations
-        bool horizontalMovement = Mathf.Abs(rb.velocity.x) + Mathf.Abs(rb.velocity.z) > MOVING_THRESHOLD;
-        animator.SetBool(isMovingHash, horizontalMovement);
+        bool horizontalMovement = Mathf.Abs(rb.velocity.x) + Mathf.Abs(rb.velocity.z) > 0;
+        bool isMoving = animator.GetBool(isMovingHash);
+        if ((!isMoving && horizontalMovement) || (isMoving && !horizontalMovement))
+        {
+            animator.SetBool(isMovingHash, horizontalMovement);
+        }
     }
 }
