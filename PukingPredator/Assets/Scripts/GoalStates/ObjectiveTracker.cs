@@ -11,15 +11,41 @@ public class ObjectiveTracker : MonoBehaviour
     Objectives get the "Objective" script, and this script will register all objectives upon loading.
     The objectives will call functions in this objectiveTracker when they are collected.
      */
+
     private GameObject objectsLeftObject;
     private Text objectsLeftText;
 
     private int remainingCollectionObjects;
 
+    /// <summary>
+    /// The prefab for the collectables UI
+    /// </summary>
+    [SerializeField]
+    private GameObject collectablesUIPrefab;
+    public GameObject emptySlotPrefab;
+    public GameObject collectedSlotPrefab;
+
+    /// <summary>
+    /// The panel that the collectables are contained in.
+    /// </summary>
+    private GameObject UIPanel;
+
+    /// <summary>
+    /// The script associated with the Collectable UI
+    /// </summary>
+    private CollectablesUI collectablesUI;
+
+    private int totalObjects;
+
+
     void Start()
     {
-        objectsLeftObject = GameObject.Find("objectsLeftText");
-        objectsLeftText = objectsLeftObject.GetComponent<Text>();
+        var canvas = GameObject.Find("Canvas");
+        UIPanel = Instantiate(collectablesUIPrefab, canvas.transform);
+        collectablesUI = UIPanel.GetComponent<CollectablesUI>();
+
+        //objectsLeftObject = GameObject.Find("objectsLeftText");
+        //objectsLeftText = objectsLeftObject.GetComponent<Text>();
 
         // find all objectives
         Objective[] objectives = FindObjectsOfType<Objective>();
@@ -27,28 +53,56 @@ public class ObjectiveTracker : MonoBehaviour
         {
             obj.registerObjectiveTracker(this);
         }
-        setRemainingText();
+        
+        totalObjects = remainingCollectionObjects;
+        UpdateCollectablesUI();
     }
 
     public void addCollectionObject()
     {
         remainingCollectionObjects++;
-        setRemainingText();
+        UpdateCollectablesUI();
     }
 
     public void removeCollectionObject()
     {
         remainingCollectionObjects--;
-        setRemainingText();
+        UpdateCollectablesUI();
     }
 
     private void setRemainingText()
     {
-        objectsLeftText.text = "Remaining Collectables: " + remainingCollectionObjects;
+        //objectsLeftText.text = "Remaining Collectables: " + remainingCollectionObjects;
 
-        if (remainingCollectionObjects <= 0)
+        //if (remainingCollectionObjects <= 0)
+        //{
+        //    objectsLeftText.text = "Collected Everything";
+        //}
+    }
+
+    public void UpdateCollectablesUI()
+    {
+        const string COLLECTABLE_SLOT_ID = "CollectableSlotUI";
+        foreach (Transform child in UIPanel.transform)
         {
-            objectsLeftText.text = "Collected Everything";
+            if (child.gameObject.name == COLLECTABLE_SLOT_ID)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        GameObject newCollectableUI;
+        for (int i = 0; i < totalObjects; i++)
+        {
+            if (totalObjects - i > remainingCollectionObjects)
+            {
+                newCollectableUI = Instantiate(collectedSlotPrefab, UIPanel.transform);
+            } else
+            {
+                newCollectableUI = Instantiate(emptySlotPrefab, UIPanel.transform);
+            }
+
+            newCollectableUI.name = COLLECTABLE_SLOT_ID;
         }
     }
 
