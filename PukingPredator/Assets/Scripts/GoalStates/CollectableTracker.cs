@@ -18,7 +18,7 @@ public class CollectableTracker : MonoBehaviour
     /// </summary>
     private int remainingCollectables;
 
-    private GameObject audioManagerObject;
+    //private GameObject audioManagerObject;
 
     private AudioManager audioManager;
 
@@ -29,9 +29,9 @@ public class CollectableTracker : MonoBehaviour
         collectableUI = GameObject.Find("objectsLeftText");
         collectablesLeftText = collectableUI.GetComponent<Text>();
 
-        audioManagerObject = GameObject.Find("AudioManager");
+        audioManager = AudioManager.Instance;
 
-        audioManager = audioManagerObject?.GetComponent<AudioManager>();
+        //audioManager = audioManagerObject?.GetComponent<AudioManager>();
 
         // find all collectables
         var collectables = FindObjectsOfType<Collectable>();
