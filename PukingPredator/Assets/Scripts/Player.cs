@@ -11,11 +11,7 @@ public enum PlayerState
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
 {
-    /// <summary>
-    /// The layers that interactable objects can be on.
-    /// </summary>
-    [SerializeField]
-    private LayerMask interactableLayers;
+    private InteractablePicker interactablePicker;
 
     [SerializeField]
     private Inventory _inventory;
@@ -34,7 +30,7 @@ public class Player : MonoBehaviour
     /// <summary>
     /// The object that the player is looking at.
     /// </summary>
-    public Interactable viewedInteractable { get; private set; } = null;
+    public Interactable targetInteractable => interactablePicker.targetInteractable;
 
 
 
@@ -48,13 +44,15 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         movement = GetComponent<Movement>();
+
+        interactablePicker = GetComponent<InteractablePicker>();
+
         AudioManager.Instance.PlayBackground();
     }
 
     private void Update()
     {
         stateEvents[state].onUpdate?.Invoke();
-        UpdateViewed();
     }
 
 
@@ -64,48 +62,5 @@ public class Player : MonoBehaviour
         var previousState = state;
         if (newState == previousState) { return; }
         state = newState;
-    }
-
-    /// <summary>
-    /// Updates the object currently being viewed by the player and updates
-    /// outlines accordingly.
-    /// </summary>
-    private void UpdateViewed()
-    {
-        var previousViewedInteractable = viewedInteractable;
-
-        //TODO: revisit this code. it is probably better to do a square cast shape and
-        //... sort collisions based on distance to the center of the cast, then
-        //... pick the best object based on that
-
-        var ray = new Ray(transform.position, transform.forward);
-        RaycastHit hit;
-        if (Physics.SphereCast(ray, radius: 0.2f, out hit, maxDistance: 2f, layerMask: interactableLayers))
-        {
-            GameObject hitObject = hit.collider.gameObject;
-
-            // if looking at the same object, no changes needed
-            if (hitObject == previousViewedInteractable) { return; }
-
-            var interactableData = hitObject.GetComponent<Interactable>();
-            var canInteract = interactableData != null && interactableData.isInteractable;
-            //dont let it interact with consumables if youre full
-            if (inventory.isFull && interactableData is Consumable) { canInteract = false; }
-
-            viewedInteractable = canInteract ? interactableData : null;
-        }
-        else
-        {
-            viewedInteractable = null;
-        }
-
-        if (previousViewedInteractable != null)
-        {
-            previousViewedInteractable.outline.enabled = false;
-        }
-        if (viewedInteractable != null)
-        {
-            viewedInteractable.outline.enabled = true;
-        }
     }
 }

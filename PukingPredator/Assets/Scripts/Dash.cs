@@ -95,12 +95,12 @@ public class Dash : InputBehaviour
 
     private void GameInput_Eat()
     {
-        var viewedInteractable = player.viewedInteractable;
+        var targetInteractable = player.targetInteractable;
 
-        if (viewedInteractable == null) { return; }
+        if (targetInteractable == null) { return; }
 
-        var viewedObject = viewedInteractable.gameObject;
-        DashTo(viewedObject);
+        var targetObject = targetInteractable.gameObject;
+        DashTo(targetObject);
     }
 
 
