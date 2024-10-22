@@ -46,6 +46,8 @@ public class CameraCulling : MonoBehaviour
         public void Reset()
         {
             if (hasBeenReset) { return; }
+
+            material.SetAlpha(initialAlpha);
             if (initialSurfaceType != SurfaceType.transparent)
             {
                 material.SetSurfaceType(initialSurfaceType);
@@ -64,7 +66,7 @@ public class CameraCulling : MonoBehaviour
 
 
 
-    void LateUpdate()
+    private void LateUpdate()
     {
         var currentlyObstructingView = collisionTracker.collisions;
         var previouslyCulledObjects = allCullingData.Keys;
