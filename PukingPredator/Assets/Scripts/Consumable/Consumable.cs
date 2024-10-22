@@ -9,7 +9,7 @@ public enum ItemState
     inInventory,
     beingPuked,
 }
-public class Consumable : MonoBehaviour
+public class Consumable : Interactable
 {
     [SerializeField]
     private bool _canDecay = false;
@@ -45,11 +45,6 @@ public class Consumable : MonoBehaviour
     /// The timer used to track the decay.
     /// </summary>
     public Timer decayTimer { get; private set; }
-
-    /// <summary>
-    /// Collider attached to the instance.
-    /// </summary>
-    private Collider hitbox;
 
     /// <summary>
     /// The layer that the object started out on.
@@ -89,30 +84,12 @@ public class Consumable : MonoBehaviour
     /// </summary>
     public bool isDecaying => decayTimer != null;
 
+    public override bool isInteractable => isConsumable;
+
     /// <summary>
     /// The mass of the instance.
     /// </summary>
     public float mass => rb != null ? rb.mass : 1;
-
-    /// <summary>
-    /// The color of the outline when close to the player.
-    /// </summary>
-    private Color outlineColor = Color.white;
-
-    /// <summary>
-    /// The range at which objects start/stop showing an outline.
-    /// </summary>
-    private float outlineDetectionRadius = 5f;
-
-    /// <summary>
-    /// Size of the outline visual.
-    /// </summary>
-    private const float OUTLINE_RADIUS = 2.2f;
-
-    /// <summary>
-    /// Settings for the outline of the consumable (toggled on via enable when player is near)
-    /// </summary>
-    public Outline outline;
 
     /// <summary>
     /// The game object that owns the consumable (ie the player).
@@ -146,14 +123,13 @@ public class Consumable : MonoBehaviour
 
 
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         initialLayer = gameObject.layer;
         initialScale = gameObject.transform.localScale;
         rb = GetComponent<Rigidbody>();
-        hitbox = GetComponent<Collider>();
-
-        ConfigureOutline();
 
         //Setup the state events
         foreach (ItemState itemState in Enum.GetValues(typeof(ItemState)))
@@ -164,22 +140,19 @@ public class Consumable : MonoBehaviour
         stateEvents[ItemState.inWorld].onEnter += ResetLayer;
         stateEvents[ItemState.inWorld].onEnter += SetGravityEnabled;
         stateEvents[ItemState.inWorld].onEnter += ResetScale;
-        //stateEvents[ItemState.inWorld].onUpdate += UpdateProximityOutline;
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
         stateEvents[ItemState.inWorld].onExit += SetGravityDisabled; 
         
-        stateEvents[ItemState.beingConsumed].onEnter += EnablePhysicsFromEventListener;
-        // stateEvents[ItemState.inWorld].onExit += DisableKinematic; TODO we gotta rethink this
+        stateEvents[ItemState.beingConsumed].onEnter += EnablePhysics;
 
         stateEvents[ItemState.beingConsumed].onUpdate += UpdateBeingConsumed;
 
-        //stateEvents[ItemState.inInventory].onEnter += DisablePhysics;
         stateEvents[ItemState.inInventory].onEnter += ClampShrunkScale;
         stateEvents[ItemState.inInventory].onEnter += StartDecay;
-        //stateEvents[ItemState.inInventory].onExit += EnablePhysics;
         stateEvents[ItemState.inInventory].onUpdate += FollowInventory;
 
         if (rb != null) { stateEvents[ItemState.beingPuked].onEnter += ResetVelocity; }
+        stateEvents[ItemState.beingPuked].onEnter += SetLayerToBeingPuked;
         stateEvents[ItemState.beingPuked].onUpdate += UpdateBeingPuked;
     }
 
@@ -193,17 +166,6 @@ public class Consumable : MonoBehaviour
     private void ClampShrunkScale()
     {
         gameObject.transform.localScale = initialScale * consumptionCutoff;
-    }
-
-    private void ConfigureOutline()
-    {
-        outline = gameObject.GetComponent<Outline>();
-        if (outline == null) { outline = gameObject.AddComponent<Outline>(); }
-
-        outline.OutlineWidth = OUTLINE_RADIUS;
-        outline.OutlineMode = Outline.Mode.OutlineVisible;
-        outline.OutlineColor = outlineColor;
-        outline.enabled = false;
     }
 
     private void Decay()
@@ -228,23 +190,17 @@ public class Consumable : MonoBehaviour
         Destroy(gameObject);
     }
 
-    // DisablePhysics/EnablePhysics are deprecated, and maybe unused
-    private void DisablePhysics()
-    {
-        rb.isKinematic = true;
-        hitbox.enabled = false;
-    }
-
     private void EnablePhysics()
     {
-        rb.isKinematic = false;
-        hitbox.enabled = true;
-    }
-
-    public void EnablePhysicsFromEventListener()
-    {
-        PhysicsEventListener eventListener = GetComponent<PhysicsEventListener>();
-        eventListener.EnablePhysics();
+        var physicsObject = GetComponent<PhysicsBehaviour>();
+        if (physicsObject != null)
+        {
+            physicsObject.EnablePhysics();
+        }
+        else if (rb != null)
+        {
+            rb.isKinematic = false;
+        }
     }
 
     private void FollowInventory()
@@ -273,20 +229,6 @@ public class Consumable : MonoBehaviour
     private void SetGravityEnabled()
     {
         SetGravity(true);
-    }
-    #endregion
-
-    // Actual enabling/disabling of physics should use the PhysicsEventListener system
-    // This should only be used to help with consumption-related mechanics
-    #region Kinematic
-    public void SetRBKinematic(bool isKinematic)
-    {
-        rb.isKinematic = isKinematic;
-    }
-
-    public void DisableKinematic()
-    {
-        SetRBKinematic(false);
     }
     #endregion
 
@@ -332,6 +274,11 @@ public class Consumable : MonoBehaviour
     private void ResetLayer()
     {
         SetLayer(initialLayer);
+    }
+
+    private void SetLayerToBeingPuked()
+    {
+        SetLayer(GameLayer.beingPuked);
     }
 
     private void SetLayerToConsumed()
@@ -385,23 +332,6 @@ public class Consumable : MonoBehaviour
 
         var hasFinishedPuking = gameObject.transform.localScale.magnitude >= initialScale.magnitude;
         if (hasFinishedPuking) { SetState(ItemState.inWorld); }
-    }
-
-    private void UpdateProximityOutline()
-    {
-        if (outline == null) { return; }
-
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, outlineDetectionRadius);
-        foreach (Collider collider in hitColliders)
-        {
-            if (collider.gameObject.CompareTag(GameTag.player))
-            {
-                outline.enabled = true;
-                return;
-            }
-        }
-        outline.enabled = false;
-        return;
     }
 
 }

@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: 4140279998483279865}
   - component: {fileID: 1228547050892690844}
   - component: {fileID: 3981772609074805335}
-  - component: {fileID: 459982181254193059}
-  - component: {fileID: 4987213970972323669}
   m_Layer: 7
   m_Name: stationary_door
   m_TagString: Untagged
@@ -49,12 +47,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dceb359917d1411f8a63078f82aa37f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
   _canDecay: 0
   consumptionCutoff: 0.05
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
   isConsumable: 1
-  outline: {fileID: 0}
 --- !u!54 &1228547050892690844
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -104,30 +102,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4212150264635040916, guid: 3f433557e6fda40e3a8a2bda7a58510f, type: 3}
---- !u!114 &459982181254193059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3092852651790340500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cd6cca4a61842f47bf25e5993a3016d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4987213970972323669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3092852651790340500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2531af01babb6e4993f0f50c35db1ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7967033862011047815
 GameObject:
   m_ObjectHideFlags: 0
