@@ -71,13 +71,13 @@ public class Eating : InputBehaviour
 
     private void GameInput_Eat()
     {
-        var viewedInteractable = player.viewedInteractable;
+        var targetInteractable = player.targetInteractable;
 
         if (inventory.isFull) { return; }
-        if (viewedInteractable == null) { return; }
+        if (targetInteractable == null) { return; }
 
-        var viewedObject = viewedInteractable.gameObject;
-        ConsumeObject(viewedObject);
+        var targetObject = targetInteractable.gameObject;
+        ConsumeObject(targetObject);
     }
     
     private void GameInput_Puke()

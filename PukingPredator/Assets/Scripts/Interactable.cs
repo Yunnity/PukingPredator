@@ -1,7 +1,13 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(Collider))]
 public abstract class Interactable : MonoBehaviour
 {
+    /// <summary>
+    /// Collider attached to the instance.
+    /// </summary>
+    protected Collider hitbox;
+
     /// <summary>
     /// If the object can be targetted for interaction.
     /// </summary>
@@ -27,9 +33,20 @@ public abstract class Interactable : MonoBehaviour
     protected virtual void Awake()
 	{
         ConfigureOutline();
+        hitbox = GetComponent<Collider>();
     }
 
 
+
+    /// <summary>
+    /// Gets the closest point on the collider to the reference position.
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
+    public Vector3 ClosestPoint(Vector3 pos)
+    {
+        return hitbox.ClosestPoint(pos);
+    }
 
     private void ConfigureOutline()
     {
