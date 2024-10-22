@@ -54,7 +54,7 @@ public class CollectableTracker : MonoBehaviour
     public void CollectedOne()
     {
         remainingCollectables--;
-        audioManager.PlaySFX("LevelUp");
+        audioManager?.PlaySFX("LevelUp", 2.0f);
         UpdateUI();
     }
 
