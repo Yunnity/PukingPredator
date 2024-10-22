@@ -18,10 +18,6 @@ public class CollectableTracker : MonoBehaviour
     /// </summary>
     private int remainingCollectables;
 
-    /// <summary>
-    /// audio manager object
-    /// </summary>
-    [SerializeField]
     private GameObject audioManagerObject;
 
     private AudioManager audioManager;
@@ -33,7 +29,9 @@ public class CollectableTracker : MonoBehaviour
         collectableUI = GameObject.Find("objectsLeftText");
         collectablesLeftText = collectableUI.GetComponent<Text>();
 
-        audioManager = audioManagerObject.GetComponent<AudioManager>();
+        audioManagerObject = GameObject.Find("AudioManager");
+
+        audioManager = audioManagerObject?.GetComponent<AudioManager>();
 
         // find all collectables
         var collectables = FindObjectsOfType<Collectable>();
@@ -54,7 +52,7 @@ public class CollectableTracker : MonoBehaviour
     public void CollectedOne()
     {
         remainingCollectables--;
-        audioManager?.PlaySFX("LevelUp", 2.0f);
+        audioManager?.PlaySFX("LevelUp", 8.0f);
         UpdateUI();
     }
 
