@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2016236159056364233}
   - component: {fileID: 4836731307832871748}
   - component: {fileID: 1813349073380665574}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FloorBroken_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
