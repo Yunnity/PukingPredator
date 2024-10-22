@@ -18,20 +18,40 @@ public class CollectableTracker : MonoBehaviour
     /// </summary>
     private int remainingCollectables;
 
+    /// <summary>
+    /// The number of collectables in total.
+    /// </summary>
+    private int totalCollectables;
 
+    /// <summary>
+    /// The prefab for the collectables UI
+    /// </summary>
+    [SerializeField]
+    private GameObject collectablesUIPrefab;
+    [SerializeField]
+    private GameObject emptySlotPrefab;
+    [SerializeField]
+    private GameObject collectedSlotPrefab;
+    [SerializeField]
+    private GameObject particleEffect;
+    private ParticleSystem effect;
 
     void Start()
     {
-        collectableUI = GameObject.Find("objectsLeftText");
-        collectablesLeftText = collectableUI.GetComponent<Text>();
+        var canvas = GameObject.Find("Canvas");
+        collectableUI = Instantiate(collectablesUIPrefab, canvas.transform);
 
         // find all collectables
         var collectables = FindObjectsOfType<Collectable>();
+        totalCollectables = collectables.Length;
         remainingCollectables = collectables.Length;
         foreach (var collectable in collectables)
         {
             collectable.tracker = this;
         }
+
+        GameObject particleSystem = Instantiate(particleEffect, transform.position, Quaternion.identity);
+        effect = particleSystem.GetComponent<ParticleSystem>();
 
         UpdateUI();
     }
@@ -47,16 +67,37 @@ public class CollectableTracker : MonoBehaviour
         UpdateUI();
     }
 
-    private void UpdateUI()
+    public void emitParticles(Vector3 position)
     {
-        if (remainingCollectables > 0)
-        {
-            collectablesLeftText.text = $"Remaining Collectables: {remainingCollectables}";
-        }
-        else
-        {
-            collectablesLeftText.text = "Collected Everything";
-        }
+        effect.transform.position = position;
+        effect.Play();
+
     }
 
+    private void UpdateUI()
+    {
+        const string COLLECTABLE_SLOT_ID = "CollectableSlotUI";
+        foreach (Transform child in collectableUI.transform)
+        {
+            if (child.gameObject.name == COLLECTABLE_SLOT_ID)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        GameObject newCollectableUI;
+        for (int i = 0; i < totalCollectables; i++)
+        {
+            if (totalCollectables - i > remainingCollectables)
+            {
+                newCollectableUI = Instantiate(collectedSlotPrefab, collectableUI.transform);
+            }
+            else
+            {
+                newCollectableUI = Instantiate(emptySlotPrefab, collectableUI.transform);
+            }
+
+            newCollectableUI.name = COLLECTABLE_SLOT_ID;
+        }
+    }
 }
