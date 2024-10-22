@@ -31,6 +31,11 @@ public class Eating : InputBehaviour
     private Player player;
 
     /// <summary>
+    /// The player's playerAnim component
+    /// </summary>
+    private PlayerAnimation anim;
+
+    /// <summary>
     /// Force applied to object when puked. Depends on how long the puke button
     /// was held down for.
     /// </summary>
@@ -56,6 +61,7 @@ public class Eating : InputBehaviour
     {
         rb = GetComponent<Rigidbody>();
         player = GetComponent<Player>();
+        anim = player.GetComponent<PlayerAnimation>();
 
         baseMass = rb.mass;
 
@@ -76,6 +82,8 @@ public class Eating : InputBehaviour
         if (inventory.isFull) { return; }
         if (targetInteractable == null) { return; }
 
+        anim.StartEatAnim();
+
         var targetObject = targetInteractable.gameObject;
         ConsumeObject(targetObject);
     }
@@ -86,6 +94,8 @@ public class Eating : InputBehaviour
 
         Consumable itemToPuke = inventory.PopItem();
         itemToPuke.SetState(ItemState.beingPuked);
+
+        anim.StartPukeAnim();
 
         //puke forward and with a little force upwards
         var pukeDir = transform.forward + Vector3.up * 0.1f;
