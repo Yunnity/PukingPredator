@@ -101,6 +101,7 @@ public class Eating : InputBehaviour
         if (inventory.isFull) { return; }
         if (targetInteractable == null) { return; }
 
+        AudioManager.Instance.PlaySFX("Eating", 8.0f);
         anim.StartEatAnim();
 
         var targetObject = targetInteractable.gameObject;
