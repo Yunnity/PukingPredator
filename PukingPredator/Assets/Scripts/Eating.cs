@@ -93,6 +93,8 @@ public class Eating : InputBehaviour
         if (inventory.isEmpty) { return; }
 
         Consumable itemToPuke = inventory.PopItem();
+        if (itemToPuke == null) return;
+
         itemToPuke.SetState(ItemState.beingPuked);
 
         anim.StartPukeAnim();
