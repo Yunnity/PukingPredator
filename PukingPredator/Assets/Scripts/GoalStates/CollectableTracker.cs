@@ -1,47 +1,66 @@
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CollectableTracker : MonoBehaviour
 {
-    /// <summary>
-    /// The main UI component for the collectable data.
-    /// </summary>
-    private GameObject collectableUI;
+    private AudioManager audioManager;
 
     /// <summary>
-    /// TEMP: The text box used for showing how many collectables are left.
+    /// How many collectables the player got.
     /// </summary>
-    private Text collectablesLeftText;
+    public int collectedCount => totalCollectables - remainingCollectables;
+
+    /// <summary>
+    /// The prefab for the slot in the collectables UI
+    /// </summary>
+    [SerializeField]
+    private GameObject collectableSlotPrefab;
+
+    /// <summary>
+    /// The UI slot component for the slots that still havent been filled.
+    /// </summary>
+    private List<CollectableSlotUI> emptySlots = new();
+
+    /// <summary>
+    /// The prefab for the particle effect when collecting an item
+    /// </summary>
+    [SerializeField]
+    private GameObject particleEffect;
+
+    /// <summary>
+    /// The particle system for playing the particle effect
+    /// </summary>
+    private ParticleSystem ps;
 
     /// <summary>
     /// The number of collectables in the level still.
     /// </summary>
-    private int remainingCollectables;
+    private int remainingCollectables => emptySlots.Count;
 
-    //private GameObject audioManagerObject;
-
-    private AudioManager audioManager;
+    /// <summary>
+    /// The number of collectables in total.
+    /// </summary>
+    private int totalCollectables;
 
 
 
     void Start()
     {
-        collectableUI = GameObject.Find("objectsLeftText");
-        collectablesLeftText = collectableUI.GetComponent<Text>();
-
         audioManager = AudioManager.Instance;
-
-        //audioManager = audioManagerObject?.GetComponent<AudioManager>();
 
         // find all collectables
         var collectables = FindObjectsOfType<Collectable>();
-        remainingCollectables = collectables.Length;
+        totalCollectables = collectables.Length;
         foreach (var collectable in collectables)
         {
             collectable.tracker = this;
+
+            var slotObject = Instantiate(collectableSlotPrefab, parent: transform);
+            emptySlots.Add(slotObject.GetComponent<CollectableSlotUI>());
         }
 
-        UpdateUI();
+        GameObject particleSystem = Instantiate(particleEffect, transform.position, Quaternion.identity);
+        ps = particleSystem.GetComponent<ParticleSystem>();
     }
 
 
@@ -49,23 +68,23 @@ public class CollectableTracker : MonoBehaviour
     /// <summary>
     /// Called when a collectable has been collected.
     /// </summary>
-    public void CollectedOne()
+    public void CollectOne()
     {
-        remainingCollectables--;
-        audioManager?.PlaySFX("LevelUp", 8.0f);
-        UpdateUI();
+        if (audioManager != null) { audioManager.PlaySFX("LevelUp", 8.0f); }
+
+        var targetSlot = emptySlots[0];
+        emptySlots.RemoveAt(0);
+
+        targetSlot.TriggerCollected();
     }
 
-    private void UpdateUI()
+    /// <summary>
+    /// Emits particles at the given position.
+    /// </summary>
+    /// <param name="position"></param>
+    public void EmitParticles(Vector3 position)
     {
-        if (remainingCollectables > 0)
-        {
-            collectablesLeftText.text = $"Remaining Collectables: {remainingCollectables}";
-        }
-        else
-        {
-            collectablesLeftText.text = "Collected Everything";
-        }
+        ps.transform.position = position;
+        ps.Play();
     }
-
 }
