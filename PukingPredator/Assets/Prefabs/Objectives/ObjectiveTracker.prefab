@@ -44,5 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 375ce16540aa0ff46935276ab5473e6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioManagerObject: {fileID: 4625655161116368568, guid: 2f61d24633070fa49887f505a0c01847,
+  collectablesUIPrefab: {fileID: 8737692738412663703, guid: 17543a20cb78b2d438b4d0a17acc8e29,
+    type: 3}
+  emptySlotPrefab: {fileID: 490450632359015113, guid: 6e49e0b9dd4589c44b6db30e528ea953,
+    type: 3}
+  collectedSlotPrefab: {fileID: 490450632359015113, guid: fbeaaf237fda67a4b8e38448177763cd,
+    type: 3}
+  particleEffect: {fileID: 4006322950566398199, guid: a0204bf98420f3d4eb233f5b35263a34,
     type: 3}
