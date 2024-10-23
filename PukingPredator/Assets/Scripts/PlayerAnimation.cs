@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerAnimation : MonoBehaviour
 {
 
-    private const float MOVING_THRESHOLD = 0.001f;
+    private const float MOVING_THRESHOLD = 0f;
 
     [SerializeField]
     private GameObject model;
@@ -13,21 +13,22 @@ public class PlayerAnimation : MonoBehaviour
     private Animator animator;
     private Rigidbody rb;
 
-    int isMovingHash;
+    private int isMovingHash = Animator.StringToHash("isMoving");
+    private int isPukingHash = Animator.StringToHash("isPuking");
+    int isEatingHash = Animator.StringToHash("isEating");
 
     // Start is called before the first frame update
     void Start()
     {
         animator = model.GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        isMovingHash = Animator.StringToHash("isMoving");
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        updateStates();
+        UpdateMovementState();
     }
 
     private void PrintAnimatorState()
@@ -43,14 +44,26 @@ public class PlayerAnimation : MonoBehaviour
 
     // Check animation state
     // Currently, we only have moving and idle
-    private void updateStates()
+    private void UpdateMovementState()
     {
         // TODO WE NEED TO CHANGE THIS but we can do it when we have more animations
-        bool horizontalMovement = Mathf.Abs(rb.velocity.x) + Mathf.Abs(rb.velocity.z) > 0;
+        bool horizontalMovement = Mathf.Abs(rb.velocity.x) + Mathf.Abs(rb.velocity.z) > MOVING_THRESHOLD;
         bool isMoving = animator.GetBool(isMovingHash);
         if ((!isMoving && horizontalMovement) || (isMoving && !horizontalMovement))
         {
             animator.SetBool(isMovingHash, horizontalMovement);
         }
+    }
+
+    public void StartPukeAnim()
+    {
+        animator.ResetTrigger(isEatingHash);
+        animator.SetTrigger(isPukingHash);
+    }
+
+    public void StartEatAnim()
+    {
+        animator.ResetTrigger(isPukingHash);
+        animator.SetTrigger(isEatingHash);
     }
 }

@@ -24,6 +24,10 @@ public class CollectableTracker : MonoBehaviour
     /// </summary>
     private int totalCollectables;
 
+    //private GameObject audioManagerObject;
+
+    private AudioManager audioManager;
+
     /// <summary>
     /// The prefab for the collectables UI
     /// </summary>
@@ -64,6 +68,10 @@ public class CollectableTracker : MonoBehaviour
         var canvas = GameObject.Find("Canvas");
         collectableUI = Instantiate(collectablesUIPrefab, canvas.transform);
 
+        audioManager = AudioManager.Instance;
+
+        //audioManager = audioManagerObject?.GetComponent<AudioManager>();
+
         // find all collectables
         var collectables = FindObjectsOfType<Collectable>();
         totalCollectables = collectables.Length;
@@ -87,6 +95,7 @@ public class CollectableTracker : MonoBehaviour
     public void CollectedOne()
     {
         remainingCollectables--;
+        audioManager?.PlaySFX("LevelUp", 8.0f);
 
         // Instantiate the collected slot at the center of the screen
         Vector3 center = new Vector3(Screen.width / 2, Screen.height / 2, 0);

@@ -1,24 +1,9 @@
 fileFormatVersion: 2
-guid: 03a30e2009ba06b48b28977953cf4184
+guid: bfc73cc6675565e4d9a94f1cc3bf4a87
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: eyeKit_Arnold_blueIris_sha
-    second: {fileID: 2100000, guid: 3c26d284bed799641a7ae7c2d92e4b8c, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: lambert2
-    second: {fileID: 2100000, guid: 24d2334f5acee5745b3d1d8cfc736873, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: lambert3
-    second: {fileID: 2100000, guid: 5a816c2fa5519b441a0cc283f8ed76f9, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
