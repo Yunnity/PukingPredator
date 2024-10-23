@@ -10,10 +10,10 @@ public class Collectable : Interactable
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag == "Player")
+        if (collision.collider.CompareTag(GameTag.player))
         {
-            tracker.emitParticles(collision.transform.position);
-            tracker.CollectedOne();
+            tracker.EmitParticles(collision.transform.position);
+            tracker.CollectOne();
             Destroy(gameObject);
         }
     }
