@@ -55,6 +55,18 @@ public class Eating : InputBehaviour
     /// </summary>
     private Rigidbody rb;
 
+    /// <summary>
+    /// How much the inventory size impacts the size of the player
+    /// </summary>
+    private const float SCALE_FACTOR = 0.2f;
+
+    /// <summary>
+    /// How quickly the players size grows.
+    /// </summary>
+    private const float SCALE_RATE = 8f;
+
+    private Vector3 targetScale;
+
     
 
     void Start()
@@ -68,9 +80,16 @@ public class Eating : InputBehaviour
         inventory.onChange += UpdateMass;
         
         baseScale = gameObject.transform.localScale;
+        targetScale = baseScale;
 
         Subscribe(InputEvent.onEat, GameInput_Eat);
         Subscribe(InputEvent.onPuke, GameInput_Puke);
+    }
+
+    private void Update()
+    {
+        var rate = SCALE_RATE * Time.deltaTime;
+        player.transform.localScale = Vector3.Lerp(player.transform.localScale, targetScale, rate);
     }
 
 
@@ -131,7 +150,7 @@ public class Eating : InputBehaviour
 
         //TODO: change this to use totalItemMass instead of the count once masses are fine tuned
         rb.mass = baseMass + currInventoryCount * MASS_FACTOR;
-        gameObject.transform.localScale = baseScale + new Vector3(0.2f, 0.2f, 0.2f) * currInventoryCount;
+        targetScale = baseScale * (1 + SCALE_FACTOR * currInventoryCount);
     }
 
 }
