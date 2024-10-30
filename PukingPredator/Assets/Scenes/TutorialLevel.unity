@@ -1099,6 +1099,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7468885337960271494, guid: 913ae199a4aec864b9af698531402093,
         type: 3}
+      propertyPath: initiallySupporting.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7468885337960271494, guid: 913ae199a4aec864b9af698531402093,
+        type: 3}
       propertyPath: initiallySupporting.Array.data[0]
       value: 
       objectReference: {fileID: 0}
@@ -1161,6 +1166,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 9190464389420216519, guid: 913ae199a4aec864b9af698531402093,
+        type: 3}
+      propertyPath: initiallySupporting.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9190464389420216519, guid: 913ae199a4aec864b9af698531402093,
+        type: 3}
+      propertyPath: initiallySupportedBy.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9190464389420216519, guid: 913ae199a4aec864b9af698531402093,
         type: 3}
@@ -4323,6 +4338,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2653915780401856863, guid: 913ae199a4aec864b9af698531402093,
         type: 3}
+      propertyPath: initiallySupporting.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2653915780401856863, guid: 913ae199a4aec864b9af698531402093,
+        type: 3}
       propertyPath: initiallySupporting.Array.data[0]
       value: 
       objectReference: {fileID: 0}
@@ -4390,6 +4410,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 9190464389420216519, guid: 913ae199a4aec864b9af698531402093,
+        type: 3}
+      propertyPath: initiallySupporting.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9190464389420216519, guid: 913ae199a4aec864b9af698531402093,
+        type: 3}
+      propertyPath: initiallySupportedBy.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9190464389420216519, guid: 913ae199a4aec864b9af698531402093,
         type: 3}
