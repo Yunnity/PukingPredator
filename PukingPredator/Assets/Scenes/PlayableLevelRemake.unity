@@ -7047,17 +7047,32 @@ PrefabInstance:
     - target: {fileID: 3904177409662049812, guid: acf9e99f95aaaa443a419775f59a9067,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4247297938628737115, guid: acf9e99f95aaaa443a419775f59a9067,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4675187398879541319, guid: acf9e99f95aaaa443a419775f59a9067,
         type: 3}
       propertyPath: m_Name
       value: LevelKit
+      objectReference: {fileID: 0}
+    - target: {fileID: 5544219704596267910, guid: acf9e99f95aaaa443a419775f59a9067,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.3873816
+      objectReference: {fileID: 0}
+    - target: {fileID: 5544219704596267910, guid: acf9e99f95aaaa443a419775f59a9067,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.6981132
+      objectReference: {fileID: 0}
+    - target: {fileID: 5544219704596267910, guid: acf9e99f95aaaa443a419775f59a9067,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.36552152
       objectReference: {fileID: 0}
     - target: {fileID: 8976141520866915321, guid: acf9e99f95aaaa443a419775f59a9067,
         type: 3}

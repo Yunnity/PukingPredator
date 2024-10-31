@@ -26,10 +26,10 @@ public class PukingBar : InputBehaviour
     void Update()
     {
         if (inventory.itemCount == 0) sliderObject.SetActive(false);
-        else sliderObject.SetActive(true);
 
         if (isCharging)
         {
+            sliderObject.SetActive(true);
             slider.value += (Time.deltaTime / MAX_PUKE_DURATION) * slider.maxValue;
         }
     }
@@ -46,5 +46,6 @@ public class PukingBar : InputBehaviour
     {
         isCharging = false;
         slider.value = 0;
+        sliderObject.SetActive(false);
     }
 }
