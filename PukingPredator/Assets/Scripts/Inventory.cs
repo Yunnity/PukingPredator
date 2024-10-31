@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -206,6 +207,15 @@ public class Inventory : MonoBehaviour
             itemUIComponent.item = item;
         }
 
+
         inventoryUI.UpdateText(items.Count, maxCount);
+    }
+
+    /// <summary>
+    /// Get the mass of the player, currently implemented as inventory item count
+    /// </summary>
+    public float getMass()
+    {
+        return itemCount;
     }
 }
