@@ -7039,39 +7039,48 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3904177409662049812, guid: acf9e99f95aaaa443a419775f59a9067,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4675187398879541319, guid: acf9e99f95aaaa443a419775f59a9067,
         type: 3}
       propertyPath: m_Name
       value: LevelKit
       objectReference: {fileID: 0}
-    - target: {fileID: 8976141520866915321, guid: acf9e99f95aaaa443a419775f59a9067,
+    - target: {fileID: 5544219704596267910, guid: acf9e99f95aaaa443a419775f59a9067,
         type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      propertyPath: m_Color.b
+      value: 0.10065861
       objectReference: {fileID: 0}
-    - target: {fileID: 8976141520866915321, guid: acf9e99f95aaaa443a419775f59a9067,
+    - target: {fileID: 5544219704596267910, guid: acf9e99f95aaaa443a419775f59a9067,
         type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
+      propertyPath: m_Color.g
+      value: 0.5471698
       objectReference: {fileID: 0}
-    - target: {fileID: 8976141520866915321, guid: acf9e99f95aaaa443a419775f59a9067,
+    - target: {fileID: 5544219704596267910, guid: acf9e99f95aaaa443a419775f59a9067,
         type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.7071068
+      propertyPath: m_Color.r
+      value: 0.14757104
       objectReference: {fileID: 0}
-    - target: {fileID: 8976141520866915321, guid: acf9e99f95aaaa443a419775f59a9067,
+    - target: {fileID: 9059740109853586029, guid: acf9e99f95aaaa443a419775f59a9067,
         type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
+      propertyPath: m_Colors.m_NormalColor.b
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8976141520866915321, guid: acf9e99f95aaaa443a419775f59a9067,
+    - target: {fileID: 9059740109853586029, guid: acf9e99f95aaaa443a419775f59a9067,
         type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
+      propertyPath: m_Colors.m_NormalColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9059740109853586029, guid: acf9e99f95aaaa443a419775f59a9067,
+        type: 3}
+      propertyPath: m_Colors.m_NormalColor.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 8879985624602244611, guid: acf9e99f95aaaa443a419775f59a9067, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: acf9e99f95aaaa443a419775f59a9067, type: 3}

@@ -20,6 +20,10 @@ public enum InputEvent
     /// </summary>
     onJumpUp,
     /// <summary>
+    /// Triggers when the user presses the "puke" input.
+    /// </summary>
+    onPukeStart,
+    /// <summary>
     /// Triggers when the user releases the "puke" input.
     /// </summary>
     onPuke,
@@ -93,7 +97,11 @@ public class GameInput : SingletonMonobehaviour<GameInput>
             pukeHoldDuration = Mathf.Max(minHoldTime, Time.time - pukePressTime);
             TriggerEvent(InputEvent.onPuke);
         };
-        controls.Player.Puke.performed += context => pukePressTime = Time.time;
+        controls.Player.Puke.performed += context =>
+        {
+            pukePressTime = Time.time;
+            TriggerEvent(InputEvent.onPukeStart);
+        };
 
         controls.Player.Reset.performed += context => TriggerEvent(InputEvent.onResetLevel);
     }
