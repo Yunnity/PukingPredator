@@ -3518,12 +3518,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1120012528}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &395288305 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1529698922666947075, guid: acf9e99f95aaaa443a419775f59a9067,
-    type: 3}
-  m_PrefabInstance: {fileID: 1075925129}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &398684296
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6995,11 +6989,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1275933947240115935, guid: acf9e99f95aaaa443a419775f59a9067,
-        type: 3}
-      propertyPath: m_Colors.m_NormalColor.a
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1331931279679679587, guid: acf9e99f95aaaa443a419775f59a9067,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7050,34 +7039,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1438907116698066077, guid: acf9e99f95aaaa443a419775f59a9067,
-        type: 3}
-      propertyPath: pauseMenuFirst
-      value: 
-      objectReference: {fileID: 395288305}
     - target: {fileID: 1689978641533485016, guid: acf9e99f95aaaa443a419775f59a9067,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4398407041184308892, guid: acf9e99f95aaaa443a419775f59a9067,
-        type: 3}
-      propertyPath: m_Colors.m_NormalColor.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4560952372479164505, guid: acf9e99f95aaaa443a419775f59a9067,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4560952372479164505, guid: acf9e99f95aaaa443a419775f59a9067,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4560952372479164505, guid: acf9e99f95aaaa443a419775f59a9067,
-        type: 3}
-      propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4675187398879541319, guid: acf9e99f95aaaa443a419775f59a9067,
@@ -7085,49 +7049,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelKit
       objectReference: {fileID: 0}
-    - target: {fileID: 6487973048752428778, guid: acf9e99f95aaaa443a419775f59a9067,
-        type: 3}
-      propertyPath: m_Interactable
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6487973048752428778, guid: acf9e99f95aaaa443a419775f59a9067,
-        type: 3}
-      propertyPath: m_Colors.m_ColorMultiplier
-      value: 1.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6946547927935498129, guid: acf9e99f95aaaa443a419775f59a9067,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8976141520866915321, guid: acf9e99f95aaaa443a419775f59a9067,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 8976141520866915321, guid: acf9e99f95aaaa443a419775f59a9067,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8976141520866915321, guid: acf9e99f95aaaa443a419775f59a9067,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 8976141520866915321, guid: acf9e99f95aaaa443a419775f59a9067,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8976141520866915321, guid: acf9e99f95aaaa443a419775f59a9067,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 8879985624602244611, guid: acf9e99f95aaaa443a419775f59a9067, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: acf9e99f95aaaa443a419775f59a9067, type: 3}
