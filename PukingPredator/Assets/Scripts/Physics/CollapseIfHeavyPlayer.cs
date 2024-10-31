@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class CollapseIfHeavyPlayer : MonoBehaviour
 {
+    // Put on tiles with PhysicsBehavior and adjust the massThreshold
 
     private PhysicsBehaviour pb;
 
+    /// <summary>
+    /// If player is greater than or equal to this mass when they collide with the structure, collapse the structure.
+    /// </summary>
     [SerializeField]
     private float massThreshold = 5f;
 
@@ -21,7 +25,7 @@ public class CollapseIfHeavyPlayer : MonoBehaviour
         if (collision.collider.CompareTag("Player"))
         {
             Inventory inventory = collision.collider.GetComponentInChildren<Inventory>();
-            if (inventory != null && inventory.getMass() > massThreshold)
+            if (inventory != null && inventory.getMass() >= massThreshold)
             {
                 pb.EnablePhysics();
             }
