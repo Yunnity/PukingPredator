@@ -27,6 +27,10 @@ public enum InputEvent
     /// Triggers when the user presses the "reset level" input.
     /// </summary>
     onResetLevel,
+    /// <summary>
+    /// Triggers when the user presses the "pause" input
+    /// </summary>
+    onPause,
 }
 
 public class GameInput : SingletonMonobehaviour<GameInput>
@@ -96,6 +100,8 @@ public class GameInput : SingletonMonobehaviour<GameInput>
         controls.Player.Puke.performed += context => pukePressTime = Time.time;
 
         controls.Player.Reset.performed += context => TriggerEvent(InputEvent.onResetLevel);
+
+        controls.Player.Pause.performed += context => TriggerEvent(InputEvent.onPause);
     }
 
 
@@ -107,7 +113,10 @@ public class GameInput : SingletonMonobehaviour<GameInput>
 
     private void TriggerEvent(InputEvent inputEvent)
     {
-        events[inputEvent]?.Invoke();
+        if (!GameManager.isGamePaused || (GameManager.isGamePaused && inputEvent == InputEvent.onPause))
+        {
+            events[inputEvent]?.Invoke();
+        }
     }
 
     public void Unsubscribe(InputEvent inputEvent, Action action)

@@ -9,6 +9,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     [SerializeField]
     private string sceneToLoad;
 
+    public static bool isGamePaused;
 
 
     // Start is called before the first frame update

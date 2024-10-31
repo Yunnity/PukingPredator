@@ -29,6 +29,13 @@ public class CameraControls : InputBehaviour
 
     void Update()
     {
+        if (GameManager.isGamePaused)
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+            return;
+        }
+
+        Cursor.lockState = CursorLockMode.Locked;
         var currentRotation = transform.localEulerAngles;
 
         var change = gameInput.cameraInput * sensitivity;
