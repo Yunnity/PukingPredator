@@ -50,8 +50,9 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         // sample usage AudioManager.Instance.PlaySFX("vomit", 1.0f);
         if (sfxDictionary.ContainsKey(clipName))
         {
-            sfxSource.Stop();
-            sfxSource.PlayOneShot(sfxDictionary[clipName], volume);
+            AudioClip clip = sfxDictionary[clipName];
+            if (sfxSource.clip == clip) sfxSource.Stop();
+            sfxSource.PlayOneShot(clip, volume);
         }
     }
 
