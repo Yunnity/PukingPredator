@@ -15,6 +15,7 @@ public class PlayerAnimation : MonoBehaviour
 
     private int isMovingHash = Animator.StringToHash("isMoving");
     private int isPukingHash = Animator.StringToHash("isPuking");
+    private int isJumpingHash = Animator.StringToHash("isJumping");
     int isEatingHash = Animator.StringToHash("isEating");
 
     // Start is called before the first frame update
@@ -57,13 +58,25 @@ public class PlayerAnimation : MonoBehaviour
 
     public void StartPukeAnim()
     {
-        animator.ResetTrigger(isEatingHash);
+        ResetTriggers();
         animator.SetTrigger(isPukingHash);
     }
 
     public void StartEatAnim()
     {
-        animator.ResetTrigger(isPukingHash);
+        ResetTriggers();
         animator.SetTrigger(isEatingHash);
+    }
+
+    public void StartJumpAnim()
+    {
+        animator.SetTrigger(isJumpingHash);
+    }
+
+    private void ResetTriggers()
+    {
+        animator.ResetTrigger(isPukingHash);
+        animator.ResetTrigger(isEatingHash);
+        animator.ResetTrigger(isJumpingHash);
     }
 }

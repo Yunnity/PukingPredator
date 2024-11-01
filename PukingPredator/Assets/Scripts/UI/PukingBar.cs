@@ -32,6 +32,10 @@ public class PukingBar : InputBehaviour
             sliderObject.SetActive(true);
             slider.value += (Time.deltaTime / MAX_PUKE_DURATION) * slider.maxValue;
         }
+        if (GameManager.isGamePaused)
+        {
+            ResetSlider();
+        }
     }
 
     public void StartChargingSlider()
