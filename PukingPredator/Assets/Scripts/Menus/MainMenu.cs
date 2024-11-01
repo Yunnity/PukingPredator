@@ -8,7 +8,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject settingsMenu;
     public void OnPlayButtonClicked()
     {
-        GameManager.TransitionToScene("PlayableLevel");
+        GameManager.TransitionToScene("PlayableLevelRemake");
     }
 
     public void OnSettingsButtonClicked()

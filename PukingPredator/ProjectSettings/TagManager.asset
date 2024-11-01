@@ -16,8 +16,8 @@ TagManager:
   - Consumable
   - Consumed
   - Dashable
-  - 
-  - 
+  - BeingPuked
+  - CameraCulling
   - 
   - 
   - 

@@ -4,16 +4,20 @@ using UnityEngine;
 
 public enum PlayerState
 {
-    eating,
+    dashing,
     standing
 }
 
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
 {
-    private Dash dash;
+    private InteractablePicker interactablePicker;
 
-    private Movement movement;
+    [SerializeField]
+    private Inventory _inventory;
+    public Inventory inventory => _inventory;
+
+    public Movement movement { get; private set; }
 
     /// <summary>
     /// The rigidbody of the player.
@@ -22,6 +26,11 @@ public class Player : MonoBehaviour
 
     public PlayerState state { get; private set; } = PlayerState.standing;
     public Dictionary<PlayerState, State> stateEvents = new();
+
+    /// <summary>
+    /// The object that the player is looking at.
+    /// </summary>
+    public Interactable targetInteractable => interactablePicker.targetInteractable;
 
 
 
@@ -34,10 +43,10 @@ public class Player : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
 
-        dash = GetComponent<Dash>();
-        dash.onComplete += DashFinished;
-
         movement = GetComponent<Movement>();
+
+        interactablePicker = GetComponent<InteractablePicker>();
+
         AudioManager.Instance.PlayBackground();
     }
 
@@ -47,26 +56,6 @@ public class Player : MonoBehaviour
     }
 
 
-
-    private void DashFinished()
-    {
-        SetState(PlayerState.standing);
-        movement.isManualMovementEnabled = true;
-    }
-
-    /// <summary>
-    /// Makes the player dash towards the target.
-    /// </summary>
-    /// <param name="obj"></param>
-    public void EatObject(GameObject obj)
-    {
-        var deltaPosition = obj.transform.position - transform.position;
-        var distance = deltaPosition.magnitude;
-
-        SetState(PlayerState.eating);
-        movement.isManualMovementEnabled = false;
-        dash.DashTo(obj);
-    }
 
     public void SetState(PlayerState newState)
     {

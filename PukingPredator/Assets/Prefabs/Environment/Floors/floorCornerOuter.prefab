@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: 2933039543530827988}
   - component: {fileID: 4810018771523942241}
   - component: {fileID: 5071285002167796237}
-  - component: {fileID: 8850867248941313939}
-  - component: {fileID: 4858046989880924192}
   m_Layer: 0
   m_Name: floorCornerOuter
   m_TagString: Untagged
@@ -107,27 +105,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.12828457, y: 0.24536933, z: 0.13484818}
   m_Center: {x: 0.56204313, y: -0.11072571, z: 0.5583273}
---- !u!114 &8850867248941313939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8135628764581542580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cd6cca4a61842f47bf25e5993a3016d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4858046989880924192
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8135628764581542580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2531af01babb6e4993f0f50c35db1ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

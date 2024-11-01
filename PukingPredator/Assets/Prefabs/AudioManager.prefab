@@ -51,4 +51,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 690992c61d8a6664f9a2f957bf943b00, type: 3}
   - {fileID: 8300000, guid: 49f104c4e6c1bfe48910e632019e8a4d, type: 3}
   - {fileID: 8300000, guid: 32f691e2cbe7d7a4cada1de866221555, type: 3}
+  - {fileID: 8300000, guid: 4fd1315bc32ceff469b68dfc1b5d2ca1, type: 3}
+  - {fileID: 8300000, guid: 3729b17ea02d16d4fb973bf3f66f28d9, type: 3}
   backgroundTrack: {fileID: 8300000, guid: 4662d00209071374da7398aa19c1cf64, type: 3}

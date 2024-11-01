@@ -86,10 +86,13 @@ public class Movement : InputBehaviour
 
     private const float MOVESPEEDFACTOR = 4f;
 
+    private PlayerAnimation playerAnimation;
+
 
 
     private void Start()
     {
+        playerAnimation = GetComponent<PlayerAnimation>();
         rb = GetComponent<Rigidbody>();
         baseMass = rb.mass;
 
@@ -97,6 +100,8 @@ public class Movement : InputBehaviour
 
         Subscribe(InputEvent.onJumpDown, GameInput_JumpDown);
         Subscribe(InputEvent.onJumpUp, GameInput_JumpUp);
+
+        transform.rotation = Quaternion.Euler(transform.eulerAngles.x, playerCamera.transform.eulerAngles.y, transform.eulerAngles.z);
     }
 
     private void FixedUpdate()
@@ -132,7 +137,10 @@ public class Movement : InputBehaviour
                 :   rb.velocity.HorizontalProjection().normalized;
 
         float turnSpeed = 10f;
-        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
+        if (inputVector.magnitude > 0)
+        {
+            transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
+        }
 
         //jumping code
         isGrounded = Physics.CheckSphere(transform.position, groundCheckRadius, groundLayer);
@@ -156,6 +164,8 @@ public class Movement : InputBehaviour
         isJumping = true;
         isJumpCancelled = false;
         jumpTime = 0;
+
+        playerAnimation?.StartJumpAnim();
     }
 
     public void GameInput_JumpUp()
