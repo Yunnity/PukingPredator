@@ -13,18 +13,18 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
     private AudioSource backgroundSource;
     private AudioSource sfxSource;
 
-    private Dictionary<string, AudioClip> sfxDictionary = new Dictionary<string, AudioClip>();
-
+    public enum ClipName
+    {
+        LevelUp,
+        Rainfall,
+        Villian,
+        Puking,
+        Eating
+    }
 
     protected override void Awake()
     {
         base.Awake();
-
-        // Loads sfx into a dictionary
-        foreach (AudioClip clip in sfxClips)
-        {
-            sfxDictionary[clip.name] = clip;
-        }
 
         backgroundSource = gameObject.AddComponent<AudioSource>();
         sfxSource = gameObject.AddComponent<AudioSource>();
@@ -45,14 +45,12 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         sfxSource.Stop();
     }
 
-    public void PlaySFX(string clipName, float volume = 1.0f)
+    public void PlaySFX(ClipName name, float volume = 1.0f)
     {
         // sample usage AudioManager.Instance.PlaySFX("vomit", 1.0f);
-        if (sfxDictionary.ContainsKey(clipName))
-        {
-            sfxSource.Stop();
-            sfxSource.PlayOneShot(sfxDictionary[clipName], volume);
-        }
+        AudioClip clip = sfxClips[(int) name];
+        if (sfxSource.clip == clip) sfxSource.Stop();
+        sfxSource.PlayOneShot(clip, volume);
     }
 
     public void SetMusicVolume(float volume)
