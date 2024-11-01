@@ -210,12 +210,4 @@ public class Inventory : MonoBehaviour
 
         inventoryUI.UpdateText(items.Count, maxCount);
     }
-
-    /// <summary>
-    /// Get the mass of the player, currently implemented as inventory item count
-    /// </summary>
-    public float getMass()
-    {
-        return itemCount;
-    }
 }

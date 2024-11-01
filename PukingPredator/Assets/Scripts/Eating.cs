@@ -154,4 +154,10 @@ public class Eating : InputBehaviour
         targetScale = baseScale * (1 + SCALE_FACTOR * currInventoryCount);
     }
 
+    /// <summary>
+    /// Get the player's mass.
+    /// We can decide how to calculate this later
+    /// </summary>
+    public float GetMass() { return inventory.itemCount; }
+
 }

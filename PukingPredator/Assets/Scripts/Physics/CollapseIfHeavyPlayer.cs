@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PhysicsBehaviour))]
 public class CollapseIfHeavyPlayer : MonoBehaviour
 {
-    // Put on tiles with PhysicsBehavior and adjust the massThreshold
 
     private PhysicsBehaviour pb;
 
@@ -22,10 +22,10 @@ public class CollapseIfHeavyPlayer : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.CompareTag("Player"))
+        if (collision.collider.CompareTag(GameTag.player))
         {
-            Inventory inventory = collision.collider.GetComponentInChildren<Inventory>();
-            if (inventory != null && inventory.getMass() >= massThreshold)
+            Eating eating = collision.collider.GetComponent<Eating>();
+            if (eating != null && eating.GetMass() >= massThreshold)
             {
                 pb.EnablePhysics();
             }
