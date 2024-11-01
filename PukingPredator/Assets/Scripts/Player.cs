@@ -63,4 +63,13 @@ public class Player : MonoBehaviour
         if (newState == previousState) { return; }
         state = newState;
     }
+
+    /// <summary>
+    /// Return the player's mass, for collision triggers.
+    /// For now, mass = size of inventory
+    /// </summary>
+    public float GetMass()
+    {
+        return _inventory.itemCount;
+    }
 }

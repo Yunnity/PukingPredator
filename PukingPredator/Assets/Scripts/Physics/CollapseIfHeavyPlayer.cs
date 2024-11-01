@@ -24,8 +24,8 @@ public class CollapseIfHeavyPlayer : MonoBehaviour
     {
         if (collision.collider.CompareTag(GameTag.player))
         {
-            Eating eating = collision.collider.GetComponent<Eating>();
-            if (eating != null && eating.GetMass() >= massThreshold)
+            Player player= collision.collider.GetComponent<Player>();
+            if (player != null && player.GetMass() >= massThreshold)
             {
                 pb.EnablePhysics();
             }
