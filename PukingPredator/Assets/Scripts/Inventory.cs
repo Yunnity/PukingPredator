@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -206,7 +205,6 @@ public class Inventory : MonoBehaviour
             var itemUIComponent = newItemUI.GetComponent<ItemUI>();
             itemUIComponent.item = item;
         }
-
 
         inventoryUI.UpdateText(items.Count, maxCount);
     }
