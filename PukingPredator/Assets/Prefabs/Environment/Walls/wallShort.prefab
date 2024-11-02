@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6684479798015238749}
   - component: {fileID: 4138698366952016558}
   - component: {fileID: 380167639356517370}
+  - component: {fileID: -8754834435706126757}
   m_Layer: 7
   m_Name: wallShort
   m_TagString: Untagged
@@ -165,3 +166,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2531af01babb6e4993f0f50c35db1ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-8754834435706126757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056429117184596584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2736d28d9039c6a43b83e46f15ea521c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  massThreshold: 7
