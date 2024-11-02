@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: e95f6ae6241d56c4aa5ff4d5ea9383be
+guid: eaced9d33e39946fab8af885093dd55e
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: standardSurface1
+    second: {fileID: 2100000, guid: 55165057da5cd4ae498b5f6d942f19f1, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -32,10 +37,10 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 20
+    globalScale: 17
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -90,7 +95,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.19999999
+    globalScale: 0.17
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
