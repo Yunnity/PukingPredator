@@ -1,20 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PhysicsBehaviour))]
 public class CollapseIfHeavyPlayer : MonoBehaviour
 {
-
-    private PhysicsBehaviour pb;
-
     /// <summary>
-    /// If player is greater than or equal to this mass when they collide with the structure, collapse the structure.
+    /// If player is greater than or equal to this mass when they collide with
+    /// the structure, collapse the structure.
     /// </summary>
     [SerializeField]
     private float massThreshold = 5f;
 
-    // Start is called before the first frame update
+    private PhysicsBehaviour pb;
+
+
+
     void Start()
     {
         pb = GetComponent<PhysicsBehaviour>();
@@ -24,11 +23,25 @@ public class CollapseIfHeavyPlayer : MonoBehaviour
     {
         if (collision.collider.CompareTag(GameTag.player))
         {
-            Player player= collision.collider.GetComponent<Player>();
-            if (player != null && player.GetMass() >= massThreshold)
+            var player = collision.collider.GetComponent<Player>();
+            if (IsPlayerHeavy(player))
             {
                 pb.EnablePhysics();
             }
         }
+    }
+
+
+
+    /// <summary>
+    /// Checks if the player is heavy enough to cause a collapse.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <returns></returns>
+    private bool IsPlayerHeavy(Player player)
+    {
+        //TODO: should this be swapped to actually use the mass, or should it
+        //      continue to use the item count to keep it intuitive
+        return player.inventory.itemCount >= massThreshold;
     }
 }
