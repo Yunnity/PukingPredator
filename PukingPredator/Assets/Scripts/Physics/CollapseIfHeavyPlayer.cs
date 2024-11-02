@@ -41,7 +41,8 @@ public class CollapseIfHeavyPlayer : MonoBehaviour
     private bool IsPlayerHeavy(Player player)
     {
         //TODO: should this be swapped to actually use the mass, or should it
-        //      continue to use the item count to keep it intuitive
+        //      continue to use the item count to keep it easier to track for
+        //      the player?
         return player.inventory.itemCount >= massThreshold;
     }
 }
