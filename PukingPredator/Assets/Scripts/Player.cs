@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
 
         Vector3? spawnPosition = CheckpointManager.Instance.LastCheckpointPosition;
         if (spawnPosition != null) transform.position = (Vector3)spawnPosition;
-        CheckpointManager.Instance.Respawn();
+        CheckpointManager.Instance.ResetCollected();
     }
 
     private void Update()

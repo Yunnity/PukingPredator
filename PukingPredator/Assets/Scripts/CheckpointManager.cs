@@ -45,7 +45,10 @@ public class CheckpointManager : SingletonMonobehaviour<CheckpointManager>
         previousCollected = new List<int> (collected);
     }
 
-    public void Respawn()
+    /// <summary>
+    /// Resets collectables collected after checkpoint
+    /// </summary> 
+    public void ResetCollected()
     {
         collected = new List<int>  (previousCollected);
     }
