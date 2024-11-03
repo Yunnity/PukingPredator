@@ -8,24 +8,24 @@ public class CheckpointManager : SingletonMonobehaviour<CheckpointManager>
     public Vector3? LastCheckpointPosition { get; set; } = null;
 
     /// <summary>
-    /// The collectables that the player has collected prior to the checkpoint
+    /// The ids of the collectables that the player has collected prior to the checkpoint
     /// </summary>
-    public List<Collectable> previousCollected;
+    public List<int> previousCollected;
 
     /// <summary>
-    /// The collectables that the player has collected
+    /// The ids pf the collectables that the player has collected
     /// </summary>
-    private List<Collectable> collected;
+    private List<int> collected;
 
     public void Start()
     {
-        collected = new List<Collectable>();
-        previousCollected = new List<Collectable>();
+        collected = new List<int>();
+        previousCollected = new List<int>();
     }
 
-    public void AddCollectable(Collectable collectable)
+    public void AddCollectable(int id)
     {
-        collected.Add(collectable);
+        collected.Add(id);
     }
 
     /// <summary>
@@ -42,11 +42,11 @@ public class CheckpointManager : SingletonMonobehaviour<CheckpointManager>
     {
         if (LastCheckpointPosition == position) return;
         LastCheckpointPosition = position;
-        previousCollected = new List<Collectable> (collected);
+        previousCollected = new List<int> (collected);
     }
 
     public void Respawn()
     {
-        collected = new List<Collectable>  (previousCollected);
+        collected = new List<int>  (previousCollected);
     }
 }

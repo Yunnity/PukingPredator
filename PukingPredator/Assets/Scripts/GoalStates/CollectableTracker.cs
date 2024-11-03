@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CollectableTracker : MonoBehaviour
@@ -48,13 +49,15 @@ public class CollectableTracker : MonoBehaviour
     {
         audioManager = AudioManager.Instance;
 
-        // find all collectables
-        var collectables = FindObjectsOfType<Collectable>();
+        // find all collectables, orders them to ensure id consistency
+        var collectables = FindObjectsOfType<Collectable>().OrderBy(obj => obj.transform.position.x).ToArray(); ;
         totalCollectables = collectables.Length;
+
+        int id = 0;
         foreach (var collectable in collectables)
         {
             collectable.tracker = this;
-
+            collectable.id = id++;
             var slotObject = Instantiate(collectableSlotPrefab, parent: transform);
             emptySlots.Add(slotObject.GetComponent<CollectableSlotUI>());
         }
@@ -62,10 +65,11 @@ public class CollectableTracker : MonoBehaviour
         GameObject particleSystem = Instantiate(particleEffect, transform.position, Quaternion.identity);
         ps = particleSystem.GetComponent<ParticleSystem>();
 
-        foreach (Collectable c in CheckpointManager.Instance.previousCollected) {
+        foreach (var c in CheckpointManager.Instance.previousCollected) {
             var targetSlot = emptySlots[0];
             emptySlots.RemoveAt(0);
             targetSlot.DisplayCollectable();
+            Destroy(collectables[c].gameObject);
         }
     }
 
