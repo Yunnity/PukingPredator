@@ -7,6 +7,7 @@ public class Collectable : Interactable
     public CollectableTracker tracker;
     public GameObject particleEffect;
 
+    public int id;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -14,6 +15,7 @@ public class Collectable : Interactable
         {
             tracker.EmitParticles(collision.transform.position);
             tracker.CollectOne();
+            CheckpointManager.Instance.AddCollectable(id);
             Destroy(gameObject);
         }
     }
