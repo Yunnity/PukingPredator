@@ -14,7 +14,8 @@ public class Collectable : Interactable
         {
             tracker.EmitParticles(collision.transform.position);
             tracker.CollectOne();
-            Destroy(gameObject);
+            CheckpointManager.Instance.AddCollectable(this);
+            gameObject.SetActive(false);
         }
     }
 }

@@ -21,7 +21,7 @@ public class FollowPlayer : MonoBehaviour
     /// <summary>
     /// The relative position to the player.
     /// </summary>
-    private Vector3 offset;
+    private Vector3 OFFSET = new Vector3(0, 0.15f, 0);
 
     /// <summary>
     /// Player object to follow
@@ -35,7 +35,6 @@ public class FollowPlayer : MonoBehaviour
     {
         player ??= GameObject.FindGameObjectsWithTag("Player")[0];
 
-        offset = transform.position - player.transform.position;
 
         initialPlayerScaleMagnitude = player.transform.localScale.magnitude;
         initialScale = transform.localScale;
@@ -47,7 +46,7 @@ public class FollowPlayer : MonoBehaviour
         //copy "copyPlayerScaleFactor" percent of the scale CHANGE
         var multiplier = 1 + (relativePlayerScale - 1) * copyPlayerScaleFactor;
 
-        transform.position = player.transform.position + offset * multiplier;
+        transform.position = player.transform.position + OFFSET * multiplier;
 
         transform.localScale = initialScale * multiplier;
     }

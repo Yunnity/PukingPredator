@@ -48,6 +48,10 @@ public class Player : MonoBehaviour
         interactablePicker = GetComponent<InteractablePicker>();
 
         AudioManager.Instance.PlayBackground();
+
+        Vector3? spawnPosition = CheckpointManager.Instance.LastCheckpointPosition;
+        if (spawnPosition != null) transform.position = (Vector3)spawnPosition;
+        CheckpointManager.Instance.Respawn();
     }
 
     private void Update()
