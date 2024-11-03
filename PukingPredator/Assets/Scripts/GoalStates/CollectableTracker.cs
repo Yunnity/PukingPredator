@@ -61,6 +61,12 @@ public class CollectableTracker : MonoBehaviour
 
         GameObject particleSystem = Instantiate(particleEffect, transform.position, Quaternion.identity);
         ps = particleSystem.GetComponent<ParticleSystem>();
+
+        foreach (Collectable c in CheckpointManager.Instance.previousCollected) {
+            var targetSlot = emptySlots[0];
+            emptySlots.RemoveAt(0);
+            targetSlot.DisplayCollectable();
+        }
     }
 
 

@@ -48,4 +48,16 @@ public class CollectableSlotUI : MonoBehaviour
 
         StartCoroutine(GoToSlot());
     }
+
+    /// <summary>
+    /// Shows the collectable as collected without the animation
+    /// Used when respawning on checlpoints
+    /// </summary>
+    public void DisplayCollectable()
+    {
+        collectedVersion.SetActive(true);
+        var slotRect = collectedVersion.GetComponent<RectTransform>();
+        
+        slotRect.localPosition = Vector3.zero;
+    }
 }
