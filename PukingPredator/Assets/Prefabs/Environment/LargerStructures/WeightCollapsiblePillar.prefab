@@ -109,8 +109,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: pillar_01 (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 746564775240780054, guid: eb1d686ff099b4004854199143aa8420, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -227,8 +226,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: pillar_01 (2)
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 746564775240780054, guid: eb1d686ff099b4004854199143aa8420, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
