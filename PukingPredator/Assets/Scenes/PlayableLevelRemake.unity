@@ -15689,6 +15689,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7412414113889462052, guid: 97ace5109ad010144ab2ff1e331bbcc0,
         type: 3}
+      propertyPath: levelIDInt
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412414113889462052, guid: 97ace5109ad010144ab2ff1e331bbcc0,
+        type: 3}
       propertyPath: goalClearedText
       value: 
       objectReference: {fileID: 23167917}
