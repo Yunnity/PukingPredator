@@ -62,14 +62,21 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         //TODO: save completion data to persistent storage
     }
 
-    public static void TransitionToScene(string sceneName)
+    public static void TransitionToNextLevel(int levelNumber)
     {
-        if (!Instance.levelIds.Contains(sceneName)) { Cursor.lockState = CursorLockMode.Confined; }
-        SceneManager.LoadScene(sceneName);
+        var currentLevelNumber = Instance.levelIds.IndexOf(Instance.currentLevelId);
+        if (currentLevelNumber >= Instance.levelIds.Count) { return; }
+        TransitionToLevel(currentLevelNumber + 1);
     }
 
     public static void TransitionToLevel(int levelNumber)
     {
         TransitionToScene(Instance.levelIds[levelNumber]);
+    }
+
+    public static void TransitionToScene(string sceneName)
+    {
+        if (!Instance.levelIds.Contains(sceneName)) { Cursor.lockState = CursorLockMode.Confined; }
+        SceneManager.LoadScene(sceneName);
     }
 }
