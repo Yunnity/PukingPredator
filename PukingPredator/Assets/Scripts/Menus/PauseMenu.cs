@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -15,13 +13,8 @@ public class PauseMenu : InputBehaviour
 
     public void GameInput_Pause()
     {
-        PauseOrResume();
-    }
-
-    public void PauseOrResume()
-    {
-        if (GameManager.isGamePaused) Resume();
-        else Pause();
+        if (GameManager.isGamePaused) { Resume(); }
+        else { Pause(); }
     }
 
     private void Resume()
