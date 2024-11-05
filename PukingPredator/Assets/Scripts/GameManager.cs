@@ -76,7 +76,18 @@ public class GameManager : SingletonMonobehaviour<GameManager>
 
     public static void TransitionToScene(string sceneName)
     {
-        if (!Instance.levelIds.Contains(sceneName)) { Cursor.lockState = CursorLockMode.Confined; }
+        var isLevelScene = Instance.levelIds.Contains(sceneName);
+        if (!isLevelScene) { Cursor.lockState = CursorLockMode.Confined; }
+
+        if (isLevelScene)
+        {
+            AudioManager.Instance.PlayBackground();
+        }
+        else
+        {
+            AudioManager.Instance.StopMusic();
+        }
+
         SceneManager.LoadScene(sceneName);
     }
 }
