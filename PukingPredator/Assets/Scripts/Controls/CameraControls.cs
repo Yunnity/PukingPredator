@@ -14,11 +14,6 @@ public class CameraControls : InputBehaviour
     /// </summary>
     private float minY = -80;
 
-    /// <summary>
-    /// The sensitivity of the camera movement.
-    /// </summary>
-    private float sensitivity = 1f;
-
 
 
     void Start()
@@ -33,7 +28,7 @@ public class CameraControls : InputBehaviour
 
         var currentRotation = transform.localEulerAngles;
 
-        var change = gameInput.cameraInput * sensitivity;
+        var change = gameInput.cameraInput * GameManager.sensitivity;
         currentRotation += new Vector3(-change.y, change.x, 0);
         currentRotation = ClampCircular(currentRotation);
 

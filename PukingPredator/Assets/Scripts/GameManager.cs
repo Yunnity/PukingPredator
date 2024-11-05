@@ -26,6 +26,19 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         }
     }
 
+    private static float _sensitivity = 1f;
+    public static float sensitivity
+    {
+        get
+        {
+            return _sensitivity;
+        }
+        set
+        {
+            _sensitivity = value;
+        }
+    }
+
     /// <summary>
     /// The names of levels in the unity editor.
     /// </summary>
