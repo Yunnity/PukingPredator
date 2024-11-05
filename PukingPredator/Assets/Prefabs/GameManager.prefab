@@ -49,4 +49,5 @@ MonoBehaviour:
   levelIds:
   - TutorialLevel
   - PlayableLevelRemake
+  - Level2
   sceneToLoad: StartScreen
