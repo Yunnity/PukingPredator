@@ -78,6 +78,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     {
         var isLevelScene = Instance.levelIds.Contains(sceneName);
         if (!isLevelScene) { Cursor.lockState = CursorLockMode.Confined; }
+        if (isLevelScene) { Instance.currentLevelId = sceneName; }
 
         if (isLevelScene)
         {
