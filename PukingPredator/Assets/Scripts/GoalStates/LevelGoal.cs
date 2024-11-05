@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class LevelGoal : MonoBehaviour
@@ -5,16 +6,35 @@ public class LevelGoal : MonoBehaviour
     [SerializeField]
     GameObject goalClearedText;
 
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == GameTag.player)
-        {
-            var collectedCount = FindObjectOfType<CollectableTracker>().collectedCount;
+    private bool isReached = false;
 
-            GameManager.Instance.SetLevelCompleted(new(collectableCount: collectedCount));
+    /// <summary>
+    /// Delay to go to the next level in seconds.
+    /// </summary>
+    private float nextLevelDelay = 2f;
+
+
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (isReached) { return; }
+
+        if (other.gameObject.tag == GameTag.player)
+        {
+            isReached = true;
             goalClearedText.SetActive(true);
-            Destroy(gameObject);
+
+            StartCoroutine(GoToNextLevel());
         }
     }
 
+    private IEnumerator GoToNextLevel()
+    {
+        yield return new WaitForSeconds(nextLevelDelay);
+
+        var collectedCount = FindObjectOfType<CollectableTracker>().collectedCount;
+        GameManager.SetLevelCompleted(new(collectableCount: collectedCount));
+
+        GameManager.TransitionToNextLevel();
+    }
 }

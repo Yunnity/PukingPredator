@@ -52,9 +52,9 @@ public class GameManager : SingletonMonobehaviour<GameManager>
 
 
 
-    public void SetLevelCompleted(LevelCompletionData data)
+    public static void SetLevelCompleted(LevelCompletionData data)
     {
-        var currentData = completionData[currentLevelId];
+        var currentData = Instance.completionData[Instance.currentLevelId];
 
         currentData.isDone = true;
         currentData.collectableCount = Mathf.Max(currentData.collectableCount, data.collectableCount);
@@ -62,11 +62,11 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         //TODO: save completion data to persistent storage
     }
 
-    public static void TransitionToNextLevel(int levelNumber)
+    public static void TransitionToNextLevel()
     {
-        var currentLevelNumber = Instance.levelIds.IndexOf(Instance.currentLevelId);
-        if (currentLevelNumber >= Instance.levelIds.Count) { return; }
-        TransitionToLevel(currentLevelNumber + 1);
+        var nextLevelNumber = Instance.levelIds.IndexOf(Instance.currentLevelId) + 1;
+        if (nextLevelNumber >= Instance.levelIds.Count) { return; }
+        TransitionToLevel(nextLevelNumber);
     }
 
     public static void TransitionToLevel(int levelNumber)
