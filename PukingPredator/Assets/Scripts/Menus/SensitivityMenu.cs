@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -36,10 +34,6 @@ public class SensitivityMenu : MonoBehaviour
 
     private void OnEnable()
     {
-        if (slider != null)
-        {
-            slider.value = GameSettings.cameraSensitivity;
-        }
         EventSystem.current.SetSelectedGameObject(firstGameObjectSelected);
     }
 }

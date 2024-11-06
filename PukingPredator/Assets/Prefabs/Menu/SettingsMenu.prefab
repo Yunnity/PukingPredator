@@ -432,7 +432,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &9157048981937138027
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1012,7 +1012,7 @@ PrefabInstance:
     - target: {fileID: 290042043528066888, guid: 3a56580566898ae419530cc0d2133830,
         type: 3}
       propertyPath: m_Name
-      value: SensitivityControlsMenu
+      value: CameraSensitivity
       objectReference: {fileID: 0}
     - target: {fileID: 290042043528066888, guid: 3a56580566898ae419530cc0d2133830,
         type: 3}
@@ -1032,27 +1032,27 @@ PrefabInstance:
     - target: {fileID: 3072754584547479524, guid: 3a56580566898ae419530cc0d2133830,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3072754584547479524, guid: 3a56580566898ae419530cc0d2133830,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3072754584547479524, guid: 3a56580566898ae419530cc0d2133830,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3983377312557698983, guid: 3a56580566898ae419530cc0d2133830,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3983377312557698983, guid: 3a56580566898ae419530cc0d2133830,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7962614644572152898, guid: 3a56580566898ae419530cc0d2133830,
         type: 3}

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7917285354610713233}
   - component: {fileID: 5457832126833304005}
   m_Layer: 5
-  m_Name: SensitivityControlsMenu
+  m_Name: CameraSensitivity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,7 +61,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensitivitySlider: {fileID: 3690254451581757373}
   sensitivity: 0.3
-  firstGameObjectSelected: {fileID: 0}
+  firstGameObjectSelected: {fileID: 3690254451581757373}
 --- !u!1 &1209095196266997730
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 4812048141724741178}
   - component: {fileID: 768484476541960932}
   m_Layer: 5
-  m_Name: SensitivityText
+  m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -393,8 +393,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7962614644572152898}
   - component: {fileID: 6731489110178607601}
+  - component: {fileID: 3823767291084157678}
   m_Layer: 5
-  m_Name: SensitivitySlider
+  m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -435,7 +436,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 2
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -473,9 +474,9 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5457832126833304005}
-        m_TargetAssemblyTypeName: SensitivityMenu, Assembly-CSharp
-        m_MethodName: ChangeSensitivity
+      - m_Target: {fileID: 3823767291084157678}
+        m_TargetAssemblyTypeName: SettingsSlider, Assembly-CSharp
+        m_MethodName: OnChange
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -485,6 +486,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3823767291084157678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3690254451581757373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aa294e39918f4ea28e84c45a58c219d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  setting: 0
 --- !u!1 &7925549632736370683
 GameObject:
   m_ObjectHideFlags: 0
