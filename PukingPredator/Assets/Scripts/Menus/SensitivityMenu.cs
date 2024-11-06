@@ -31,14 +31,14 @@ public class SensitivityMenu : MonoBehaviour
 
     public void ChangeSensitivity()
     {
-        GameManager.sensitivity = slider.value;
+        GameSettings.cameraSensitivity = slider.value;
     }
 
     private void OnEnable()
     {
         if (slider != null)
         {
-            slider.value = GameManager.sensitivity;
+            slider.value = GameSettings.cameraSensitivity;
         }
         EventSystem.current.SetSelectedGameObject(firstGameObjectSelected);
     }
