@@ -29,6 +29,7 @@ public class CameraControls : InputBehaviour
         var currentRotation = transform.localEulerAngles;
 
         var change = gameInput.cameraInput * GameManager.sensitivity;
+        if (!gameInput.inputDeviceType.IsKeyboardOrMouse()) { change *= Time.deltaTime * 384f; }
         currentRotation += new Vector3(-change.y, change.x, 0);
         currentRotation = ClampCircular(currentRotation);
 
