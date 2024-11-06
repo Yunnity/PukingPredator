@@ -58,7 +58,7 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         // sample usage AudioManager.Instance.PlaySFX(ClipName.Eating);
 
         var volume = relativeVolumes.ContainsKey(name) ? relativeVolumes[name] : 1f;
-        //TODO: volume *= GameSettings.MasterVolume * GameSettings.SFXVolume;
+        volume *= GameSettings.volumeMaster * GameSettings.volumeSFX;
         if (volume <= 0) { return; }
         
         AudioClip clip = sfxClips[(int) name];
@@ -66,8 +66,8 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         sfxSource.PlayOneShot(clip, volume);
     }
 
-    public void SetMusicVolume(float volume)
+    public static void UpdateMusicVolume()
     {
-        backgroundSource.volume = volume;
+        Instance.backgroundSource.volume = GameSettings.volumeMaster * GameSettings.volumeMusic;
     }
 }
