@@ -1,13 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class SettingsMenu : MonoBehaviour
+public class SettingsMenu : MenuRoot
 {
-    [SerializeField] private GameObject sensitivitySliderMenu;
-    [SerializeField] private GameObject keyBoardControls;
-    [SerializeField] private GameObject controllerControls;
+    [SerializeField]
+    private GameObject sensitivitySliderMenu;
+
+    [SerializeField]
+    private GameObject keyBoardControls;
+
+    [SerializeField]
+    private GameObject controllerControls;
 
     public void OnNextButtonClicked()
     {
