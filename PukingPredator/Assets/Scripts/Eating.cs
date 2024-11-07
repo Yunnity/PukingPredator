@@ -130,6 +130,12 @@ public class Eating : InputBehaviour
             //...while calculating it based on the mass?
             itemRb.AddForce(pukeDir * pukeForce * itemRb.mass, ForceMode.Impulse);
         }
+        Explosive explosive = itemToPuke.GetComponent<Explosive>();
+        if ( explosive != null )
+        {
+            explosive.KnockbackItemsInRadius(pukeDir * pukeForce);
+            Destroy(itemToPuke.gameObject);
+        }
     }
 
     /// <summary>
