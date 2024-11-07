@@ -29,6 +29,8 @@ public class CameraControls : InputBehaviour
 
     void Update()
     {
+        if (GameManager.isGamePaused) { return; }
+
         var currentRotation = transform.localEulerAngles;
 
         var change = gameInput.cameraInput * sensitivity;

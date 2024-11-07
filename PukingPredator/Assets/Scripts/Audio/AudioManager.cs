@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
 
 public class AudioManager : SingletonMonobehaviour<AudioManager>
 {
@@ -13,28 +12,37 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
     private AudioSource backgroundSource;
     private AudioSource sfxSource;
 
-    private Dictionary<string, AudioClip> sfxDictionary = new Dictionary<string, AudioClip>();
-
+    public enum ClipName
+    {
+        LevelUp,
+        Rainfall,
+        Villian,
+        Puking,
+        Eating
+    }
+    public Dictionary<ClipName, float> relativeVolumes = new()
+    {
+        { ClipName.LevelUp, 8f },
+        { ClipName.Rainfall, 1f },
+        { ClipName.Villian, 1f },
+        { ClipName.Puking, 1f },
+        { ClipName.Eating, 2f },
+    };
 
     protected override void Awake()
     {
         base.Awake();
-
-        // Loads sfx into a dictionary
-        foreach (AudioClip clip in sfxClips)
-        {
-            sfxDictionary[clip.name] = clip;
-        }
 
         backgroundSource = gameObject.AddComponent<AudioSource>();
         sfxSource = gameObject.AddComponent<AudioSource>();
     }
 
 
-    public void PlayBackground(float volume = 1.0f, bool loop = true)
+    public void PlayBackground(bool loop = true)
     {
+        if (backgroundSource.isPlaying) { return; }
+
         backgroundSource.clip = backgroundTrack;
-        backgroundSource.volume = volume;
         backgroundSource.loop = loop;
         backgroundSource.Play();
     }
@@ -45,14 +53,17 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         sfxSource.Stop();
     }
 
-    public void PlaySFX(string clipName, float volume = 1.0f)
+    public void PlaySFX(ClipName name)
     {
-        // sample usage AudioManager.Instance.PlaySFX("vomit", 1.0f);
-        if (sfxDictionary.ContainsKey(clipName))
-        {
-            sfxSource.Stop();
-            sfxSource.PlayOneShot(sfxDictionary[clipName], volume);
-        }
+        // sample usage AudioManager.Instance.PlaySFX(ClipName.Eating);
+
+        var volume = relativeVolumes.ContainsKey(name) ? relativeVolumes[name] : 1f;
+        //TODO: volume *= GameSettings.MasterVolume * GameSettings.SFXVolume;
+        if (volume <= 0) { return; }
+        
+        AudioClip clip = sfxClips[(int) name];
+        if (sfxSource.clip == clip) { sfxSource.Stop(); }
+        sfxSource.PlayOneShot(clip, volume);
     }
 
     public void SetMusicVolume(float volume)

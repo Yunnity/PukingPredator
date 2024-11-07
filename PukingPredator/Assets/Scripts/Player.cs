@@ -46,8 +46,6 @@ public class Player : MonoBehaviour
         movement = GetComponent<Movement>();
 
         interactablePicker = GetComponent<InteractablePicker>();
-
-        AudioManager.Instance.PlayBackground();
     }
 
     private void Update()

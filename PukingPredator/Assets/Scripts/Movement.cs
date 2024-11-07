@@ -86,10 +86,13 @@ public class Movement : InputBehaviour
 
     private const float MOVESPEEDFACTOR = 4f;
 
+    private PlayerAnimation playerAnimation;
+
 
 
     private void Start()
     {
+        playerAnimation = GetComponent<PlayerAnimation>();
         rb = GetComponent<Rigidbody>();
         baseMass = rb.mass;
 
@@ -161,6 +164,8 @@ public class Movement : InputBehaviour
         isJumping = true;
         isJumpCancelled = false;
         jumpTime = 0;
+
+        playerAnimation?.StartJumpAnim();
     }
 
     public void GameInput_JumpUp()

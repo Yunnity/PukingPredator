@@ -20,6 +20,10 @@ public enum InputEvent
     /// </summary>
     onJumpUp,
     /// <summary>
+    /// Triggers when the user presses the "puke" input.
+    /// </summary>
+    onPukeStart,
+    /// <summary>
     /// Triggers when the user releases the "puke" input.
     /// </summary>
     onPuke,
@@ -27,6 +31,10 @@ public enum InputEvent
     /// Triggers when the user presses the "reset level" input.
     /// </summary>
     onResetLevel,
+    /// <summary>
+    /// Triggers when the user presses the "pause" input
+    /// </summary>
+    onPause,
 }
 
 public class GameInput : SingletonMonobehaviour<GameInput>
@@ -93,9 +101,15 @@ public class GameInput : SingletonMonobehaviour<GameInput>
             pukeHoldDuration = Mathf.Max(minHoldTime, Time.time - pukePressTime);
             TriggerEvent(InputEvent.onPuke);
         };
-        controls.Player.Puke.performed += context => pukePressTime = Time.time;
+        controls.Player.Puke.performed += context =>
+        {
+            pukePressTime = Time.time;
+            TriggerEvent(InputEvent.onPukeStart);
+        };
 
         controls.Player.Reset.performed += context => TriggerEvent(InputEvent.onResetLevel);
+
+        controls.Player.Pause.performed += context => TriggerEvent(InputEvent.onPause);
     }
 
 
@@ -107,7 +121,10 @@ public class GameInput : SingletonMonobehaviour<GameInput>
 
     private void TriggerEvent(InputEvent inputEvent)
     {
-        events[inputEvent]?.Invoke();
+        if (!GameManager.isGamePaused || (GameManager.isGamePaused && inputEvent == InputEvent.onPause))
+        {
+            events[inputEvent]?.Invoke();
+        }
     }
 
     public void Unsubscribe(InputEvent inputEvent, Action action)
