@@ -29,11 +29,6 @@ public class Puking : InputBehaviour
     private const float PUKE_EXPLODE_THRESH = 0.8f;
 
     /// <summary>
-    /// If you have this many items in the inventory and you puke with force, you will knock back items in front of you
-    /// </summary>
-    private const int KNOCKBACK_ITEM_THRESH = 5;
-
-    /// <summary>
     /// Force applied to object when puked. Depends on how long the puke button
     /// was held down for.
     /// </summary>
@@ -87,7 +82,7 @@ public class Puking : InputBehaviour
             itemRb.AddForce(pukeVelocity * itemRb.mass, ForceMode.Impulse);
 
             // -1 because player loses an item when they puke
-            if (pukeForce > MAX_PUKE_FORCE * PUKE_EXPLODE_THRESH && inventory.itemCount >= KNOCKBACK_ITEM_THRESH - 1)
+            if (pukeForce > MAX_PUKE_FORCE * PUKE_EXPLODE_THRESH)
             {
                 KnockbackItemsInFrontofPlayer(pukeVelocity * pukeForce, pukeForce, itemRb);
             }
