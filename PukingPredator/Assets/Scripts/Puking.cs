@@ -100,7 +100,6 @@ public class Puking : InputBehaviour
     /// <param name="itemRB">RigidBody of item being puked</param>
     public void KnockbackItemsInFrontofPlayer(float pukeForce, Rigidbody itemRB)
     {
-        Debug.Log( pukeForce / MAX_PUKE_FORCE);
         Vector3 halfExtents = new Vector3(pukeForce / MAX_PUKE_FORCE, 0.5f, 0.5f); // Half the size of the box (x, y, z)
 
         // BoxCast in the direction of the velocity
