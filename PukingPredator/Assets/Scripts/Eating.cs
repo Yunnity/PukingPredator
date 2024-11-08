@@ -37,6 +37,9 @@ public class Eating : InputBehaviour
         if (inventory.isFull) { return; }
         if (targetInteractable == null) { return; }
 
+        //TODO: should this be shifted down to the consume object script so that
+        //      it only triggers if you actually eat stuff? getting a collectable
+        //      isnt the same as eating
         AudioManager.Instance.PlaySFX(AudioManager.ClipName.Eating);
         anim.StartEatAnim();
 
