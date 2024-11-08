@@ -28,6 +28,10 @@ public enum InputEvent
     /// </summary>
     onPuke,
     /// <summary>
+    /// Triggers when the user cancels the "puke", generally by going to a menu.
+    /// </summary>
+    onPukeCancel,
+    /// <summary>
     /// Triggers when the user presses the "reset level" input.
     /// </summary>
     onResetLevel,
@@ -54,11 +58,13 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     /// </summary>
     private Dictionary<InputEvent, Action> events = new();
 
+    private bool isChargingPuke = false;
+
     /// <summary>
     /// The minimum time for something to be held for. A tap will still be
     /// registered as this much time.
     /// </summary>
-    private float minHoldTime = 0.1f;
+    public const float minHoldTime = 0.1f;
 
     /// <summary>
     /// The movement input vector. Has a max magnitude of 1.
@@ -75,7 +81,7 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     /// The amount of time that the puke button has been held. Only meaningful
     /// at the time that the puke event is triggered.
     /// </summary>
-    public float pukeHoldDuration { get; private set; } = 0f;
+    public float pukeHoldDuration => Mathf.Max(minHoldTime, Time.time - pukePressTime);
 
 
 
@@ -98,13 +104,23 @@ public class GameInput : SingletonMonobehaviour<GameInput>
 
         controls.Player.Puke.canceled += context =>
         {
-            pukeHoldDuration = Mathf.Max(minHoldTime, Time.time - pukePressTime);
+            if (!isChargingPuke) { return; }
             TriggerEvent(InputEvent.onPuke);
         };
         controls.Player.Puke.performed += context =>
         {
+            isChargingPuke = true;
             pukePressTime = Time.time;
             TriggerEvent(InputEvent.onPukeStart);
+        };
+
+        controls.Player.Pause.performed += context =>
+        {
+            if (isChargingPuke)
+            {
+                isChargingPuke = false;
+                TriggerEvent(InputEvent.onPukeCancel);
+            }
         };
 
         controls.Player.Reset.performed += context => TriggerEvent(InputEvent.onResetLevel);
