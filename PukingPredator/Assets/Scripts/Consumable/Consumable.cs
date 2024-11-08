@@ -27,8 +27,7 @@ public class Consumable : Interactable
     /// The relative scale at which an object will be treated as consumed.
     /// ie 0.05 means 5% of original size.
     /// </summary>
-    [SerializeField]
-    private float consumptionCutoff = 0.05f;
+    public const float consumptionCutoff = 0.05f;
 
     /// <summary>
     /// The prefab the instance should become when it decays.
@@ -104,7 +103,7 @@ public class Consumable : Interactable
     /// <summary>
     /// The lerp factor used when growing items.
     /// </summary>
-    private float pukeRate = 12f;
+    public const float pukeRate = 12f;
 
     /// <summary>
     /// Rigid body attached to the instance.
