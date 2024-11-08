@@ -35,6 +35,8 @@ public class Eating : InputBehaviour
     /// </summary>
     private PlayerAnimation anim;
 
+    private const float PUKE_EXPLODE_THRESH = 0.8f;
+
     /// <summary>
     /// Force applied to object when puked. Depends on how long the puke button
     /// was held down for.
@@ -129,12 +131,10 @@ public class Eating : InputBehaviour
             //...the velocity and if there was a rigid body then we can reduce the velocity
             //...while calculating it based on the mass?
             itemRb.AddForce(pukeDir * pukeForce * itemRb.mass, ForceMode.Impulse);
-        }
-        Explosive explosive = itemToPuke.GetComponent<Explosive>();
-        if ( explosive != null )
-        {
-            explosive.KnockbackItemsInRadius(pukeDir * pukeForce);
-            Destroy(itemToPuke.gameObject);
+            if (pukeForce > MAX_PUKE_FORCE * PUKE_EXPLODE_THRESH)
+            {
+                KnockbackItemsInFrontofPlayer(pukeDir * pukeForce, pukeForce, itemRb);
+            }
         }
     }
 
@@ -158,6 +158,31 @@ public class Eating : InputBehaviour
         //TODO: change this to use totalItemMass instead of the count once masses are fine tuned
         rb.mass = baseMass + currInventoryCount * MASS_FACTOR;
         targetScale = baseScale * (1 + SCALE_FACTOR * currInventoryCount);
+    }
+
+    public void KnockbackItemsInFrontofPlayer(Vector3 vec, float f, Rigidbody itemRB)
+    {
+
+        Vector3 halfExtents = new Vector3(1f, 0.5f, 0.5f); // Half the size of the box (x, y, z)
+
+        // BoxCast in the direction of the velocity
+        RaycastHit[] hits = Physics.BoxCastAll(transform.position + (transform.forward * 0.1f) + (transform.up * 0.6f), halfExtents, vec, Quaternion.identity, 3f);
+
+        foreach (RaycastHit hit in hits)
+        {
+            if (!hit.collider.CompareTag(GameTag.player))
+            {
+                Rigidbody hitRB = hit.collider.GetComponent<Rigidbody>();
+                PhysicsBehaviour pb = hit.collider.GetComponent<PhysicsBehaviour>();
+                if (hitRB != null && pb != null && hitRB != itemRB)
+                {
+                    pb.EnablePhysics();
+                    //hitRB.isKinematic = false;
+                    hitRB.AddExplosionForce(1f * f, transform.position, 5f, 0.01f, ForceMode.VelocityChange);
+                    //hitRB.AddForce(vec * hitRB.mass * 0.5f, ForceMode.Impulse);
+                }
+            }
+        }
     }
 
 }
