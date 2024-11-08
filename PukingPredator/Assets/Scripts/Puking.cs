@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent(typeof(Player))]
 public class Puking : InputBehaviour
@@ -73,6 +74,9 @@ public class Puking : InputBehaviour
 
         anim.StartPukeAnim();
 
+        bool pukeWithForce = pukeForce > MAX_PUKE_FORCE * PUKE_EXPLODE_THRESH;
+        AudioManager.Instance.PlaySFX(pukeWithForce ? AudioManager.ClipName.PukeForce : AudioManager.ClipName.Puke);
+
         Rigidbody itemRb = itemToPuke.GetComponent<Rigidbody>();
         if (itemRb != null)
         {
@@ -82,7 +86,7 @@ public class Puking : InputBehaviour
             itemRb.AddForce(pukeVelocity * itemRb.mass, ForceMode.Impulse);
 
             // -1 because player loses an item when they puke
-            if (pukeForce > MAX_PUKE_FORCE * PUKE_EXPLODE_THRESH)
+            if (pukeWithForce)
             {
                 KnockbackItemsInFrontofPlayer(pukeVelocity * pukeForce, pukeForce, itemRb);
             }
