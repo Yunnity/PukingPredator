@@ -11,12 +11,17 @@ public class Puking : InputBehaviour
     /// <summary>
     /// The players inventory.
     /// </summary>
-    private Inventory inventory => player.inventory;
+    public Inventory inventory => player.inventory;
 
     /// <summary>
     /// The player component.
     /// </summary>
     private Player player;
+
+    /// <summary>
+    /// The direction to puke in. Pukes forwards with a little force upwards.
+    /// </summary>
+    private Vector3 pukeDirection => transform.forward + Vector3.up * 0.1f;
 
     /// <summary>
     /// Force applied to object when puked. Depends on how long the puke button
@@ -33,6 +38,12 @@ public class Puking : InputBehaviour
     private const float MIN_PUKE_FORCE = 1f;
     private const float MAX_PUKE_FORCE = 20f;
     private const float MAX_PUKE_DURATION = 2f;
+
+    /// <summary>
+    /// The velocity that an object would be puked with if at this moment. Only
+    /// meaningful while charging a puke.
+    /// </summary>
+    public Vector3 pukeVelocity => pukeDirection * pukeForce;
 
 
 
@@ -57,17 +68,15 @@ public class Puking : InputBehaviour
 
         anim.StartPukeAnim();
 
-        //puke forward and with a little force upwards
-        var pukeDir = transform.forward + Vector3.up * 0.1f;
-
         Rigidbody itemRb = itemToPuke.GetComponent<Rigidbody>();
         if (itemRb != null)
         {
             //TODO: make this code work if there is no rigid body. perhaps just set
             //...the velocity and if there was a rigid body then we can reduce the velocity
             //...while calculating it based on the mass?
-            itemRb.AddForce(pukeDir * pukeForce * itemRb.mass, ForceMode.Impulse);
+            itemRb.AddForce(pukeVelocity * itemRb.mass, ForceMode.Impulse);
         }
+
     }
 
 }
