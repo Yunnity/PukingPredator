@@ -35,7 +35,14 @@ public class Eating : InputBehaviour
     /// </summary>
     private PlayerAnimation anim;
 
+    /// <summary>
+    /// If pukeForce is greater than this, the puke will also knock back items in front of the player
+    /// </summary>
     private const float PUKE_EXPLODE_THRESH = 0.8f;
+    /// <summary>
+    /// If you have this many items in the inventory and you puke with force, you will knock back items in front of you
+    /// </summary>
+    private const int KNOCKBACK_ITEM_THRESH = 5;
 
     /// <summary>
     /// Force applied to object when puked. Depends on how long the puke button
@@ -131,7 +138,9 @@ public class Eating : InputBehaviour
             //...the velocity and if there was a rigid body then we can reduce the velocity
             //...while calculating it based on the mass?
             itemRb.AddForce(pukeDir * pukeForce * itemRb.mass, ForceMode.Impulse);
-            if (pukeForce > MAX_PUKE_FORCE * PUKE_EXPLODE_THRESH)
+            
+            // -1 because player loses an item when they puke
+            if (pukeForce > MAX_PUKE_FORCE * PUKE_EXPLODE_THRESH && inventory.itemCount >= KNOCKBACK_ITEM_THRESH - 1)
             {
                 KnockbackItemsInFrontofPlayer(pukeDir * pukeForce, pukeForce, itemRb);
             }
@@ -177,9 +186,8 @@ public class Eating : InputBehaviour
                 if (hitRB != null && pb != null && hitRB != itemRB)
                 {
                     pb.EnablePhysics();
-                    //hitRB.isKinematic = false;
                     hitRB.AddExplosionForce(1f * f, transform.position, 5f, 0.01f, ForceMode.VelocityChange);
-                    //hitRB.AddForce(vec * hitRB.mass * 0.5f, ForceMode.Impulse);
+                    //hitRB.AddForce(vec * hitRB.mass * 0.5f, ForceMode.Impulse); // alternate force if you want to push things forward
                 }
             }
         }
