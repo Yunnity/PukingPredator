@@ -1,12 +1,24 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 /// <summary>
 /// The events that occur based on user inputs.
 /// </summary>
 public enum InputEvent
 {
+    /// <summary>
+    /// Triggers when a major or minor device swap occurs
+    /// (ie keyboard+mouse -> gamepad or keyboard -> mouse).
+    /// </summary>
+    onDeviceSwapAny,
+    /// <summary>
+    /// Triggers when a major device swap occurs (ie keyboard+mouse -> gamepad,
+    /// but not keyboard -> mouse).
+    /// </summary>
+    onDeviceSwapMajor,
     /// <summary>
     /// Triggers when the user presses the "eat" input.
     /// </summary>
@@ -40,7 +52,6 @@ public enum InputEvent
     /// </summary>
     onPause,
 }
-
 public class GameInput : SingletonMonobehaviour<GameInput>
 {
     /// <summary>
@@ -59,6 +70,11 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     private Dictionary<InputEvent, Action> events = new();
 
     private bool isChargingPuke = false;
+
+    /// <summary>
+    /// The most recently used input device type. Can change constantly in game.
+    /// </summary>
+    public InputDeviceType inputDeviceType = InputDeviceType.mouse;
 
     /// <summary>
     /// The minimum time for something to be held for. A tap will still be
@@ -88,6 +104,8 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     protected override void Awake()
     {
         base.Awake();
+
+        InputSystem.onEvent += DetectDeviceChange;
 
         controls = new();
         controls.Player.Enable();
@@ -129,6 +147,47 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     }
 
 
+
+    private void DetectDeviceChange(InputEventPtr eventPtr, InputDevice device)
+    {
+        var initialDeviceType = inputDeviceType;
+
+        // Check if the event is a state change (e.g., button press, move event)
+        if (eventPtr.IsA<StateEvent>() || eventPtr.IsA<DeltaStateEvent>())
+        {
+            // Ignore mouse position changes to reduce noise
+            if (device is Mouse && eventPtr.IsA<DeltaStateEvent>())
+                return;
+
+            // Get the type of input device generating the event
+            if (device is Keyboard)
+            {
+                inputDeviceType = InputDeviceType.keyboard;
+            }
+            else if (device is Mouse)
+            {
+                inputDeviceType = InputDeviceType.mouse;
+            }
+            else if (device is Gamepad)
+            {
+                inputDeviceType = InputDeviceType.gamepad;
+            }
+            else
+            {
+                inputDeviceType = InputDeviceType.other;
+            }
+        }
+
+        if (initialDeviceType == inputDeviceType) { return; }
+
+        TriggerEvent(InputEvent.onDeviceSwapAny);
+
+        //if either wasnt keyboard/mouse, it must be a major change
+        if (!initialDeviceType.IsKeyboardOrMouse() || !inputDeviceType.IsKeyboardOrMouse())
+        {
+            TriggerEvent(InputEvent.onDeviceSwapMajor);
+        }
+    }
 
     public void Subscribe(InputEvent inputEvent, Action action)
     {

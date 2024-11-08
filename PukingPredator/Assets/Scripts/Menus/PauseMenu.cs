@@ -5,6 +5,7 @@ public class PauseMenu : InputBehaviour
 {
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject pauseMenuFirst;
+    [SerializeField] private GameObject sensitivityMenu;
 
     void Start()
     {
@@ -13,7 +14,17 @@ public class PauseMenu : InputBehaviour
 
     public void GameInput_Pause()
     {
-        if (GameManager.isGamePaused) { Resume(); }
+        if (GameManager.isGamePaused) 
+        {
+            if (sensitivityMenu.activeSelf)
+            {
+                CloseSensitivityMenu();
+            }
+            else
+            {
+                Resume();
+            }
+        }
         else { Pause(); }
     }
 
@@ -31,9 +42,32 @@ public class PauseMenu : InputBehaviour
         GameManager.isGamePaused = true;
     }
 
+    private void CloseSensitivityMenu()
+    {
+        sensitivityMenu.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(pauseMenuFirst);
+    }
+
     public void OnResumeButtonClicked()
     {
         Resume();
+    }
+
+    public void OnSettingsButtonClicked()
+    {
+        if (!sensitivityMenu.activeSelf)
+        {
+            sensitivityMenu.SetActive(true);
+        }
+        else
+        {
+            sensitivityMenu.SetActive(false);
+        }
+    }
+
+    public void OnBackButtonClicked()
+    {
+        CloseSensitivityMenu();
     }
 
     public void OnQuitButtonClicked()
