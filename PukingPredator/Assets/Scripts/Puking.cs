@@ -27,7 +27,7 @@ public class Puking : InputBehaviour
         get
         {
             float holdPercent = Mathf.Clamp(gameInput.pukeHoldDuration / MAX_PUKE_DURATION, 0, 1);
-            return Mathf.Lerp(MIN_PUKE_FORCE, MAX_PUKE_FORCE, holdPercent);
+            return Mathf.Lerp(MIN_PUKE_FORCE * player.relativeScale, MAX_PUKE_FORCE, holdPercent);
         }
     }
     private const float MIN_PUKE_FORCE = 1f;
