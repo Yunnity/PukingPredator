@@ -41,6 +41,11 @@ public class Player : MonoBehaviour
     private Rigidbody rb;
 
     /// <summary>
+    /// The current scale relative to the base scale.
+    /// </summary>
+    public float relativeScale => transform.localScale.magnitude / baseScale.magnitude;
+
+    /// <summary>
     /// How much the inventory size impacts the size of the player
     /// </summary>
     private const float SCALE_FACTOR = 0.2f;
