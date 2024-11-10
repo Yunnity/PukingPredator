@@ -46,6 +46,7 @@ public class CameraCulling : MonoBehaviour
         public void Reset()
         {
             if (hasBeenReset) { return; }
+            hasBeenReset = true;
 
             material.SetAlpha(initialAlpha);
             if (initialSurfaceType != SurfaceType.transparent)
