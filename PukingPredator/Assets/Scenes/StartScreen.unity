@@ -275,12 +275,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f61d24633070fa49887f505a0c01847, type: 3}
---- !u!1 &834834637 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7986902513050443138, guid: a536febdb22209549aaead0c14994aad,
-    type: 3}
-  m_PrefabInstance: {fileID: 6040060524902023899}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &899095831
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -349,6 +343,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c680af80c98a41f18197d91ae56325b, type: 3}
+--- !u!1 &1286632295 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2032070913165141020, guid: a536febdb22209549aaead0c14994aad,
+    type: 3}
+  m_PrefabInstance: {fileID: 6040060524902023899}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1354544546
 GameObject:
   m_ObjectHideFlags: 0
@@ -937,7 +937,7 @@ PrefabInstance:
         type: 3}
       propertyPath: firstSelected
       value: 
-      objectReference: {fileID: 834834637}
+      objectReference: {fileID: 1286632295}
     - target: {fileID: 9157048981937138027, guid: a536febdb22209549aaead0c14994aad,
         type: 3}
       propertyPath: m_Pivot.x
