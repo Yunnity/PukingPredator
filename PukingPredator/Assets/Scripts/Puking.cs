@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent(typeof(Player))]
 public class Puking : InputBehaviour
@@ -73,6 +74,9 @@ public class Puking : InputBehaviour
 
         anim.StartPukeAnim();
 
+        bool pukeWithForce = pukeForce > MAX_PUKE_FORCE * PUKE_EXPLODE_THRESHOLD;
+        AudioManager.Instance.PlaySFX(pukeWithForce ? AudioManager.ClipName.PukeForce : AudioManager.ClipName.Puke);
+
         Rigidbody itemRb = itemToPuke.GetComponent<Rigidbody>();
         if (itemRb != null)
         {
@@ -81,8 +85,7 @@ public class Puking : InputBehaviour
             //...while calculating it based on the mass?
             itemRb.AddForce(pukeVelocity * itemRb.mass, ForceMode.Impulse);
 
-            // -1 because player loses an item when they puke
-            if (pukeForce > MAX_PUKE_FORCE * PUKE_EXPLODE_THRESHOLD)
+            if (pukeWithForce)
             {
                 KnockbackItemsInFrontofPlayer(pukeForce, itemRb);
             }
@@ -97,7 +100,6 @@ public class Puking : InputBehaviour
     /// <param name="itemRB">RigidBody of item being puked</param>
     public void KnockbackItemsInFrontofPlayer(float pukeForce, Rigidbody itemRB)
     {
-        Debug.Log( pukeForce / MAX_PUKE_FORCE);
         Vector3 halfExtents = new Vector3(pukeForce / MAX_PUKE_FORCE, 0.5f, 0.5f); // Half the size of the box (x, y, z)
 
         // BoxCast in the direction of the velocity
