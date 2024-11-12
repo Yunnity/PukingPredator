@@ -196,16 +196,16 @@ public class Inventory : MonoBehaviour
         }
 
         //foreach (var item in items.AsEnumerable().Reverse())
-        if (items.Count > 0)
-        {
-            var item = items[0];
-            GameObject newItemUI = Instantiate(itemUIPrefab, UIPanel.transform);
-            newItemUI.name = ITEM_SLOT_ID;
+        //if (items.Count > 0)
+        //{
+        //    var item = items[0];
+        //    GameObject newItemUI = Instantiate(itemUIPrefab, UIPanel.transform);
+        //    newItemUI.name = ITEM_SLOT_ID;
 
-            var itemUIComponent = newItemUI.GetComponent<ItemUI>();
-            itemUIComponent.item = item;
-        }
+        //    var itemUIComponent = newItemUI.GetComponent<ItemUI>();
+        //    itemUIComponent.item = item;
+        //}
 
-        inventoryUI.UpdateText(items.Count, maxCount);
+        inventoryUI.UpdateImage(items.Count);
     }
 }

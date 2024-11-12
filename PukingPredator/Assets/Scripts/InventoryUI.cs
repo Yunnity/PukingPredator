@@ -1,20 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using System;
+using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
-    public TMP_Text inventoryText;
+    public Image inventoryImage;
+    public List<Sprite> sprites;
     string currColor;
 
-    public void UpdateText(float currInventoryCount, float maxInventoryCount)
+    public void UpdateImage(int currInventoryCount)
     {
-        float currRatio = currInventoryCount / maxInventoryCount;
-        if (currRatio < 0.5) currColor = "green";
-        else if (currInventoryCount == maxInventoryCount) currColor = "red";
-        else currColor = "yellow";
-        inventoryText.text = $"<color={currColor}>Inventory: {currInventoryCount}/{maxInventoryCount}</color>";
+        inventoryImage.sprite = sprites[currInventoryCount];
     }
 }
