@@ -14,9 +14,14 @@ public class InteractablePicker : MonoBehaviour
     private float baseRange = 2f;
 
     /// <summary>
-    /// The layers that interactable objects can be on.
+    /// Used if raycast fails.
     /// </summary>
     [SerializeField]
+    private CollisionTracker collisionTracker;
+
+    /// <summary>
+    /// The layers that interactable objects can be on.
+    /// </summary>
     private LayerMask interactableLayers;
 
     private Player player;
@@ -31,6 +36,7 @@ public class InteractablePicker : MonoBehaviour
     private void Start()
     {
         player = GetComponent<Player>();
+        interactableLayers = GameLayer.GetLayerMask(collisionTracker.gameObject.layer);
     }
 
     private void Update()
@@ -59,23 +65,66 @@ public class InteractablePicker : MonoBehaviour
     private Interactable GetViewedInteractable()
     {
         Interactable result = null;
-
-        var multiplier = transform.localScale.y;
-        var startBehindOffset = 0.1f * multiplier; //used to make objects directly in front of you get selected
-        var maxDistance = baseRange * multiplier + startBehindOffset;
-        var radius = baseRadius * multiplier;
-        var ray = new Ray(
-            transform.position + (radius+0.05f) * Vector3.up - transform.forward * startBehindOffset,
-            transform.forward
-        );
         RaycastHit hit;
-        if (Physics.SphereCast(ray, radius, out hit, maxDistance, layerMask: interactableLayers))
+
+        var forward = transform.forward;
+
+        //first try a simple raycast
+        if (RaycastInDirection(direction: forward, out hit))
+        {
+            var hitObject = hit.collider.gameObject;
+            result = hitObject.GetComponent<Interactable>();
+            if (result != null) { return result; }
+        }
+
+        //that failed, check for objects in the collision tracker
+        float smallestAngle = float.MaxValue;
+        Vector3 bestDirection = Vector3.zero;
+        foreach (var collision in collisionTracker.collisions)
+        {
+            var interactable = collision.GetComponent<Interactable>();
+            if (interactable == null) { continue; }
+
+            // Calculate the direction to the collision point, projected onto the XZ plane
+            Vector3 directionToCollision = collision.transform.position - transform.position;
+            Vector3 directionToCollisionXZ = new Vector3(directionToCollision.x, 0, directionToCollision.z).normalized;
+
+            // Calculate the angle between transform.forward and the direction to the collision
+            float angle = Vector3.Angle(forward, directionToCollisionXZ);
+
+            // Update if this is the smallest angle found
+            if (angle < smallestAngle)
+            {
+                smallestAngle = angle;
+                bestDirection = directionToCollisionXZ;
+                result = interactable;
+            }
+        }
+
+        if (result == null) { return null; }
+
+        //raycast again to make sure you get the closest thing at the smallest
+        //angle, not just the smallest angle
+        if (RaycastInDirection(direction: bestDirection, out hit))
         {
             var hitObject = hit.collider.gameObject;
             result = hitObject.GetComponent<Interactable>();
         }
 
         return result;
+    }
+
+    private bool RaycastInDirection(Vector3 direction, out RaycastHit hit)
+    {
+        var multiplier = transform.localScale.y;
+        var startBehindOffset = 0.1f * multiplier; //used to make objects directly in front of you get selected
+        var maxDistance = baseRange * multiplier + startBehindOffset;
+        var radius = baseRadius * multiplier;
+        var ray = new Ray(
+            transform.position + (radius + 0.05f) * Vector3.up - transform.forward * startBehindOffset,
+            direction
+        );
+        return Physics.SphereCast(ray, radius, out hit, maxDistance, layerMask: interactableLayers);
     }
 }
 
