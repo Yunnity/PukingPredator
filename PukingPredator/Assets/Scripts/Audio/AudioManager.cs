@@ -29,7 +29,7 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         { ClipName.Villian, 1f },
         { ClipName.Puking, 1f },
         { ClipName.Eating, 2f },
-        { ClipName.Puke, 1f },
+        { ClipName.Puke, 2f },
         { ClipName.PukeForce, 8f },
     };
 
