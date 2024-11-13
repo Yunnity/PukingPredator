@@ -1189,8 +1189,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c938e0caf92774d9f5f5c0f3bd6ef0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  copyPlayerScaleFactor: 0.5
-  player: {fileID: 2567298882619119056}
+  copyTargetScaleFactor: 0.5
+  target: {fileID: 2567298882619119056}
 --- !u!1 &4477757843396663395
 GameObject:
   m_ObjectHideFlags: 0
