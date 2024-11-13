@@ -753,7 +753,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: wallShort (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8754834435706126757, guid: a736965907bd24800a03331256120cef, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -4989,7 +4990,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: wallShort
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8754834435706126757, guid: a736965907bd24800a03331256120cef, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
