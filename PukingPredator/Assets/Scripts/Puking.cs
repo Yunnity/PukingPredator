@@ -25,7 +25,20 @@ public class Puking : InputBehaviour
     private Vector3 pukeDirection => transform.forward + Vector3.up * 0.1f;
 
     /// <summary>
-    /// If pukeForce is greater than this, the puke will also knock back items in front of the player
+    /// The collision tracker used to roughly determine the objects that could
+    /// be affected.
+    /// </summary>
+    [SerializeField]
+    private CollisionTracker pukeExplodeCollisionTracker;
+
+    /// <summary>
+    /// The max distance if you fully charge the puke but had 2 items consumed.
+    /// </summary>
+    private const float PUKE_EXPLODE_BASE_MAX_DISTANCE = 2f;
+
+    /// <summary>
+    /// If pukeForce is greater than this, the puke will also knock back items
+    /// in front of the player.
     /// </summary>
     private const float PUKE_EXPLODE_THRESHOLD = 0.5f;
 
@@ -100,28 +113,25 @@ public class Puking : InputBehaviour
     /// <param name="itemRB">RigidBody of item being puked</param>
     public void KnockbackItemsInFrontofPlayer(float pukeForce, Rigidbody itemRB)
     {
-        Vector3 halfExtents = new Vector3(pukeForce / MAX_PUKE_FORCE, 0.5f, 0.5f); // Half the size of the box (x, y, z)
+        float percentCharged = pukeForce / MAX_PUKE_FORCE;
+        var range = PUKE_EXPLODE_BASE_MAX_DISTANCE * percentCharged * player.relativeScale;
 
-        // BoxCast in the direction of the velocity
-        RaycastHit[] hits = Physics.BoxCastAll(transform.position + (transform.forward * 0.1f) + (transform.up * 0.6f), halfExtents, transform.forward, Quaternion.identity, 3f);
-
-        foreach (RaycastHit hit in hits)
+        foreach (var collision in pukeExplodeCollisionTracker.collisions)
         {
-            if (hit.collider.CompareTag(GameTag.player))
-            {
-                continue;
-            }
-            Rigidbody hitRB = hit.collider.GetComponent<Rigidbody>();
-            if (hitRB == null || hitRB == itemRB)
-            {
-                continue;
-            }
+            if (collision.CompareTag(GameTag.player)) { continue; }
 
-            PhysicsBehaviour pb = hit.collider.GetComponent<PhysicsBehaviour>();
+            var distance = Vector3.Distance(transform.position, collision.transform.position);
+            if (distance > range) { continue; }
+
+            Rigidbody hitRB = collision.GetComponent<Rigidbody>();
+            if (hitRB == null || hitRB == itemRB) { continue; }
+
+            PhysicsBehaviour pb = collision.GetComponent<PhysicsBehaviour>();
             if (pb != null)
             {
                 pb.EnablePhysics();
             }
+
             hitRB.AddExplosionForce(1f * pukeForce, transform.position, 5f, 0.01f, ForceMode.VelocityChange);
         }
     }
