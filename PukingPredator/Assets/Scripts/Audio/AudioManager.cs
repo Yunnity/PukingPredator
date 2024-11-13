@@ -18,7 +18,9 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         Rainfall,
         Villian,
         Puking,
-        Eating
+        Eating,
+        Puke,
+        PukeForce,
     }
     public Dictionary<ClipName, float> relativeVolumes = new()
     {
@@ -27,6 +29,8 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         { ClipName.Villian, 1f },
         { ClipName.Puking, 1f },
         { ClipName.Eating, 2f },
+        { ClipName.Puke, 2f },
+        { ClipName.PukeForce, 8f },
     };
 
     protected override void Awake()

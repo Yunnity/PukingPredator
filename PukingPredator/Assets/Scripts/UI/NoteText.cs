@@ -42,14 +42,14 @@ public class NoteText : Note
         UIText = textObject.AddComponent<TextMeshProUGUI>();
         UIText.text = text;
         UIText.color = color;
-        UIText.alignment = TextAlignmentOptions.Right;
+        UIText.alignment = TextAlignmentOptions.Center;
 
         RectTransform rectTransform = UIText.GetComponent<RectTransform>();
-        rectTransform.pivot = new Vector2(1f, 0f);
-        rectTransform.anchorMin = new Vector2(1f, 0f);
-        rectTransform.anchorMax = new Vector2(1f, 0f);
+        rectTransform.pivot = new Vector2(0.5f, 0.7f);
+        rectTransform.anchorMin = new Vector2(0.5f, 0.7f);
+        rectTransform.anchorMax = new Vector2(0.5f, 0.7f);
         rectTransform.sizeDelta = new Vector2(Screen.width * 0.9f, rectTransform.sizeDelta.y);
-        rectTransform.anchoredPosition = new Vector2(-margin.x, margin.y);
+        rectTransform.anchoredPosition = Vector2.zero;
     }
 
     /// <summary>

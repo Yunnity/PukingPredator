@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent(typeof(Player))]
 public class Puking : InputBehaviour
@@ -22,6 +23,11 @@ public class Puking : InputBehaviour
     /// The direction to puke in. Pukes forwards with a little force upwards.
     /// </summary>
     private Vector3 pukeDirection => transform.forward + Vector3.up * 0.1f;
+
+    /// <summary>
+    /// If pukeForce is greater than this, the puke will also knock back items in front of the player
+    /// </summary>
+    private const float PUKE_EXPLODE_THRESHOLD = 0.5f;
 
     /// <summary>
     /// Force applied to object when puked. Depends on how long the puke button
@@ -68,6 +74,9 @@ public class Puking : InputBehaviour
 
         anim.StartPukeAnim();
 
+        bool pukeWithForce = pukeForce > MAX_PUKE_FORCE * PUKE_EXPLODE_THRESHOLD;
+        AudioManager.Instance.PlaySFX(pukeWithForce ? AudioManager.ClipName.PukeForce : AudioManager.ClipName.Puke);
+
         Rigidbody itemRb = itemToPuke.GetComponent<Rigidbody>();
         if (itemRb != null)
         {
@@ -75,8 +84,46 @@ public class Puking : InputBehaviour
             //...the velocity and if there was a rigid body then we can reduce the velocity
             //...while calculating it based on the mass?
             itemRb.AddForce(pukeVelocity * itemRb.mass, ForceMode.Impulse);
+
+            if (pukeWithForce)
+            {
+                KnockbackItemsInFrontofPlayer(pukeForce, itemRb);
+            }
         }
 
+    }
+
+    /// <summary>
+    /// Knocks back items in front of player
+    /// </summary>
+    /// <param name="pukeForce">0-1 puke force</param>
+    /// <param name="itemRB">RigidBody of item being puked</param>
+    public void KnockbackItemsInFrontofPlayer(float pukeForce, Rigidbody itemRB)
+    {
+        Vector3 halfExtents = new Vector3(pukeForce / MAX_PUKE_FORCE, 0.5f, 0.5f); // Half the size of the box (x, y, z)
+
+        // BoxCast in the direction of the velocity
+        RaycastHit[] hits = Physics.BoxCastAll(transform.position + (transform.forward * 0.1f) + (transform.up * 0.6f), halfExtents, transform.forward, Quaternion.identity, 3f);
+
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.CompareTag(GameTag.player))
+            {
+                continue;
+            }
+            Rigidbody hitRB = hit.collider.GetComponent<Rigidbody>();
+            if (hitRB == null || hitRB == itemRB)
+            {
+                continue;
+            }
+
+            PhysicsBehaviour pb = hit.collider.GetComponent<PhysicsBehaviour>();
+            if (pb != null)
+            {
+                pb.EnablePhysics();
+            }
+            hitRB.AddExplosionForce(1f * pukeForce, transform.position, 5f, 0.01f, ForceMode.VelocityChange);
+        }
     }
 
 }
