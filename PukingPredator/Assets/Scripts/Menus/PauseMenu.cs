@@ -6,6 +6,7 @@ public class PauseMenu : InputBehaviour
 {
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject pauseMenuFirst;
+    [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject sensitivityMenu;
 
     void Start()
@@ -31,6 +32,8 @@ public class PauseMenu : InputBehaviour
 
     private void Resume()
     {
+        mainMenu.SetActive(true);
+        sensitivityMenu.SetActive(false);
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
         GameManager.isGamePaused = false;
