@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : InputBehaviour
 {
@@ -51,6 +52,12 @@ public class PauseMenu : InputBehaviour
     public void OnResumeButtonClicked()
     {
         Resume();
+    }
+
+    public void OnRestartButtonClicked()
+    {
+        Resume();
+        GameManager.TransitionToScene(SceneManager.GetActiveScene().name);
     }
 
     public void OnSettingsButtonClicked()

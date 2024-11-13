@@ -11,7 +11,7 @@ public class MenuRoot : MonoBehaviour
 
 
 
-    private void OnEnable()
+    public virtual void OnEnable()
     {
         EventSystem.current.SetSelectedGameObject(firstSelected);
     }
