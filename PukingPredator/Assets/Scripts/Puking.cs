@@ -20,6 +20,12 @@ public class Puking : InputBehaviour
     private Player player;
 
     /// <summary>
+    /// The prefab for the projectile blast.
+    /// </summary>
+    [SerializeField]
+    private GameObject projectileBlastPrefab;
+
+    /// <summary>
     /// The direction to puke in. Pukes forwards with a little force upwards.
     /// </summary>
     private Vector3 pukeDirection => transform.forward + Vector3.up * 0.1f;
@@ -101,9 +107,25 @@ public class Puking : InputBehaviour
             if (pukeWithForce)
             {
                 KnockbackItemsInFrontofPlayer(pukeForce, itemRb);
+                AddCollisionBlast(itemToPuke.gameObject, itemRb);
             }
         }
 
+    }
+
+    /// <summary>
+    /// Adds an object to cause collapses via the projectile.
+    /// </summary>
+    /// <param name="itemToPuke"></param>
+    private void AddCollisionBlast(GameObject itemToPuke, Rigidbody itemRb)
+    {
+        if (projectileBlastPrefab == null) { return; }
+
+        var projectileBlast = Instantiate(projectileBlastPrefab, inventory.transform.position, player.transform.rotation);
+        projectileBlast.GetComponent<ProjectileBlast>().owner = itemToPuke;
+        projectileBlast.GetComponent<FollowObject>().target = itemToPuke;
+        projectileBlast.GetComponent<AlignWithVelocity>().rb = itemRb;
+        projectileBlast.GetComponent<DestroyOnLowVelocity>().rb = itemRb;
     }
 
     /// <summary>

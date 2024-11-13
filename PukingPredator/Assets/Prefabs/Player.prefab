@@ -273,6 +273,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameInput: {fileID: 0}
+  projectileBlastPrefab: {fileID: 366142060094844730, guid: f0e6297c1a84b47f0bf93b0fb5225a8a,
+    type: 3}
   pukeExplodeCollisionTracker: {fileID: 4967972047446330138}
 --- !u!114 &9057554939570478379
 MonoBehaviour:
@@ -493,8 +495,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c938e0caf92774d9f5f5c0f3bd6ef0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  copyPlayerScaleFactor: 0
-  player: {fileID: 5441739923584274610}
+  copyTargetScaleFactor: 0
+  target: {fileID: 0}
 --- !u!120 &2088171905374843720
 LineRenderer:
   serializedVersion: 2
