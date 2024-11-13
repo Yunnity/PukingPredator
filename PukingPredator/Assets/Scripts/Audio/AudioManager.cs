@@ -7,7 +7,7 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
     private List<AudioClip> sfxClips;
 
     [SerializeField]
-    private AudioClip backgroundTrack;
+    private List<AudioClip> backgroundTracks;
 
     private AudioSource backgroundSource;
     private AudioSource sfxSource;
@@ -22,6 +22,13 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         Puke,
         PukeForce,
     }
+
+    public enum MusicName
+    {
+        Title,
+        Game
+    }
+
     public Dictionary<ClipName, float> relativeVolumes = new()
     {
         { ClipName.LevelUp, 8f },
@@ -42,11 +49,11 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
     }
 
 
-    public void PlayBackground(bool loop = true)
+    public void PlayBackground(MusicName music, bool loop = true)
     {
         if (backgroundSource.isPlaying) { return; }
-
-        backgroundSource.clip = backgroundTrack;
+        backgroundSource.Stop();
+        backgroundSource.clip = backgroundTracks[(int) music];
         backgroundSource.loop = loop;
         backgroundSource.Play();
     }

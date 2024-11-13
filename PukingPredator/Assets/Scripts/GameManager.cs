@@ -82,11 +82,13 @@ public class GameManager : SingletonMonobehaviour<GameManager>
 
         if (isLevelScene)
         {
-            AudioManager.Instance.PlayBackground();
+            AudioManager.Instance.StopMusic();
+            AudioManager.Instance.PlayBackground(AudioManager.MusicName.Game);
         }
         else
         {
             AudioManager.Instance.StopMusic();
+            AudioManager.Instance.PlayBackground(AudioManager.MusicName.Title);
         }
 
         SceneManager.LoadScene(sceneName);
