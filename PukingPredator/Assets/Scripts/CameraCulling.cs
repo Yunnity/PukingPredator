@@ -25,10 +25,13 @@ public class CameraCulling : MonoBehaviour
         private SurfaceType initialSurfaceType;
         public bool isFullOpacity => (initialAlpha - alpha) < 0.2f * initialAlpha;
         private Material material;
+        public Transform transform { get; private set; }
 
         public CullingData(Material material)
+        public CullingData(Material material, Transform transform)
         {
             this.material = material;
+            this.transform = transform;
             initialAlpha = material.GetAlpha();
             initialSurfaceType = material.GetSurfaceType();
 
@@ -138,7 +141,7 @@ public class CameraCulling : MonoBehaviour
             result.AddRange(
                 materials
                 .Where(m => m.HasProperty("_Color"))
-                .Select(m => new CullingData(m))
+                .Select(m => new CullingData(m, obj.transform))
             );
 
             //reset the materials so it doesnt break QuickOutline
