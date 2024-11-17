@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Player))]
 public class InteractablePicker : MonoBehaviour
@@ -31,10 +32,14 @@ public class InteractablePicker : MonoBehaviour
     /// </summary>
     public Interactable targetInteractable { get; private set; } = null;
 
-
+    /// <summary>
+    /// The list of objects that are being supported to the target
+    /// </summary>
+    public List<Interactable> targetSupports { get; private set; } = null;
 
     private void Start()
     {
+        targetSupports = new List<Interactable>();
         player = GetComponent<Player>();
         interactableLayers = GameLayer.GetLayerMask(collisionTracker.gameObject.layer);
     }
@@ -50,13 +55,19 @@ public class InteractablePicker : MonoBehaviour
             targetInteractable = null;
         }
 
+        foreach (Interactable target in targetSupports)
+        {
+            target.outline.enabled = false;
+        }
+
+        targetSupports = new List<Interactable>();
         if (previousTargetInteractable != null)
         {
-            previousTargetInteractable.outline.enabled = false;
+            setOutline(previousTargetInteractable, false);
         }
         if (targetInteractable != null)
         {
-            targetInteractable.outline.enabled = true;
+            setOutline(targetInteractable, true);
         }
     }
 
@@ -125,6 +136,23 @@ public class InteractablePicker : MonoBehaviour
             direction
         );
         return Physics.SphereCast(ray, radius, out hit, maxDistance, layerMask: interactableLayers);
+    }
+
+    private void setOutline(Interactable interactable, bool enabled)
+    {
+        if (interactable.outline.enabled == enabled) return;
+        interactable.outline.enabled = enabled;
+        PhysicsSupport support = interactable.GetComponent<PhysicsSupport>();
+        if (support != null)
+        {
+            if (support.supportsBeforeCollapse != 1) return;
+            foreach (var other in support.initiallySupporting)
+            {
+                Interactable supportInteractable = other.GetComponent<Interactable>();
+                targetSupports.Add(supportInteractable);
+                setOutline(supportInteractable, enabled);
+            }
+        }
     }
 }
 
