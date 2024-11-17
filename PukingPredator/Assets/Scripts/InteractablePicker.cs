@@ -141,7 +141,9 @@ public class InteractablePicker : MonoBehaviour
     private void setOutline(Interactable interactable, bool enabled)
     {
         if (interactable.outline.enabled == enabled) return;
+
         interactable.outline.enabled = enabled;
+
         PhysicsSupport support = interactable.GetComponent<PhysicsSupport>();
         if (support != null)
         {
@@ -151,6 +153,22 @@ public class InteractablePicker : MonoBehaviour
                 Interactable supportInteractable = other.GetComponent<Interactable>();
                 targetSupports.Add(supportInteractable);
                 setOutline(supportInteractable, enabled);
+            }
+        }
+
+        Transform parentTransform = interactable.transform.parent;
+        PhysicsCollapseGroup physicsCollapseGroup = parentTransform.GetComponent<PhysicsCollapseGroup>();
+
+        if (physicsCollapseGroup != null)
+        {
+            foreach (Transform child in parentTransform)
+            {
+                Interactable supportInteractable = child.GetComponent<Interactable>();
+                if (supportInteractable != null)
+                {
+                    targetSupports.Add(supportInteractable);
+                    setOutline(supportInteractable, enabled);
+                }
             }
         }
     }
