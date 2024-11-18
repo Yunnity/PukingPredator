@@ -58,5 +58,11 @@ public abstract class Interactable : MonoBehaviour
         outline.OutlineColor = outlineColor;
         outline.enabled = false;
     }
+
+    public void ChangeColor(Color color)
+    {
+        outline = gameObject.GetComponent<Outline>();
+        outline.OutlineColor = color;
+    }
 }
 

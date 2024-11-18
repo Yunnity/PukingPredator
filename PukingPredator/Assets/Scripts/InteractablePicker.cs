@@ -60,11 +60,12 @@ public class InteractablePicker : MonoBehaviour
             target.outline.enabled = false;
         }
 
-        targetSupports = new List<Interactable>();
         if (previousTargetInteractable != null)
         {
             setOutline(previousTargetInteractable, false);
         }
+
+        targetSupports = new List<Interactable>();
         if (targetInteractable != null)
         {
             setOutline(targetInteractable, true);
@@ -143,19 +144,26 @@ public class InteractablePicker : MonoBehaviour
         if (interactable.outline.enabled == enabled) return;
 
         interactable.outline.enabled = enabled;
-
+        Color supportColor = enabled ? Color.red : Color.white;
+        // Enables group highlight for supported objects
         PhysicsSupport support = interactable.GetComponent<PhysicsSupport>();
         if (support != null)
         {
             if (support.supportsBeforeCollapse != 1) return;
+
             foreach (var other in support.initiallySupporting)
             {
+                // Ensures fallen walls are not highlihgted if the base is highlighted
+                if (other.GetComponent<PhysicsSupport>().supportsBeforeCollapse != 1) continue;
                 Interactable supportInteractable = other.GetComponent<Interactable>();
+                
+                supportInteractable.ChangeColor(supportColor);
                 targetSupports.Add(supportInteractable);
                 setOutline(supportInteractable, enabled);
             }
         }
 
+        // Hihglights objects in the same physics collapse group
         Transform parentTransform = interactable.transform.parent;
         PhysicsCollapseGroup physicsCollapseGroup = parentTransform.GetComponent<PhysicsCollapseGroup>();
 
@@ -163,9 +171,11 @@ public class InteractablePicker : MonoBehaviour
         {
             foreach (Transform child in parentTransform)
             {
+                if (child == interactable.transform) continue;
                 Interactable supportInteractable = child.GetComponent<Interactable>();
                 if (supportInteractable != null)
                 {
+                    supportInteractable.ChangeColor(supportColor);
                     targetSupports.Add(supportInteractable);
                     setOutline(supportInteractable, enabled);
                 }
