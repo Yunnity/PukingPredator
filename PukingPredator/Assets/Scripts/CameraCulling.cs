@@ -179,14 +179,11 @@ public class CameraCulling : MonoBehaviour
     /// <returns></returns>
     private float GetAlphaMultiplier(CullingData cd)
     {
-        var multiplier = 0.15f;
-
-        multiplier /= Mathf.Log(1+obstructingCount);
-
+        const float SCALE = 0.4f;
         //distance from camera -> object, NOT player -> object
         var distance = Vector3.Distance(transform.position, cd.transform.position);
-        multiplier *= 0.2f + Mathf.Log(1+distance/8);
 
-        return multiplier;
+        var multiplier = 1 * (0.01f + Mathf.Log(1 + Mathf.Pow(distance / 4f, 2))) / Mathf.Log(1 + obstructingCount);
+        return Mathf.Min(1, multiplier) * SCALE;
     }
 }
