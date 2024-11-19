@@ -36,7 +36,7 @@ public class Outline : MonoBehaviour {
     get { return outlineColor; }
     set {
       outlineColor = value;
-      needsUpdate = true;
+      UpdateMaterialProperties();
     }
   }
 
@@ -138,7 +138,6 @@ public class Outline : MonoBehaviour {
   }
 
   void OnDisable() {
-    UpdateMaterialProperties();
     foreach (var renderer in renderers) {
 
       // Remove outline shaders

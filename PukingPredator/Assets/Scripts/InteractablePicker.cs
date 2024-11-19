@@ -55,17 +55,14 @@ public class InteractablePicker : MonoBehaviour
             targetInteractable = null;
         }
 
-        if (!targetInteractable || previousTargetInteractable != targetInteractable)
+        foreach (Interactable target in targetSupports)
         {
-            foreach (Interactable target in targetSupports)
-            {
-                target.ChangeColor(Color.white);
-                setOutline(target, false);
-                targetSupports = new List<Interactable>();
-            }
+            target.ChangeColor(Color.white);
+            setOutline(target, false);
         }
-        
 
+
+        targetSupports = new List<Interactable>();
         if (previousTargetInteractable != null)
         {
             setOutline(previousTargetInteractable, false);
@@ -168,7 +165,7 @@ public class InteractablePicker : MonoBehaviour
             }
         }
 
-        // Hihglights objects in the same physics collapse group
+        // Highlights objects in the same physics collapse group
         Transform parentTransform = interactable.transform.parent;
         PhysicsCollapseGroup physicsCollapseGroup = parentTransform.GetComponent<PhysicsCollapseGroup>();
 
