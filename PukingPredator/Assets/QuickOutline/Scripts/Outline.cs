@@ -138,6 +138,7 @@ public class Outline : MonoBehaviour {
   }
 
   void OnDisable() {
+    UpdateMaterialProperties();
     foreach (var renderer in renderers) {
 
       // Remove outline shaders

@@ -45,7 +45,7 @@ public class InteractablePicker : MonoBehaviour
     }
 
     private void Update()
-	{
+    {
         var previousTargetInteractable = targetInteractable;
         targetInteractable = GetViewedInteractable();
 
@@ -55,17 +55,22 @@ public class InteractablePicker : MonoBehaviour
             targetInteractable = null;
         }
 
-        foreach (Interactable target in targetSupports)
+        if (!targetInteractable || previousTargetInteractable != targetInteractable)
         {
-            target.outline.enabled = false;
+            foreach (Interactable target in targetSupports)
+            {
+                target.ChangeColor(Color.white);
+                setOutline(target, false);
+                targetSupports = new List<Interactable>();
+            }
         }
+        
 
         if (previousTargetInteractable != null)
         {
             setOutline(previousTargetInteractable, false);
         }
 
-        targetSupports = new List<Interactable>();
         if (targetInteractable != null)
         {
             setOutline(targetInteractable, true);
@@ -156,10 +161,10 @@ public class InteractablePicker : MonoBehaviour
                 // Ensures fallen walls are not highlihgted if the base is highlighted
                 if (other.GetComponent<PhysicsSupport>().supportsBeforeCollapse != 1) continue;
                 Interactable supportInteractable = other.GetComponent<Interactable>();
-                
-                supportInteractable.ChangeColor(supportColor);
-                targetSupports.Add(supportInteractable);
+
                 setOutline(supportInteractable, enabled);
+                supportInteractable.ChangeColor(supportColor);
+                if (enabled) targetSupports.Add(supportInteractable);
             }
         }
 
@@ -175,12 +180,11 @@ public class InteractablePicker : MonoBehaviour
                 Interactable supportInteractable = child.GetComponent<Interactable>();
                 if (supportInteractable != null)
                 {
+                    supportInteractable.outline.enabled = enabled;
                     supportInteractable.ChangeColor(supportColor);
-                    targetSupports.Add(supportInteractable);
-                    setOutline(supportInteractable, enabled);
+                    if (enabled) targetSupports.Add(supportInteractable);
                 }
             }
         }
     }
 }
-
