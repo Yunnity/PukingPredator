@@ -15,6 +15,11 @@ public class Movement : InputBehaviour
     private bool canJump => isGrounded && !isJumping;
 
     /// <summary>
+    /// Radius of the sphere used for friction checks.
+    /// </summary>
+    private float frictiondCheckRadius = 0.05f;
+
+    /// <summary>
     /// Radius of the sphere used for collision checks.
     /// </summary>
     private float groundCheckRadius = 0.45f;
@@ -88,12 +93,14 @@ public class Movement : InputBehaviour
 
     private PlayerAnimation playerAnimation;
 
-
+    private DynamicFriction dynamicFriction;
 
     private void Start()
     {
         playerAnimation = GetComponent<PlayerAnimation>();
         rb = GetComponent<Rigidbody>();
+        dynamicFriction = GetComponent<DynamicFriction>();
+
         baseMass = rb.mass;
 
         if (playerCamera == null) { playerCamera = GameObject.FindGameObjectsWithTag("MainCamera")[0]; }
@@ -149,8 +156,13 @@ public class Movement : InputBehaviour
         {
             jumpTime += Time.deltaTime;
 
-            if (jumpTime > buttonTime) { isJumping = false; }
+            if (jumpTime > buttonTime) { 
+                isJumping = false;
+            }
         }
+
+        bool enableFriction = Physics.CheckSphere(transform.position, frictiondCheckRadius, groundLayer);
+        if (!isJumping && enableFriction && dynamicFriction) dynamicFriction.SetFriction(true);
     }
 
 
@@ -160,7 +172,7 @@ public class Movement : InputBehaviour
         if (!canJump) { return; }
 
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
+        if (dynamicFriction) dynamicFriction.SetFriction(false);
         isJumping = true;
         isJumpCancelled = false;
         jumpTime = 0;

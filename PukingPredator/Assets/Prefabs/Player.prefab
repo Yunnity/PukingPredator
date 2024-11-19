@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: 8543201992326126533}
   - component: {fileID: 5113436857972032728}
   - component: {fileID: 8976480857431449465}
+  - component: {fileID: 6171710584143676546}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -171,7 +172,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5441739923584274610}
-  m_Material: {fileID: 13400000, guid: 7e290163a6c784e4095fa9ae4438f436, type: 2}
+  m_Material: {fileID: 13400000, guid: 8fa7982dee37a5c4e8749794df6131bb, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -329,6 +330,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collisionTracker: {fileID: 676090849721875520}
+--- !u!114 &6171710584143676546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5441739923584274610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2fc5f5414bd305488fb971fd1381518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundMaterial: {fileID: 13400000, guid: 8fa7982dee37a5c4e8749794df6131bb, type: 2}
+  airMaterial: {fileID: 13400000, guid: 7e290163a6c784e4095fa9ae4438f436, type: 2}
 --- !u!1 &5541611196680227059
 GameObject:
   m_ObjectHideFlags: 0
