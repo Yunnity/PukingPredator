@@ -13,7 +13,7 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
     private AudioSource backgroundSource;
     private AudioSource sfxSource;
 
-    private AudioSource walkingSource;
+    private ClipName currentsfx;
 
     public enum ClipName
     {
@@ -42,7 +42,7 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         { ClipName.Eating, 2f },
         { ClipName.Puke, 0.2f },
         { ClipName.PukeForce, 8f },
-        { ClipName.Walking, 1f },
+        { ClipName.Walking, 2f },
     };
 
     protected override void Awake()
@@ -51,10 +51,6 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
 
         backgroundSource = gameObject.AddComponent<AudioSource>();
         sfxSource = gameObject.AddComponent<AudioSource>();
-        walkingSource = gameObject.AddComponent<AudioSource>();
-        walkingSource.clip = sfxClips[(int) ClipName.Walking];
-        walkingSource.loop = true;
-        walkingSource.volume = 0.1f;
     }
 
 
@@ -73,7 +69,7 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         sfxSource.Stop();
     }
 
-    public void PlaySFX(ClipName name)
+    public void PlaySFX(ClipName name, bool wait = false)
     {
         // sample usage AudioManager.Instance.PlaySFX(ClipName.Eating);
 
@@ -82,20 +78,13 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         if (volume <= 0) { return; }
         
         AudioClip clip = sfxClips[(int) name];
-        if (sfxSource.clip == clip) { sfxSource.Stop(); }
-        sfxSource.PlayOneShot(clip, volume);
-    }
 
-    public void SetWalking(bool isWalking)
-    {
-        walkingSource.volume = sfxSource.isPlaying ? 0f : 0.1f;
-        if (!walkingSource.isPlaying && isWalking)
-        {
-            walkingSource.Play();
-        } else if (walkingSource.isPlaying && !isWalking)
-        {
-            walkingSource.Stop();
-        }
+        // Waits for the sound effect to finish
+        if (wait && sfxSource.isPlaying && currentsfx == name) return;
+        if (currentsfx == name) { sfxSource.Stop(); }
+
+        sfxSource.PlayOneShot(clip, volume);
+        currentsfx = name;
     }
 
     public static void UpdateMusicVolume()

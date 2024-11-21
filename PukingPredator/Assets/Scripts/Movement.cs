@@ -124,8 +124,6 @@ public class Movement : InputBehaviour
 
             if (rb.velocity.y <= 0) { isJumping = false; }
         }
-
-        AudioManager.Instance.SetWalking(rb.velocity.magnitude > 0.1);
     }
 
     private void Update()
@@ -146,6 +144,8 @@ public class Movement : InputBehaviour
 
         //jumping code
         isGrounded = Physics.CheckSphere(transform.position, groundCheckRadius, groundLayer);
+        bool horizontalMovement = Mathf.Abs(rb.velocity.x) + Mathf.Abs(rb.velocity.z) > 0f;
+        if (isGrounded && horizontalMovement) AudioManager.Instance.PlaySFX(AudioManager.ClipName.Walking, true);
 
         if (isJumping)
         {
