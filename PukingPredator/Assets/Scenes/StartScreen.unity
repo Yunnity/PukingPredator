@@ -260,6 +260,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 681048077165818070, guid: 2f61d24633070fa49887f505a0c01847,
+        type: 3}
+      propertyPath: sfxClips.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 681048077165818070, guid: 2f61d24633070fa49887f505a0c01847,
+        type: 3}
+      propertyPath: sfxClips.Array.data[5]
+      value: 
+      objectReference: {fileID: 8300000, guid: 207a4e0e28188e949a858e2581d9b5ec, type: 3}
+    - target: {fileID: 681048077165818070, guid: 2f61d24633070fa49887f505a0c01847,
+        type: 3}
+      propertyPath: sfxClips.Array.data[7]
+      value: 
+      objectReference: {fileID: 8300000, guid: 158d7e6c1ae747744bee1dd7d88fb69f, type: 3}
     - target: {fileID: 4625655161116368568, guid: 2f61d24633070fa49887f505a0c01847,
         type: 3}
       propertyPath: m_Name

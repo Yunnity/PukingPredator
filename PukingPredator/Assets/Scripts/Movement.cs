@@ -124,6 +124,8 @@ public class Movement : InputBehaviour
 
             if (rb.velocity.y <= 0) { isJumping = false; }
         }
+
+        AudioManager.Instance.SetWalking(rb.velocity.magnitude > 0.1);
     }
 
     private void Update()

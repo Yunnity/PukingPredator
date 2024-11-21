@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class AudioManager : SingletonMonobehaviour<AudioManager>
 {
@@ -12,6 +13,8 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
     private AudioSource backgroundSource;
     private AudioSource sfxSource;
 
+    private AudioSource walkingSource;
+
     public enum ClipName
     {
         LevelUp,
@@ -21,6 +24,7 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         Eating,
         Puke,
         PukeForce,
+        Walking,
     }
 
     public enum MusicName
@@ -36,8 +40,9 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         { ClipName.Villian, 1f },
         { ClipName.Puking, 1f },
         { ClipName.Eating, 2f },
-        { ClipName.Puke, 2f },
+        { ClipName.Puke, 0.2f },
         { ClipName.PukeForce, 8f },
+        { ClipName.Walking, 1f },
     };
 
     protected override void Awake()
@@ -46,6 +51,10 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
 
         backgroundSource = gameObject.AddComponent<AudioSource>();
         sfxSource = gameObject.AddComponent<AudioSource>();
+        walkingSource = gameObject.AddComponent<AudioSource>();
+        walkingSource.clip = sfxClips[(int) ClipName.Walking];
+        walkingSource.loop = true;
+        walkingSource.volume = 0.1f;
     }
 
 
@@ -75,6 +84,18 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         AudioClip clip = sfxClips[(int) name];
         if (sfxSource.clip == clip) { sfxSource.Stop(); }
         sfxSource.PlayOneShot(clip, volume);
+    }
+
+    public void SetWalking(bool isWalking)
+    {
+        walkingSource.volume = sfxSource.isPlaying ? 0f : 0.1f;
+        if (!walkingSource.isPlaying && isWalking)
+        {
+            walkingSource.Play();
+        } else if (walkingSource.isPlaying && !isWalking)
+        {
+            walkingSource.Stop();
+        }
     }
 
     public static void UpdateMusicVolume()
