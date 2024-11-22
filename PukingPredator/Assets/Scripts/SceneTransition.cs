@@ -15,25 +15,34 @@ public class SceneTransition : SingletonMonobehaviour<SceneTransition>
     public void FadeToScene(string sceneName)
     {
         Canvas canvas = FindObjectOfType<Canvas>();
-        fadeImage = Instantiate(fadePrefab, canvas.transform);
+        if (canvas)
+        {
+            fadeImage = Instantiate(fadePrefab, canvas.transform);
 
-        nextSceneName = sceneName;
-        StartCoroutine(FadeIn());
+            nextSceneName = sceneName;
+            StartCoroutine(FadeIn());
+        } else
+        {
+            SceneManager.LoadScene(sceneName);
+        }
     }
 
     private IEnumerator FadeOut()
     {
+        Canvas canvas = FindObjectOfType<Canvas>();
+        fadeImage = Instantiate(fadePrefab, canvas.transform);
+
         float timeElapsed = 0f;
         float fadeDuration = 1f;
 
         while (timeElapsed < fadeDuration)
         {
             timeElapsed += Time.deltaTime;
-
+            
             // Lerps alpha to transparent
-            fadeImage.color = new Color(1f, 1f, 1f, Mathf.Lerp(1f, 0f, timeElapsed / fadeDuration));
+            fadeImage.color = new Color(0f, 0f, 0f, Mathf.Lerp(1f, 0f, timeElapsed / fadeDuration));
 
-            if (timeElapsed < fadeDuration + fadeDuration / 2) SceneManager.LoadScene(nextSceneName);
+            if (timeElapsed < fadeDuration + fadeDuration / 2) 
             yield return null;
         }
     }
@@ -48,7 +57,16 @@ public class SceneTransition : SingletonMonobehaviour<SceneTransition>
             timeElapsed += Time.deltaTime;
 
             // Lerps alpha to be fully opaque
-            fadeImage.color = new Color(1f, 1f, 1f, Mathf.Lerp(0f, 1f, timeElapsed / fadeDuration));
+            fadeImage.color = new Color(0f, 0f, 0f, Mathf.Lerp(0f, 1f, timeElapsed / fadeDuration));
+            yield return null;
+        }
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(nextSceneName);
+        asyncLoad.allowSceneActivation = true;
+
+        // Wait for the scene to finish loading
+        while (!asyncLoad.isDone)
+        {
             yield return null;
         }
 

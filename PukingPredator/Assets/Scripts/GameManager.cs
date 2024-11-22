@@ -90,6 +90,9 @@ public class GameManager : SingletonMonobehaviour<GameManager>
             AudioManager.Instance.PlayBackground(AudioManager.MusicName.Title);
         }
 
-        SceneTransition.Instance.FadeToScene(sceneName);
+        if (isLevelScene)
+            SceneTransition.Instance.FadeToScene(sceneName);
+        else
+            SceneManager.LoadScene(sceneName);
     }
 }
