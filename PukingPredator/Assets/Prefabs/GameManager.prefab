@@ -52,5 +52,3 @@ MonoBehaviour:
   - Level2
   - Level3
   sceneToLoad: StartScreen
-  transition: {fileID: 866972729022536312, guid: faa492ddca390c24d923233a32ae6fe3,
-    type: 3}
