@@ -22,9 +22,9 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         Villian,
         Puking,
         Eating,
-        Puke,
         PukeForce,
         Walking,
+        Jump
     }
 
     public enum MusicName
@@ -40,9 +40,8 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         { ClipName.Villian, 1f },
         { ClipName.Puking, 1f },
         { ClipName.Eating, 2f },
-        { ClipName.Puke, 0.2f },
         { ClipName.PukeForce, 8f },
-        { ClipName.Walking, 2f },
+        { ClipName.Walking, 1f },
     };
 
     protected override void Awake()

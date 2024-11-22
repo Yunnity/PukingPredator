@@ -168,6 +168,7 @@ public class Movement : InputBehaviour
         jumpTime = 0;
 
         playerAnimation?.StartJumpAnim();
+        AudioManager.Instance.PlaySFX(AudioManager.ClipName.Jump, true);
     }
 
     public void GameInput_JumpUp()
