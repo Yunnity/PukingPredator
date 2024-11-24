@@ -17,7 +17,7 @@ public class Movement : InputBehaviour
     /// <summary>
     /// Radius of the sphere used for friction checks.
     /// </summary>
-    private float frictiondCheckRadius = 0.05f;
+    private float frictionCheckRadius = 0.05f;
 
     /// <summary>
     /// Radius of the sphere used for collision checks.
@@ -161,8 +161,8 @@ public class Movement : InputBehaviour
             }
         }
 
-        bool enableFriction = Physics.CheckSphere(transform.position, frictiondCheckRadius, groundLayer);
-        if (!isJumping && enableFriction && dynamicFriction) dynamicFriction.SetFriction(true);
+        bool isOnGround = Physics.CheckSphere(transform.position, frictionCheckRadius, groundLayer);
+        if (!isJumping && isOnGround && dynamicFriction) dynamicFriction.SetFriction(true);
     }
 
 
