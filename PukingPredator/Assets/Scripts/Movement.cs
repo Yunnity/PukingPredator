@@ -106,7 +106,7 @@ public class Movement : InputBehaviour
     /// <summary>
     /// Adjust the jump behavior during wall sliding.
     /// </summary>
-    private const float WALLSLIDEADJUSTMENT = 0.25f;
+    private const float WALLSLIDEADJUSTMENT = 0.05f;
 
     private void Start()
     {
