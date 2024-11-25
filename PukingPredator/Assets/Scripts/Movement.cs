@@ -93,10 +93,19 @@ public class Movement : InputBehaviour
 
     private PlayerAnimation playerAnimation;
 
+    /// <summary>
+    /// Manages the friction applied to the player based on movement or surfaces.
+    /// </summary>
     private DynamicFriction dynamicFriction;
 
+    /// <summary>
+    /// Indicates whether the player is sliding along a wall
+    /// </summary>
     private bool wallSlide;
 
+    /// <summary>
+    /// Adjust the jump behavior during wall sliding.
+    /// </summary>
     private const float WALLSLIDEADJUSTMENT = 0.25f;
 
     private void Start()
@@ -177,6 +186,8 @@ public class Movement : InputBehaviour
         if (!canJump) { return; }
 
         Vector3 jump = Vector3.up * jumpForce;
+
+        // Applies more force when sliding against a wall
         if (wallSlide)
         {
             Vector2 inputVector = gameInput.movementInput;

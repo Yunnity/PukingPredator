@@ -29,7 +29,8 @@ public class WallFriction : MonoBehaviour
         {
             player.movement.SetWallSlide(true);
             playerCollider.material = airMaterial;
-        } else
+        }
+        else
         {
             player.movement.SetWallSlide(false);
         }
