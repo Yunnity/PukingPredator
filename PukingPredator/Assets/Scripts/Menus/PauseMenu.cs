@@ -32,7 +32,6 @@ public class PauseMenu : InputBehaviour
 
     private void Resume()
     {
-        mainMenu.SetActive(true);
         sensitivityMenu.SetActive(false);
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
@@ -49,7 +48,7 @@ public class PauseMenu : InputBehaviour
     private void CloseSensitivityMenu()
     {
         sensitivityMenu.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(pauseMenuFirst);
+        mainMenu.SetActive(true);
     }
 
     public void OnResumeButtonClicked()
@@ -65,14 +64,8 @@ public class PauseMenu : InputBehaviour
 
     public void OnSettingsButtonClicked()
     {
-        if (!sensitivityMenu.activeSelf)
-        {
-            sensitivityMenu.SetActive(true);
-        }
-        else
-        {
-            sensitivityMenu.SetActive(false);
-        }
+        sensitivityMenu.SetActive(true);
+        mainMenu.SetActive(false);
     }
 
     public void OnBackButtonClicked()
