@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 7735693393853470070}
   - component: {fileID: 7900572071823809787}
   - component: {fileID: 2349085855086874647}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SmallBookshelf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,7 +180,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 0}
   _canDecay: 0
-  consumptionCutoff: 0.05
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
   isConsumable: 1
