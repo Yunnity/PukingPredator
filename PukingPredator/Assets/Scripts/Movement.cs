@@ -95,6 +95,10 @@ public class Movement : InputBehaviour
 
     private DynamicFriction dynamicFriction;
 
+    private bool wallSlide;
+
+    private const float WALLSLIDEADJUSTMENT = 0.25f;
+
     private void Start()
     {
         playerAnimation = GetComponent<PlayerAnimation>();
@@ -109,6 +113,7 @@ public class Movement : InputBehaviour
         Subscribe(InputEvent.onJumpUp, GameInput_JumpUp);
 
         transform.rotation = Quaternion.Euler(transform.eulerAngles.x, playerCamera.transform.eulerAngles.y, transform.eulerAngles.z);
+        wallSlide = false;
     }
 
     private void FixedUpdate()
@@ -162,7 +167,7 @@ public class Movement : InputBehaviour
         }
 
         bool isOnGround = Physics.CheckSphere(transform.position, frictionCheckRadius, groundLayer);
-        if (!isJumping && isOnGround && dynamicFriction) dynamicFriction.SetFriction(true);
+        if (!isJumping && isOnGround && !wallSlide) dynamicFriction.SetFriction(true);
     }
 
 
@@ -171,7 +176,14 @@ public class Movement : InputBehaviour
     {
         if (!canJump) { return; }
 
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        Vector3 jump = Vector3.up * jumpForce;
+        if (wallSlide)
+        {
+            Vector2 inputVector = gameInput.movementInput;
+            jump += Vector3.up * inputVector.magnitude * WALLSLIDEADJUSTMENT;
+        }
+
+        rb.AddForce(jump, ForceMode.Impulse);
         if (dynamicFriction) dynamicFriction.SetFriction(false);
         isJumping = true;
         isJumpCancelled = false;
@@ -183,5 +195,10 @@ public class Movement : InputBehaviour
     public void GameInput_JumpUp()
     {
         if (isJumping) { isJumpCancelled = true; }
+    }
+
+    public void SetWallSlide(bool isWallSlide)
+    {
+        wallSlide = isWallSlide;
     }
 }
