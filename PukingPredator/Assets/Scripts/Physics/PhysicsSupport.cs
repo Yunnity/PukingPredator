@@ -21,7 +21,7 @@ public class PhysicsSupport : MonoBehaviour
     /// List used purely to assign links in the level editor.
     /// </summary>
     [SerializeField]
-    private List<GameObject> initiallySupporting = new();
+    public List<GameObject> initiallySupporting = new();
 
     private PhysicsBehaviour physicsObject;
 
@@ -39,7 +39,7 @@ public class PhysicsSupport : MonoBehaviour
     /// If this many supports fail, the structure will collapse
     /// </summary>
     [SerializeField]
-    private int supportsBeforeCollapse = 1;
+    public int supportsBeforeCollapse { get; private set; } = 1;
 
 
 

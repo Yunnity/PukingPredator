@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Player))]
 public class InteractablePicker : MonoBehaviour
@@ -31,16 +32,20 @@ public class InteractablePicker : MonoBehaviour
     /// </summary>
     public Interactable targetInteractable { get; private set; } = null;
 
-
+    /// <summary>
+    /// The list of objects that are being supported to the target
+    /// </summary>
+    public List<Interactable> targetSupports { get; private set; } = null;
 
     private void Start()
     {
+        targetSupports = new List<Interactable>();
         player = GetComponent<Player>();
         interactableLayers = GameLayer.GetLayerMask(collisionTracker.gameObject.layer);
     }
 
     private void Update()
-	{
+    {
         var previousTargetInteractable = targetInteractable;
         targetInteractable = GetViewedInteractable();
 
@@ -50,13 +55,22 @@ public class InteractablePicker : MonoBehaviour
             targetInteractable = null;
         }
 
+        foreach (Interactable target in targetSupports)
+        {
+            target.ChangeColor(Color.white);
+            setOutline(target, false);
+        }
+
+
+        targetSupports = new List<Interactable>();
         if (previousTargetInteractable != null)
         {
-            previousTargetInteractable.outline.enabled = false;
+            setOutline(previousTargetInteractable, false);
         }
+
         if (targetInteractable != null)
         {
-            targetInteractable.outline.enabled = true;
+            setOutline(targetInteractable, true);
         }
     }
 
@@ -126,5 +140,48 @@ public class InteractablePicker : MonoBehaviour
         );
         return Physics.SphereCast(ray, radius, out hit, maxDistance, layerMask: interactableLayers);
     }
-}
 
+    private void setOutline(Interactable interactable, bool enabled)
+    {
+        if (interactable.outline.enabled == enabled) return;
+
+        interactable.outline.enabled = enabled;
+        Color supportColor = enabled ? Color.red : Color.white;
+        // Enables group highlight for supported objects
+        PhysicsSupport support = interactable.GetComponent<PhysicsSupport>();
+        if (support != null)
+        {
+            if (support.supportsBeforeCollapse != 1) return;
+
+            foreach (var other in support.initiallySupporting)
+            {
+                // Ensures fallen walls are not highlihgted if the base is highlighted
+                if (other.GetComponent<PhysicsSupport>().supportsBeforeCollapse != 1) continue;
+                Interactable supportInteractable = other.GetComponent<Interactable>();
+
+                setOutline(supportInteractable, enabled);
+                supportInteractable.ChangeColor(supportColor);
+                if (enabled) targetSupports.Add(supportInteractable);
+            }
+        }
+
+        // Highlights objects in the same physics collapse group
+        Transform parentTransform = interactable.transform.parent;
+        PhysicsCollapseGroup physicsCollapseGroup = parentTransform.GetComponent<PhysicsCollapseGroup>();
+
+        if (physicsCollapseGroup != null)
+        {
+            foreach (Transform child in parentTransform)
+            {
+                if (child == interactable.transform) continue;
+                Interactable supportInteractable = child.GetComponent<Interactable>();
+                if (supportInteractable != null)
+                {
+                    supportInteractable.outline.enabled = enabled;
+                    supportInteractable.ChangeColor(supportColor);
+                    if (enabled) targetSupports.Add(supportInteractable);
+                }
+            }
+        }
+    }
+}

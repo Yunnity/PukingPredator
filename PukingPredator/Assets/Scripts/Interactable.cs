@@ -16,7 +16,7 @@ public abstract class Interactable : MonoBehaviour
     /// <summary>
     /// Size of the outline visual.
     /// </summary>
-    private const float OUTLINE_RADIUS = 2.2f;
+    private const float OUTLINE_RADIUS = 3f;
 
     /// <summary>
     /// Settings for the outline of the consumable (toggled on via enable when player is near)
@@ -57,6 +57,12 @@ public abstract class Interactable : MonoBehaviour
         outline.OutlineMode = Outline.Mode.OutlineVisible;
         outline.OutlineColor = outlineColor;
         outline.enabled = false;
+    }
+
+    public void ChangeColor(Color color)
+    {
+        outline = gameObject.GetComponent<Outline>();
+        outline.OutlineColor = color;
     }
 }
 

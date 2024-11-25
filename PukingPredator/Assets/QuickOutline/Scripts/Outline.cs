@@ -36,7 +36,7 @@ public class Outline : MonoBehaviour {
     get { return outlineColor; }
     set {
       outlineColor = value;
-      needsUpdate = true;
+      UpdateMaterialProperties();
     }
   }
 
