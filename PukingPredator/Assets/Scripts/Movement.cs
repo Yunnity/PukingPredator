@@ -12,12 +12,12 @@ public class Movement : InputBehaviour
     /// <summary>
     /// If the instance can currently jump.
     /// </summary>
-    private bool canJump => isGrounded && !isJumping;
+    private bool canJump => !isCoyoteFinished;
 
     /// <summary>
     /// Radius of the sphere used for collision checks.
     /// </summary>
-    private float groundCheckRadius = 0.45f;
+    private float groundCheckRadius = 0.2f;
 
     /// <summary>
     /// Layers of ground objects.
@@ -31,19 +31,24 @@ public class Movement : InputBehaviour
     private bool isGrounded;
 
     /// <summary>
-    /// If a jump was cancelled early by releasing the jump button.
+    /// If the instance has been ungrounded for more than a certain amount of time
     /// </summary>
-    private bool isJumpCancelled;
+    private bool isCoyoteFinished;
+
+    /// <summary>
+    /// Timer for coyote time
+    /// </summary>
+    private float coyoteTime = 0f;
+
+    /// <summary>
+    /// Amount of leniency for coyote time
+    /// </summary>
+    private float coyoteTimeLimit = 0.2f;
 
     /// <summary>
     /// If the instance is currently in a jump.
     /// </summary>
     private bool isJumping;
-
-    /// <summary>
-    /// Force applied downwards to reduce jump height if you let go early.
-    /// </summary>
-    private float jumpCancelRate = 0.4f;
 
     /// <summary>
     /// The force applied when jumping.
@@ -99,7 +104,6 @@ public class Movement : InputBehaviour
         if (playerCamera == null) { playerCamera = GameObject.FindGameObjectsWithTag("MainCamera")[0]; }
 
         Subscribe(InputEvent.onJumpDown, GameInput_JumpDown);
-        Subscribe(InputEvent.onJumpUp, GameInput_JumpUp);
 
         transform.rotation = Quaternion.Euler(transform.eulerAngles.x, playerCamera.transform.eulerAngles.y, transform.eulerAngles.z);
     }
@@ -112,17 +116,6 @@ public class Movement : InputBehaviour
         if (isManualMovementEnabled)
         {
             rb.velocity = moveDir * moveSpeed / (1 + Mathf.Exp(rb.mass - baseMass) * MOVESPEEDFACTOR) + new Vector3(0, rb.velocity.y, 0);
-        }
-
-        //jumping code
-        //Reduce jump height if the button is released early
-        if (isJumpCancelled && isJumping && rb.velocity.y > 0)
-        {
-            var vel = rb.velocity;
-            vel.y = rb.velocity.y * jumpCancelRate;
-            rb.velocity = vel;
-
-            if (rb.velocity.y <= 0) { isJumping = false; }
         }
     }
 
@@ -141,9 +134,9 @@ public class Movement : InputBehaviour
         {
             transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
         }
-
+        Vector3 position = transform.position;
         //jumping code
-        isGrounded = Physics.CheckSphere(transform.position, groundCheckRadius, groundLayer);
+        isGrounded = Physics.CheckSphere(new Vector3(position.x, position.y + 0.1f, position.z), groundCheckRadius, groundLayer);
 
         if (isJumping)
         {
@@ -151,25 +144,35 @@ public class Movement : InputBehaviour
 
             if (jumpTime > buttonTime) { isJumping = false; }
         }
+        else if (!isJumping) { jumpTime = 0; }
+
+        if (isGrounded)
+        {
+            if (jumpTime == 0)
+            {
+                isJumping = false;
+                isCoyoteFinished = false;
+                coyoteTime = 0f;
+            }
+        }
+        else if (!isGrounded && !isCoyoteFinished)
+        {
+            if (coyoteTime > coyoteTimeLimit) { isCoyoteFinished = true; }
+            else { coyoteTime += Time.deltaTime; }
+        }
     }
-
-
 
     public void GameInput_JumpDown()
     {
         if (!canJump) { return; }
 
+        isCoyoteFinished = true;
+        rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
         isJumping = true;
-        isJumpCancelled = false;
         jumpTime = 0;
 
         playerAnimation?.StartJumpAnim();
-    }
-
-    public void GameInput_JumpUp()
-    {
-        if (isJumping) { isJumpCancelled = true; }
     }
 }
