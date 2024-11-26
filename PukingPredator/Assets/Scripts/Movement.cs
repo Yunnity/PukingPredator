@@ -3,10 +3,17 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Movement : InputBehaviour
 {
+    private float baseMass;
+
     /// <summary>
     /// If the instance can currently jump.
     /// </summary>
     private bool canJump => !isJumping && Time.time <= lastTimeGrounded + coyoteTime;
+
+    /// <summary>
+    /// Amount of leniency for coyote time.
+    /// </summary>
+    private float coyoteTime = 0.2f;
 
     [SerializeField]
     private CollisionTracker groundCollisionTracker;
@@ -17,25 +24,20 @@ public class Movement : InputBehaviour
     private bool isGrounded;
 
     /// <summary>
-    /// Amount of leniency for coyote time.
-    /// </summary>
-    private float coyoteTime = 0.2f;
-
-    /// <summary>
     /// If the instance is currently in a jump.
     /// </summary>
     private bool isJumping;
+
+    /// <summary>
+    /// Can be used to disable the movement code so velocity is not reset.
+    /// </summary>
+    public bool isManualMovementEnabled = true;
 
     /// <summary>
     /// The force applied when jumping.
     /// </summary>
     [SerializeField]
     private float jumpForce;
-
-    /// <summary>
-    /// Can be used to disable the movement code so velocity is not reset.
-    /// </summary>
-    public bool isManualMovementEnabled = true;
 
     private float lastTimeGrounded = 0;
 
@@ -50,6 +52,13 @@ public class Movement : InputBehaviour
     private float moveSpeed = 10f;
 
     /// <summary>
+    /// Used to change move speed with size.
+    /// </summary>
+    private const float MOVE_SPEED_FACTOR = 4f;
+
+    private PlayerAnimation playerAnimation;
+
+    /// <summary>
     /// A reference to the camera, used for correcting movement direction.
     /// </summary>
     [SerializeField]
@@ -59,12 +68,6 @@ public class Movement : InputBehaviour
     /// The rigidbody of the instance.
     /// </summary>
     private Rigidbody rb;
-
-    private float baseMass;
-
-    private const float MOVESPEEDFACTOR = 4f;
-
-    private PlayerAnimation playerAnimation;
 
 
 
@@ -88,7 +91,7 @@ public class Movement : InputBehaviour
         // kind of weird since jumping is tied directly to mass since we use forces, but horizontal movement is not
         if (isManualMovementEnabled)
         {
-            rb.velocity = moveDir * moveSpeed / (1 + Mathf.Exp(rb.mass - baseMass) * MOVESPEEDFACTOR) + new Vector3(0, rb.velocity.y, 0);
+            rb.velocity = moveDir * moveSpeed / (1 + Mathf.Exp(rb.mass - baseMass) * MOVE_SPEED_FACTOR) + new Vector3(0, rb.velocity.y, 0);
         }
     }
 
