@@ -312,7 +312,7 @@ MonoBehaviour:
   gameInput: {fileID: 0}
   groundCollisionTracker: {fileID: 8469289830357230587}
   isManualMovementEnabled: 1
-  jumpForce: 6
+  jumpForce: 5.5
   playerCamera: {fileID: 0}
 --- !u!114 &1461194574326899231
 MonoBehaviour:
