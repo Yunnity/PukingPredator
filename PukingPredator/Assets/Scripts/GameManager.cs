@@ -38,7 +38,6 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     private string sceneToLoad = "";
 
 
-
     void Start()
     {
         if (sceneToLoad != "") { TransitionToScene(sceneToLoad); }
@@ -91,6 +90,6 @@ public class GameManager : SingletonMonobehaviour<GameManager>
             AudioManager.Instance.PlayBackground(AudioManager.MusicName.Title);
         }
 
-        SceneManager.LoadScene(sceneName);
+        SceneTransition.Instance.FadeToScene(sceneName);
     }
 }
