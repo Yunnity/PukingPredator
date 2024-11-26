@@ -3,6 +3,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Movement : InputBehaviour
 {
+    private float baseMass;
+
     /// <summary>
     /// The max time to hold the jump button for.
     /// </summary>
@@ -13,6 +15,11 @@ public class Movement : InputBehaviour
     /// If the instance can currently jump.
     /// </summary>
     private bool canJump => isGrounded && !isJumping;
+
+    /// <summary>
+    /// Manages the friction applied to the player based on movement or surfaces.
+    /// </summary>
+    private DynamicFriction dynamicFriction;
 
     /// <summary>
     /// Radius of the sphere used for friction checks.
@@ -46,6 +53,13 @@ public class Movement : InputBehaviour
     private bool isJumping;
 
     /// <summary>
+    /// Can be used to disable the movement code so velocity is not reset.
+    /// </summary>
+    public bool isManualMovementEnabled = true;
+
+    public bool isSlidingOnWall = false;
+
+    /// <summary>
     /// Force applied downwards to reduce jump height if you let go early.
     /// </summary>
     private float jumpCancelRate = 0.4f;
@@ -61,10 +75,7 @@ public class Movement : InputBehaviour
     /// </summary>
     private float jumpTime;
 
-    /// <summary>
-    /// Can be used to disable the movement code so velocity is not reset.
-    /// </summary>
-    public bool isManualMovementEnabled = true;
+    private const float MOVE_SPEED_FACTOR = 4f;
 
     /// <summary>
     /// The direction of the players recent movement input with the camera rotation applied.
@@ -75,6 +86,8 @@ public class Movement : InputBehaviour
     /// The speed that the player moves in any given direction.
     /// </summary>
     private float moveSpeed = 10f;
+
+    private PlayerAnimation playerAnimation;
 
     /// <summary>
     /// A reference to the camera, used for correcting movement direction.
@@ -87,26 +100,12 @@ public class Movement : InputBehaviour
     /// </summary>
     private Rigidbody rb;
 
-    private float baseMass;
-
-    private const float MOVESPEEDFACTOR = 4f;
-
-    private PlayerAnimation playerAnimation;
-
-    /// <summary>
-    /// Manages the friction applied to the player based on movement or surfaces.
-    /// </summary>
-    private DynamicFriction dynamicFriction;
-
-    /// <summary>
-    /// Indicates whether the player is sliding along a wall
-    /// </summary>
-    private bool wallSlide;
-
     /// <summary>
     /// Adjust the jump behavior during wall sliding.
     /// </summary>
     private const float WALL_SLIDE_ADJUSTMENT = 0.05f;
+
+
 
     private void Start()
     {
@@ -122,7 +121,6 @@ public class Movement : InputBehaviour
         Subscribe(InputEvent.onJumpUp, GameInput_JumpUp);
 
         transform.rotation = Quaternion.Euler(transform.eulerAngles.x, playerCamera.transform.eulerAngles.y, transform.eulerAngles.z);
-        wallSlide = false;
     }
 
     private void FixedUpdate()
@@ -132,7 +130,7 @@ public class Movement : InputBehaviour
         // kind of weird since jumping is tied directly to mass since we use forces, but horizontal movement is not
         if (isManualMovementEnabled)
         {
-            rb.velocity = moveDir * moveSpeed / (1 + Mathf.Exp(rb.mass - baseMass) * MOVESPEEDFACTOR) + new Vector3(0, rb.velocity.y, 0);
+            rb.velocity = moveDir * moveSpeed / (1 + Mathf.Exp(rb.mass - baseMass) * MOVE_SPEED_FACTOR) + new Vector3(0, rb.velocity.y, 0);
         }
 
         //jumping code
@@ -176,7 +174,7 @@ public class Movement : InputBehaviour
         }
 
         bool isOnGround = Physics.CheckSphere(transform.position, frictionCheckRadius, groundLayer);
-        if (!isJumping && isOnGround && !wallSlide) dynamicFriction.SetFriction(true);
+        if (!isJumping && isOnGround && !isSlidingOnWall) dynamicFriction.SetFriction(true);
     }
 
 
@@ -188,7 +186,7 @@ public class Movement : InputBehaviour
         Vector3 jump = Vector3.up * jumpForce;
 
         // Applies more force when sliding against a wall
-        if (wallSlide)
+        if (isSlidingOnWall)
         {
             Vector2 inputVector = gameInput.movementInput;
             jump += Vector3.up * inputVector.magnitude * WALL_SLIDE_ADJUSTMENT;
@@ -208,8 +206,4 @@ public class Movement : InputBehaviour
         if (isJumping) { isJumpCancelled = true; }
     }
 
-    public void SetWallSlide(bool isWallSlide)
-    {
-        wallSlide = isWallSlide;
-    }
 }
