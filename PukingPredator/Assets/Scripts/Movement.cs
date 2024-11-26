@@ -127,8 +127,7 @@ public class Movement : InputBehaviour
 
         #region jumping code
         isGrounded =    groundCollisionTracker.collisions.Count > 0
-                    &&  !isJumping
-                    &&  rb.velocity.y <= 0;
+                    &&  !isJumping;
         //disable gravity when on the ground to prevent sliding down stairs
         rb.useGravity = !isGrounded || rb.velocity.y > 0;
 
