@@ -21,7 +21,7 @@ public class Movement : InputBehaviour
     /// <summary>
     /// If the instance is currently on the ground.
     /// </summary>
-    private bool isGrounded;
+    private bool isGrounded = false;
 
     /// <summary>
     /// If the instance is currently in a jump.
@@ -69,6 +69,11 @@ public class Movement : InputBehaviour
     /// </summary>
     private Rigidbody rb;
 
+    /// <summary>
+    /// How quickly the player model turns.
+    /// </summary>
+    private float turnSpeed = 10f;
+
 
 
     private void Start()
@@ -99,19 +104,19 @@ public class Movement : InputBehaviour
     {
         if (gameInput == null) { return; }
 
-        //walking code
+        #region walking code
         Vector2 inputVector = gameInput.movementInput;
         moveDir =   isManualMovementEnabled
                 ?   Quaternion.Euler(0, playerCamera.transform.eulerAngles.y, 0) * new Vector3(inputVector.x, 0, inputVector.y)
                 :   rb.velocity.HorizontalProjection().normalized;
 
-        float turnSpeed = 10f;
         if (inputVector.magnitude > 0)
         {
             transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
         }
+        #endregion
 
-        //jumping code
+        #region jumping code
         isGrounded = groundCollisionTracker.collisions.Count > 0 && rb.velocity.y <= 0;
         //disable gravity when on the ground to prevent sliding down stairs
         rb.useGravity = !isGrounded || rb.velocity.y > 0;
@@ -121,6 +126,7 @@ public class Movement : InputBehaviour
             lastTimeGrounded = Time.time;
             isJumping = false;
         }
+        #endregion
     }
 
     public void GameInput_JumpDown()
