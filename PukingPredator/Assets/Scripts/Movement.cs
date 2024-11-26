@@ -4,15 +4,9 @@ using UnityEngine;
 public class Movement : InputBehaviour
 {
     /// <summary>
-    /// The max time to hold the jump button for.
-    /// </summary>
-    [SerializeField]
-    private float buttonTime = 0.4f;
-
-    /// <summary>
     /// If the instance can currently jump.
     /// </summary>
-    private bool canJump => !isCoyoteFinished;
+    private bool canJump => !isJumping && Time.time <= lastTimeGrounded + coyoteTime;
 
     [SerializeField]
     private CollisionTracker groundCollisionTracker;
@@ -23,19 +17,9 @@ public class Movement : InputBehaviour
     private bool isGrounded;
 
     /// <summary>
-    /// If the instance has been ungrounded for more than a certain amount of time
+    /// Amount of leniency for coyote time.
     /// </summary>
-    private bool isCoyoteFinished;
-
-    /// <summary>
-    /// Timer for coyote time
-    /// </summary>
-    private float coyoteTime = 0f;
-
-    /// <summary>
-    /// Amount of leniency for coyote time
-    /// </summary>
-    private float coyoteTimeLimit = 0.2f;
+    private float coyoteTime = 0.2f;
 
     /// <summary>
     /// If the instance is currently in a jump.
@@ -49,14 +33,11 @@ public class Movement : InputBehaviour
     private float jumpForce;
 
     /// <summary>
-    /// How long a jump has been going on for.
-    /// </summary>
-    private float jumpTime;
-
-    /// <summary>
     /// Can be used to disable the movement code so velocity is not reset.
     /// </summary>
     public bool isManualMovementEnabled = true;
+
+    private float lastTimeGrounded = 0;
 
     /// <summary>
     /// The direction of the players recent movement input with the camera rotation applied.
@@ -128,42 +109,24 @@ public class Movement : InputBehaviour
         }
 
         //jumping code
-        isGrounded = groundCollisionTracker.collisions.Count > 0 && rb.velocity.y <= 0.01;
+        isGrounded = groundCollisionTracker.collisions.Count > 0 && rb.velocity.y <= 0;
 
-        if (isJumping)
+        if (isGrounded && rb.velocity.y <= 0)
         {
-            jumpTime += Time.deltaTime;
-
-            if (jumpTime > buttonTime) { isJumping = false; }
-        }
-        else if (!isJumping) { jumpTime = 0; }
-
-        if (isGrounded)
-        {
-            if (jumpTime == 0)
-            {
-                isJumping = false;
-                isCoyoteFinished = false;
-                coyoteTime = 0f;
-            }
-        }
-        else if (!isGrounded && !isCoyoteFinished)
-        {
-            if (coyoteTime > coyoteTimeLimit) { isCoyoteFinished = true; }
-            else { coyoteTime += Time.deltaTime; }
+            lastTimeGrounded = Time.time;
+            isJumping = false;
         }
     }
 
     public void GameInput_JumpDown()
     {
         if (!canJump) { return; }
+        isJumping = true;
+        //artifically decreasing the time to protect against double jumps
+        lastTimeGrounded -= coyoteTime;
 
-        isCoyoteFinished = true;
         rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
-        isJumping = true;
-        jumpTime = 0;
 
         playerAnimation?.StartJumpAnim();
     }
