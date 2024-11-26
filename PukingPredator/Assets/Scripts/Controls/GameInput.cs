@@ -140,9 +140,6 @@ public class GameInput : SingletonMonobehaviour<GameInput>
                 TriggerEvent(InputEvent.onPukeCancel);
             }
         };
-
-        controls.Player.Reset.performed += context => TriggerEvent(InputEvent.onResetLevel);
-
         controls.Player.Pause.performed += context => TriggerEvent(InputEvent.onPause);
     }
 

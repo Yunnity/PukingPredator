@@ -119,6 +119,75 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c478e579aa94d36bcfc4bbc5dbe3fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreTriggerColliders: 0
+--- !u!1 &3636958459974270298
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1698986286161848075}
+  - component: {fileID: 7208299943284827168}
+  - component: {fileID: 8469289830357230587}
+  m_Layer: 6
+  m_Name: GroundedHitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1698986286161848075
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3636958459974270298}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 0.015, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6383069886282343629}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &7208299943284827168
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3636958459974270298}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5146348295389768003, guid: 16281f37c81af4fc5a2c2413c61bf584, type: 3}
+--- !u!114 &8469289830357230587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3636958459974270298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70c478e579aa94d36bcfc4bbc5dbe3fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ignoreTriggerColliders: 1
 --- !u!1 &5441739923584274610
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,6 +231,7 @@ Transform:
   - {fileID: 8872039109298861227}
   - {fileID: 3066273621339677046}
   - {fileID: 7396281966028002544}
+  - {fileID: 1698986286161848075}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2990891393853639730
@@ -240,12 +310,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameInput: {fileID: 0}
-  buttonTime: 0.4
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 129
-  jumpForce: 6
+  groundCollisionTracker: {fileID: 8469289830357230587}
   isManualMovementEnabled: 1
+  jumpForce: 6
   playerCamera: {fileID: 0}
 --- !u!114 &1461194574326899231
 MonoBehaviour:
@@ -448,6 +515,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c478e579aa94d36bcfc4bbc5dbe3fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreTriggerColliders: 0
 --- !u!1 &8008164748713273364
 GameObject:
   m_ObjectHideFlags: 0
