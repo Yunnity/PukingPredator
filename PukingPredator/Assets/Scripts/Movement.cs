@@ -14,16 +14,8 @@ public class Movement : InputBehaviour
     /// </summary>
     private bool canJump => !isCoyoteFinished;
 
-    /// <summary>
-    /// Radius of the sphere used for collision checks.
-    /// </summary>
-    private float groundCheckRadius = 0.2f;
-
-    /// <summary>
-    /// Layers of ground objects.
-    /// </summary>
     [SerializeField]
-    private LayerMask groundLayer;
+    private CollisionTracker groundCollisionTracker;
 
     /// <summary>
     /// If the instance is currently on the ground.
@@ -134,9 +126,9 @@ public class Movement : InputBehaviour
         {
             transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
         }
-        Vector3 position = transform.position;
+
         //jumping code
-        isGrounded = Physics.CheckSphere(new Vector3(position.x, position.y + 0.1f, position.z), groundCheckRadius, groundLayer);
+        isGrounded = groundCollisionTracker.collisions.Count > 0 && rb.velocity.y <= 0.01;
 
         if (isJumping)
         {
