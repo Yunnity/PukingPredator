@@ -119,6 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c478e579aa94d36bcfc4bbc5dbe3fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreTriggerColliders: 0
 --- !u!1 &3636958459974270298
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,6 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c478e579aa94d36bcfc4bbc5dbe3fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreTriggerColliders: 1
 --- !u!1 &5441739923584274610
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,13 +310,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameInput: {fileID: 0}
-  buttonTime: 0.4
   groundCollisionTracker: {fileID: 8469289830357230587}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 129
-  jumpForce: 6
   isManualMovementEnabled: 1
+  jumpForce: 6
   playerCamera: {fileID: 0}
 --- !u!114 &1461194574326899231
 MonoBehaviour:
@@ -517,6 +515,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c478e579aa94d36bcfc4bbc5dbe3fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreTriggerColliders: 0
 --- !u!1 &8008164748713273364
 GameObject:
   m_ObjectHideFlags: 0
