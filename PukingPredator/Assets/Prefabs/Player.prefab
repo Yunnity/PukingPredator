@@ -317,7 +317,7 @@ MonoBehaviour:
   groundedHitbox: {fileID: 6584506170128143826}
   isManualMovementEnabled: 1
   isSlidingOnWall: 0
-  jumpForce: 5
+  jumpForce: 5.5
   playerCamera: {fileID: 0}
 --- !u!114 &1461194574326899231
 MonoBehaviour:

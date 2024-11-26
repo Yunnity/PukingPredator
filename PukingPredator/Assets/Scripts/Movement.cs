@@ -46,9 +46,8 @@ public class Movement : InputBehaviour
         get => _isGrounded;
         set
         {
-            if (value == _isGrounded) { return; }
             _isGrounded = value;
-            rb.useGravity = !_isGrounded;
+            rb.useGravity = !_isGrounded || rb.velocity.y > 0;
         }
     }
     private bool _isGrounded = true;
