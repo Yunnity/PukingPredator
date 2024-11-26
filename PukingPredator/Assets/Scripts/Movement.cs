@@ -77,7 +77,7 @@ public class Movement : InputBehaviour
         rb = GetComponent<Rigidbody>();
         baseMass = rb.mass;
 
-        if (playerCamera == null) { playerCamera = GameObject.FindGameObjectsWithTag("MainCamera")[0]; }
+        if (playerCamera == null) { playerCamera = GameObject.FindGameObjectsWithTag(GameTag.mainCamera)[0]; }
 
         Subscribe(InputEvent.onJumpDown, GameInput_JumpDown);
 
