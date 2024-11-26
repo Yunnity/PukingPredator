@@ -106,7 +106,7 @@ public class Movement : InputBehaviour
     /// <summary>
     /// Adjust the jump behavior during wall sliding.
     /// </summary>
-    private const float WALLSLIDEADJUSTMENT = 0.05f;
+    private const float WALL_SLIDE_ADJUSTMENT = 0.05f;
 
     private void Start()
     {
@@ -191,7 +191,7 @@ public class Movement : InputBehaviour
         if (wallSlide)
         {
             Vector2 inputVector = gameInput.movementInput;
-            jump += Vector3.up * inputVector.magnitude * WALLSLIDEADJUSTMENT;
+            jump += Vector3.up * inputVector.magnitude * WALL_SLIDE_ADJUSTMENT;
         }
 
         rb.AddForce(jump, ForceMode.Impulse);
