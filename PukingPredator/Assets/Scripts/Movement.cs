@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -70,9 +71,17 @@ public class Movement : InputBehaviour
     public bool isSlidingOnWall = false;
 
     /// <summary>
+    /// How long you can press the jump button before being able to jump
+    /// and still have it go off.
+    /// </summary>
+    private float jumpBufferTime = 0.4f;
+
+    /// <summary>
     /// Force applied downwards to reduce jump height if you let go early.
     /// </summary>
     private float jumpCancelRate = 0.4f;
+
+    private Coroutine jumpCoroutine;
 
     /// <summary>
     /// The force applied when jumping.
@@ -191,8 +200,36 @@ public class Movement : InputBehaviour
 
     public void GameInput_JumpDown()
     {
-        if (!canJump) { return; }
+        if (jumpCoroutine != null) { StopCoroutine(jumpCoroutine); }
+        jumpCoroutine = StartCoroutine(TryJump());
+    }
 
+    public void GameInput_JumpUp()
+    {
+        if (isJumping) { isJumpCancelled = true; }
+    }
+
+    /// <summary>
+    /// Gets the GameInput instance and then activates all subscriptions.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator TryJump()
+    {
+        var initialTime = Time.time;
+        while (Time.time <= initialTime + jumpBufferTime)
+        {
+            if (canJump)
+            {
+                Jump();
+                jumpCoroutine = null;
+                yield break;
+            }
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    private void Jump()
+    {
         Vector3 jump = Vector3.up * jumpForce;
 
         // Applies more force when sliding against a wall
@@ -209,11 +246,6 @@ public class Movement : InputBehaviour
         jumpTime = 0;
 
         playerAnimation?.StartJumpAnim();
-    }
-
-    public void GameInput_JumpUp()
-    {
-        if (isJumping) { isJumpCancelled = true; }
     }
 
 }
