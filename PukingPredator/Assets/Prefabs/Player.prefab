@@ -1,5 +1,72 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1333831754099862954
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1990895370428575951}
+  - component: {fileID: 8282366628903078738}
+  - component: {fileID: 6584506170128143826}
+  m_Layer: 6
+  m_Name: GroundedHitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1990895370428575951
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333831754099862954}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 0.03, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6383069886282343629}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &8282366628903078738
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333831754099862954}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5146348295389768003, guid: 16281f37c81af4fc5a2c2413c61bf584, type: 3}
+--- !u!114 &6584506170128143826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333831754099862954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70c478e579aa94d36bcfc4bbc5dbe3fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1526917279679244931
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,6 +231,7 @@ Transform:
   - {fileID: 3066273621339677046}
   - {fileID: 7396281966028002544}
   - {fileID: 176577511596383278}
+  - {fileID: 1990895370428575951}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2990891393853639730
@@ -246,8 +314,10 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 129
-  jumpForce: 6
+  groundedHitbox: {fileID: 6584506170128143826}
   isManualMovementEnabled: 1
+  isSlidingOnWall: 0
+  jumpForce: 6
   playerCamera: {fileID: 0}
 --- !u!114 &1461194574326899231
 MonoBehaviour:
@@ -531,8 +601,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 173a236b116d9c34c8ad8e18e19d0f02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 7654235826465301288}
   airMaterial: {fileID: 13400000, guid: 7e290163a6c784e4095fa9ae4438f436, type: 2}
+  player: {fileID: 7654235826465301288}
 --- !u!114 &8667363859352696414
 MonoBehaviour:
   m_ObjectHideFlags: 0

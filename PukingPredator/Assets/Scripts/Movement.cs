@@ -27,15 +27,16 @@ public class Movement : InputBehaviour
     private float frictionCheckRadius = 0.05f;
 
     /// <summary>
-    /// Radius of the sphere used for collision checks.
-    /// </summary>
-    private float groundCheckRadius = 0.45f;
-
-    /// <summary>
     /// Layers of ground objects.
     /// </summary>
     [SerializeField]
     private LayerMask groundLayer;
+
+    /// <summary>
+    /// Used to check for if the player is grounded.
+    /// </summary>
+    [SerializeField]
+    private CollisionTracker groundedHitbox;
 
     /// <summary>
     /// If the instance is currently on the ground.
@@ -162,7 +163,7 @@ public class Movement : InputBehaviour
         }
 
         //jumping code
-        isGrounded = Physics.CheckSphere(transform.position, groundCheckRadius, groundLayer);
+        isGrounded = groundedHitbox.collisions.Count > 0;
 
         if (isJumping)
         {
