@@ -41,7 +41,17 @@ public class Movement : InputBehaviour
     /// <summary>
     /// If the instance is currently on the ground.
     /// </summary>
-    private bool isGrounded;
+    private bool isGrounded
+    {
+        get => _isGrounded;
+        set
+        {
+            if (value == _isGrounded) { return; }
+            _isGrounded = value;
+            rb.useGravity = !_isGrounded;
+        }
+    }
+    private bool _isGrounded = true;
 
     /// <summary>
     /// If a jump was cancelled early by releasing the jump button.
