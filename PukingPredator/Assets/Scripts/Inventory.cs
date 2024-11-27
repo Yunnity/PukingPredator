@@ -6,12 +6,6 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     /// <summary>
-    /// The prefab for the inv.
-    /// </summary>
-    [SerializeField]
-    private GameObject inventoryUIPrefab;
-
-    /// <summary>
     /// If the inventory is empty.
     /// </summary>
     public bool isEmpty => items.Count == 0;
@@ -25,12 +19,6 @@ public class Inventory : MonoBehaviour
     /// The number of items in the inventory.
     /// </summary>
     public int itemCount => items.Count;
-
-    /// <summary>
-    /// The prefab used to create item slots in the inventory UI.
-    /// </summary>
-    [SerializeField]
-    private GameObject itemUIPrefab;
 
     /// <summary>
     /// Stack to store the items in the inventory.
@@ -51,13 +39,9 @@ public class Inventory : MonoBehaviour
     public event Action onChange;
 
     /// <summary>
-    /// The panel that the inventory is contained in.
-    /// </summary>
-    private GameObject UIPanel;
-
-    /// <summary>
     /// The script associated with the inventory UI
     /// </summary>
+    [SerializeField]
     private InventoryUI inventoryUI;
 
     /// <summary>
@@ -74,10 +58,6 @@ public class Inventory : MonoBehaviour
 
     private void Start()
     {
-        var canvas = GameObject.Find("Canvas");
-        UIPanel = Instantiate(inventoryUIPrefab, canvas.transform);
-        inventoryUI = UIPanel.GetComponent<InventoryUI>();
-
         onChange += UpdateUI;
         UpdateUI();
     }
@@ -184,29 +164,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public void UpdateUI()
     {
-        const string ITEM_SLOT_ID = "ItemSlotUI";
-
-        // Clear the items other than the label for the inventory
-        foreach (Transform child in UIPanel.transform)
-        {
-            if (child.gameObject.name == ITEM_SLOT_ID)
-            {
-                Destroy(child.gameObject);
-            }
-        }
-
-        //foreach (var item in items.AsEnumerable().Reverse())
-        //if (items.Count > 0)
-        //{
-        //    var item = items[0];
-        //    GameObject newItemUI = Instantiate(itemUIPrefab, UIPanel.transform);
-        //    newItemUI.name = ITEM_SLOT_ID;
-
-        //    var itemUIComponent = newItemUI.GetComponent<ItemUI>();
-        //    itemUIComponent.item = item;
-        //}
-        Sprite thumbnail = null;
-        if (items.Count > 0) thumbnail = items[0].thumbnail;
-        inventoryUI.UpdateImage(items.Count, thumbnail);
+        var icons = items.Select(i => i.thumbnail).ToList();
+        inventoryUI.UpdateImages(icons);
     }
 }

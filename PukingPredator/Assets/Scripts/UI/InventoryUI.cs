@@ -1,28 +1,27 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
     /// <summary>
-    /// Image used to display the stomach
+    /// Image used to display the stomach.
     /// </summary>
-    public Image inventoryImage;
-
-    /// <summary>
-    /// List of sprites currently assigned to inventory items.
-    /// </summary>
-    private List<Sprite> itemSprites = new();
+    [SerializeField]
+    private Image stomachImage;
 
     /// <summary>
     /// List of stomach sprites that indicate fullness.
     /// </summary>
-    public List<Sprite> sprites;
+    [SerializeField]
+    private List<Sprite> stomachSprites;
 
     /// <summary>
     /// List of thumbnail images displayed in the inventory.
     /// </summary>
-    public List<Image> thumbnailImages;
+    [SerializeField]
+    private List<Image> thumbnailImages;
 
     /// <summary>
     /// Used to prevent images from showing a solid color when empty.
@@ -31,52 +30,21 @@ public class InventoryUI : MonoBehaviour
 
 
 
-    public void Awake()
+    public void UpdateImages(List<Sprite> icons)
     {
-        // Ensures that when the Image is empty it doesnt display a solid color.
-        foreach (var image in thumbnailImages)
+        stomachImage.sprite = stomachSprites[icons.Count];
+
+        List<(Image image, Sprite sprite)> pairedList = thumbnailImages
+            .Select((value, index) => (value, index < icons.Count ? icons[index] : null))
+            .ToList();
+
+        foreach (var pair in pairedList)
         {
-            image.color = transparentColor;
-        }
-    }
+            var image = pair.image;
+            var sprite = pair.sprite;
 
-
-
-    public void UpdateImage(int currInventoryCount, Sprite thumbnail)
-    {
-        inventoryImage.sprite = sprites[currInventoryCount];
-        if (currInventoryCount > itemSprites.Count)
-        {
-            itemSprites.Add(thumbnail);
-        }
-        else if (itemSprites.Count != 0)
-        {
-            itemSprites.RemoveAt(itemSprites.Count - 1);
-        }
-
-        // Grabs thumbnail image number of items and sets the sprite
-        for (int i = 0; i < thumbnailImages.Count; i++)
-        {
-            Image image = thumbnailImages[i];
-            int itemIndex = itemSprites.Count - i - 1;
-
-            if (itemIndex < 0)
-            {
-                image.color = transparentColor;
-            }
-            else
-            {
-                if (itemSprites[itemIndex] == null)
-                {
-                    image.color = transparentColor;
-                }
-                else
-                {
-                    image.sprite = itemSprites[itemIndex];
-                    //reset color back to full opacity and no tint
-                    image.color = Color.white;
-                }
-            }
+            image.sprite = sprite;
+            image.color = sprite == null ? transparentColor : Color.white;
         }
     }
 }
