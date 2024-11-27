@@ -62,7 +62,7 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     /// <summary>
     /// The component that looks for control inputs.
     /// </summary>
-    private PlayerControls controls;
+    public PlayerControls controls { get; private set; }
 
     /// <summary>
     /// Storage for the actions related to each event.

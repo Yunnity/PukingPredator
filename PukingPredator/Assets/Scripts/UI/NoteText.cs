@@ -45,9 +45,9 @@ public class NoteText : Note
         UIText.alignment = TextAlignmentOptions.Center;
 
         RectTransform rectTransform = UIText.GetComponent<RectTransform>();
-        rectTransform.pivot = new Vector2(0.5f, 0.7f);
-        rectTransform.anchorMin = new Vector2(0.5f, 0.7f);
-        rectTransform.anchorMax = new Vector2(0.5f, 0.7f);
+        rectTransform.pivot = new Vector2(0.5f, 0.3f);
+        rectTransform.anchorMin = new Vector2(0.5f, 0.3f);
+        rectTransform.anchorMax = new Vector2(0.5f, 0.3f);
         rectTransform.sizeDelta = new Vector2(Screen.width * 0.9f, rectTransform.sizeDelta.y);
         rectTransform.anchoredPosition = Vector2.zero;
     }
