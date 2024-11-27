@@ -15,6 +15,11 @@ public class Dash : InputBehaviour
     private Vector3 direction;
 
     /// <summary>
+    /// The distance that will be travelled horizontally while dashing.
+    /// </summary>
+    private float distance;
+
+    /// <summary>
     /// Set based on the distance to the target at the start of the dash.
     /// </summary>
     private float duration;
@@ -30,11 +35,6 @@ public class Dash : InputBehaviour
     /// </summary>
     private float heightChange;
     private const float MAX_HEIGHT_CHANGE = 0.35f;
-
-    /// <summary>
-    /// Horizontal speed when dashing
-    /// </summary>
-    private float speed = 3.5f;
 
     /// <summary>
     /// If a dash is currently happening.
@@ -54,12 +54,32 @@ public class Dash : InputBehaviour
     private Rigidbody rb;
 
     /// <summary>
+    /// Horizontal speed when dashing. Based on the distance travelled and how
+    /// far into the dash the player is.
+    /// </summary>
+    private float speedHorizontal
+    {
+        get
+        {
+            var currSpeed = 2 * speedHorizontalAverage * (1 - timeElapsed/duration);
+            return currSpeed;
+        }
+    }
+    /// <summary>
+    /// Average horizontal speed when dashing. Based on the distance travelled.
+    /// </summary>
+    private float speedHorizontalAverage
+    {
+        get => Mathf.Lerp(2.5f, 4.5f, Mathf.Clamp(distance / 1.5f, 0, 1));
+    }
+
+    /// <summary>
     /// Based on the following graphs:
     /// https://www.desmos.com/calculator/mu4bgefbi2
     /// </summary>
     private float verticalVelocity
     {
-        get => (-2 * timeElapsed + duration) * 4 * height / Mathf.Pow(duration, 2) + timeElapsed / duration;
+        get => (-2 * timeElapsed + duration) * 4 * height / Mathf.Pow(duration, 2) + heightChange / duration;
     }
 
 
@@ -86,7 +106,7 @@ public class Dash : InputBehaviour
             return;
         }
 
-        var vel = direction * speed;
+        var vel = direction * speedHorizontal;
         vel.y = verticalVelocity;
         rb.velocity = vel;
     }
@@ -120,7 +140,8 @@ public class Dash : InputBehaviour
         deltaPosition.y = 0;
 
         direction = deltaPosition.normalized;
-        duration = deltaPosition.magnitude / speed;
+        distance = deltaPosition.magnitude;
+        duration = distance / speedHorizontalAverage;
     }
 
     private void OnComplete()
