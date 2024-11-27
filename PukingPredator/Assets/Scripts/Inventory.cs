@@ -29,8 +29,7 @@ public class Inventory : MonoBehaviour
     /// <summary>
     /// The max number of items that can be held at once.
     /// </summary>
-    [SerializeField]
-    private int maxCount = 10;
+    public int maxCount { get; private set; } = 10;
 
     /// <summary>
     /// Triggered whenever items enter/leave the inventory or decay. This will
@@ -92,6 +91,17 @@ public class Inventory : MonoBehaviour
     {
         item.inventory = null;
         onChange?.Invoke();
+    }
+
+    /// <summary>
+    /// Returns the item at the index (0 being the top of the
+    /// stack).
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public Consumable PeekItem(int index = 0)
+    {
+        return items[index];
     }
 
     /// <summary>
