@@ -27,7 +27,7 @@ public class Consumable : Interactable
     /// The relative scale at which an object will be treated as consumed.
     /// ie 0.05 means 5% of original size.
     /// </summary>
-    public const float consumptionCutoff = 0.05f;
+    public const float consumptionCutoff = 0.085f;
 
     /// <summary>
     /// The prefab the instance should become when it decays.
@@ -60,8 +60,42 @@ public class Consumable : Interactable
     /// Reference to the inventory this item belongs to.
     /// </summary>
     [HideInInspector]
-    public Inventory inventory;
+    public Inventory inventory
+    {
+        get => _inventory;
+        set
+        {
+            _inventory = value;
+            if (_inventory == null) { return; }
 
+            inventoryNumber = _inventory.itemCount - 1;
+            inventoryTimeOffset = Time.time;
+            inventoryTimeScale = UnityEngine.Random.Range(1.2f, 1.6f);
+
+            inventoryTargetAngle = UnityEngine.Random.Range(0, Mathf.PI * 2);
+
+            if (_inventory.itemCount == 1) { return; }
+            //Make sure the angle isnt too close to the previous item if there is one.
+            var prevItem = _inventory.PeekItem(1);
+            while (Mathf.Abs(prevItem.inventoryTargetAngle - inventoryTargetAngle) < Mathf.PI/3)
+            {
+                inventoryTargetAngle = UnityEngine.Random.Range(0, Mathf.PI * 2);
+            }
+        }
+    }
+    private Inventory _inventory;
+
+    /// <summary>
+    /// How far from the bottom of the stack the item is. If it was the first item
+    /// eaten, the value will be 0.
+    /// </summary>
+    private int inventoryNumber;
+
+    /// <summary>
+    /// Angle relative to the players forward direction (in radians).
+    /// </summary>
+    public float inventoryTargetAngle { get; private set; }
+    
     /// <summary>
     /// The position that this object should be in if its in an inventory.
     /// </summary>
@@ -69,9 +103,29 @@ public class Consumable : Interactable
     {
         get
         {
-            return inventory.transform.position;
+            var targetPosition = inventory.transform.position;
+
+            var scale = 0.05f * inventory.transform.lossyScale.y;
+
+            var player = inventory.owner;
+            var playerForward = player.transform.forward;
+            var offsetDirection = playerForward.RotateAboutY(inventoryTargetAngle).normalized;
+            targetPosition += offsetDirection * scale;
+
+            //shift vertically based on position in inventory
+            //[0, N-1] -> [-1, 1]
+            var verticalMultiplier = (2f * inventoryNumber / (inventory.maxCount - 1)) - 1f;
+            targetPosition.y += verticalMultiplier * scale;
+
+            //apply random motion up and down
+            targetPosition.y += 0.02f * Mathf.Sin(inventoryTimeScale * (Time.time - inventoryTimeOffset));
+
+            return targetPosition;
         }
     }
+
+    private float inventoryTimeOffset;
+    private float inventoryTimeScale;
 
     /// <summary>
     /// Can be used to lock an item.
@@ -205,8 +259,13 @@ public class Consumable : Interactable
 
     private void FollowInventory()
     {
-        //TODO: add some periodic + random offset so objects float around in you?
+        //TODO: make rotation gradual?
         gameObject.transform.position = inventoryTargetPosition;
+        //gameObject.transform.position = Vector3.Lerp(
+        //    gameObject.transform.position,
+        //    inventoryTargetPosition,
+        //    10f * Time.deltaTime * Mathf.Max(1f, 2*Vector3.Distance(transform.position, inventory.transform.position))
+        //);
     }
 
     #region Gravity
