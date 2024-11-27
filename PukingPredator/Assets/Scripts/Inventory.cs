@@ -205,7 +205,8 @@ public class Inventory : MonoBehaviour
         //    var itemUIComponent = newItemUI.GetComponent<ItemUI>();
         //    itemUIComponent.item = item;
         //}
-
-        inventoryUI.UpdateImage(items.Count);
+        Sprite thumbnail = null;
+        if (items.Count > 0) thumbnail = items[0].thumbnail;
+        inventoryUI.UpdateImage(items.Count, thumbnail);
     }
 }
