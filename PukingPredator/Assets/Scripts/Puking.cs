@@ -96,7 +96,7 @@ public class Puking : InputBehaviour
         anim.StartPukeAnim();
 
         bool pukeWithForce = pukeForce > MAX_PUKE_FORCE * PUKE_EXPLODE_THRESHOLD;
-        AudioManager.Instance.PlaySFX(pukeWithForce ? AudioManager.ClipName.PukeForce : AudioManager.ClipName.Puke);
+        AudioManager.Instance.PlaySFX(pukeWithForce ? AudioManager.ClipName.PukeForce : AudioManager.ClipName.Puking);
 
         Rigidbody itemRb = itemToPuke.GetComponent<Rigidbody>();
         if (itemRb != null)

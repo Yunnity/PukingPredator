@@ -123,6 +123,11 @@ public class Movement : InputBehaviour
         {
             transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
         }
+
+        if (isGrounded && (rb.velocity.x != 0 || rb.velocity.z != 0))
+        {
+            AudioManager.Instance.PlaySFX(AudioManager.ClipName.Walking, true);
+        }
         #endregion
 
         #region jumping code
@@ -178,5 +183,6 @@ public class Movement : InputBehaviour
         rb.velocity = vel;
 
         playerAnimation?.StartJumpAnim();
+        AudioManager.Instance.PlaySFX(AudioManager.ClipName.Jump, true);
     }
 }
