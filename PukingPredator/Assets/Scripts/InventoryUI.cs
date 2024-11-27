@@ -7,10 +7,24 @@ using System.Linq;
 
 public class InventoryUI : MonoBehaviour
 {
+    /// <summary>
+    /// Image used to display the stomach
+    /// </summary>
     public Image inventoryImage;
+
+    /// <summary>
+    /// List of thumbnail images displayed in the inventory.
+    /// </summary>
     public List<Image> thumbnailImages;
 
+    /// <summary>
+    /// List of stimach sprites that indicate fullness.
+    /// </summary>
     public List<Sprite> sprites;
+
+    /// <summary>
+    /// List of sprites currently assigned to inventory items.
+    /// </summary>
     private List<Sprite> itemSprites;
 
     private Color transparent;
@@ -40,6 +54,7 @@ public class InventoryUI : MonoBehaviour
             if (itemSprites.Count != 0) itemSprites.RemoveAt(itemSprites.Count - 1);
         }
 
+        // Grabs thumbnail image number of items and sets the sprite
         for (int i = 0; i < thumbnailImages.Count; i++)
         {
             Image image = thumbnailImages[i];
