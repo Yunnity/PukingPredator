@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 using UnityEngine.UI;
-using System.Linq;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -13,35 +10,37 @@ public class InventoryUI : MonoBehaviour
     public Image inventoryImage;
 
     /// <summary>
+    /// List of sprites currently assigned to inventory items.
+    /// </summary>
+    private List<Sprite> itemSprites = new();
+
+    /// <summary>
+    /// List of stomach sprites that indicate fullness.
+    /// </summary>
+    public List<Sprite> sprites;
+
+    /// <summary>
     /// List of thumbnail images displayed in the inventory.
     /// </summary>
     public List<Image> thumbnailImages;
 
     /// <summary>
-    /// List of stimach sprites that indicate fullness.
+    /// Used to prevent images from showing a solid color when empty.
     /// </summary>
-    public List<Sprite> sprites;
+    private Color transparentColor = new Color(0, 0, 0, 0);
 
-    /// <summary>
-    /// List of sprites currently assigned to inventory items.
-    /// </summary>
-    private List<Sprite> itemSprites;
 
-    private Color transparent;
-    private Color opaque;
 
     public void Awake()
     {
-        transparent = new Color(0, 0, 0, 0);
-        opaque = Color.white;
-        itemSprites = new List<Sprite>();
-
         // Ensures that when the Image is empty it doesnt display a solid color.
         foreach (var image in thumbnailImages)
         {
-            image.color = transparent;
+            image.color = transparentColor;
         }
     }
+
+
 
     public void UpdateImage(int currInventoryCount, Sprite thumbnail)
     {
@@ -49,9 +48,10 @@ public class InventoryUI : MonoBehaviour
         if (currInventoryCount > itemSprites.Count)
         {
             itemSprites.Add(thumbnail);
-        } else
+        }
+        else if (itemSprites.Count != 0)
         {
-            if (itemSprites.Count != 0) itemSprites.RemoveAt(itemSprites.Count - 1);
+            itemSprites.RemoveAt(itemSprites.Count - 1);
         }
 
         // Grabs thumbnail image number of items and sets the sprite
@@ -60,14 +60,21 @@ public class InventoryUI : MonoBehaviour
             Image image = thumbnailImages[i];
             int itemIndex = itemSprites.Count - i - 1;
 
-            if (itemIndex < 0) image.color = transparent;
+            if (itemIndex < 0)
+            {
+                image.color = transparentColor;
+            }
             else
             {
-                if (itemSprites[itemIndex] == null) image.color = transparent;
+                if (itemSprites[itemIndex] == null)
+                {
+                    image.color = transparentColor;
+                }
                 else
                 {
-                    image.color = opaque;
                     image.sprite = itemSprites[itemIndex];
+                    //reset color back to full opacity and no tint
+                    image.color = Color.white;
                 }
             }
         }
