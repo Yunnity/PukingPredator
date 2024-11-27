@@ -59,7 +59,7 @@ public class Dash : InputBehaviour
     /// </summary>
     private float verticalVelocity
     {
-        get => (-2 * timeElapsed + duration) * 4 * height / Mathf.Pow(duration, 2) + timeElapsed / duration;
+        get => (-2 * timeElapsed + duration) * 4 * height / Mathf.Pow(duration, 2) + heightChange / duration;
     }
 
 
