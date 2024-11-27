@@ -183,3 +183,4 @@ MonoBehaviour:
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
   isConsumable: 1
+  thumbnail: {fileID: 21300000, guid: 3f18f3df45b697941bcbdb05662824cf, type: 3}

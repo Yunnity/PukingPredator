@@ -150,10 +150,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 0}
   _canDecay: 0
-  consumptionCutoff: 0.05
   decayInto: {fileID: 0}
   inventory: {fileID: 0}
   isConsumable: 1
+  thumbnail: {fileID: 21300000, guid: 41631e3dd395d6548baacbbc6c96fa8b, type: 3}
 --- !u!114 &3038248288414908502
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -120,7 +120,8 @@ public class Consumable : Interactable
     /// </summary>
     public Dictionary<ItemState, State> stateEvents = new();
 
-
+    [SerializeField]
+    public Sprite thumbnail;
 
     protected override void Awake()
     {

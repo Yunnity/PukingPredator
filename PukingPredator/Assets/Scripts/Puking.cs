@@ -56,7 +56,9 @@ public class Puking : InputBehaviour
     {
         get
         {
-            float holdPercent = Mathf.Clamp(gameInput.pukeHoldDuration / MAX_PUKE_DURATION, 0, 1);
+            float holdPercent = gameInput.pukeHoldDuration / MAX_PUKE_DURATION;
+            holdPercent = Mathf.Pow(holdPercent, 2);
+            holdPercent = Mathf.Clamp(holdPercent, 0, 1);
             return Mathf.Lerp(MIN_PUKE_FORCE * player.relativeScale, MAX_PUKE_FORCE, holdPercent);
         }
     }
@@ -94,7 +96,7 @@ public class Puking : InputBehaviour
         anim.StartPukeAnim();
 
         bool pukeWithForce = pukeForce > MAX_PUKE_FORCE * PUKE_EXPLODE_THRESHOLD;
-        AudioManager.Instance.PlaySFX(pukeWithForce ? AudioManager.ClipName.PukeForce : AudioManager.ClipName.Puke);
+        AudioManager.Instance.PlaySFX(pukeWithForce ? AudioManager.ClipName.PukeForce : AudioManager.ClipName.Puking);
 
         Rigidbody itemRb = itemToPuke.GetComponent<Rigidbody>();
         if (itemRb != null)

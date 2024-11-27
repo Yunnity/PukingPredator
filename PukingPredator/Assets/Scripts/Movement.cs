@@ -1,39 +1,28 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Movement : InputBehaviour
 {
-    /// <summary>
-    /// The max time to hold the jump button for.
-    /// </summary>
-    [SerializeField]
-    private float buttonTime = 0.4f;
+    private float baseMass;
 
     /// <summary>
     /// If the instance can currently jump.
     /// </summary>
-    private bool canJump => isGrounded && !isJumping;
+    private bool canJump => !isJumping && Time.time <= lastTimeGrounded + coyoteTime;
 
     /// <summary>
-    /// Radius of the sphere used for collision checks.
+    /// Amount of leniency for coyote time.
     /// </summary>
-    private float groundCheckRadius = 0.45f;
+    private float coyoteTime = 0.2f;
 
-    /// <summary>
-    /// Layers of ground objects.
-    /// </summary>
     [SerializeField]
-    private LayerMask groundLayer;
+    private CollisionTracker groundCollisionTracker;
 
     /// <summary>
     /// If the instance is currently on the ground.
     /// </summary>
-    private bool isGrounded;
-
-    /// <summary>
-    /// If a jump was cancelled early by releasing the jump button.
-    /// </summary>
-    private bool isJumpCancelled;
+    private bool isGrounded = false;
 
     /// <summary>
     /// If the instance is currently in a jump.
@@ -41,9 +30,17 @@ public class Movement : InputBehaviour
     private bool isJumping;
 
     /// <summary>
-    /// Force applied downwards to reduce jump height if you let go early.
+    /// Can be used to disable the movement code so velocity is not reset.
     /// </summary>
-    private float jumpCancelRate = 0.4f;
+    public bool isManualMovementEnabled = true;
+
+    /// <summary>
+    /// How long you can press the jump button before being able to jump
+    /// and still have it go off.
+    /// </summary>
+    private float jumpBufferTime = 0.2f;
+
+    private Coroutine jumpCoroutine;
 
     /// <summary>
     /// The force applied when jumping.
@@ -51,15 +48,7 @@ public class Movement : InputBehaviour
     [SerializeField]
     private float jumpForce;
 
-    /// <summary>
-    /// How long a jump has been going on for.
-    /// </summary>
-    private float jumpTime;
-
-    /// <summary>
-    /// Can be used to disable the movement code so velocity is not reset.
-    /// </summary>
-    public bool isManualMovementEnabled = true;
+    private float lastTimeGrounded = float.MinValue;
 
     /// <summary>
     /// The direction of the players recent movement input with the camera rotation applied.
@@ -72,6 +61,13 @@ public class Movement : InputBehaviour
     private float moveSpeed = 10f;
 
     /// <summary>
+    /// Used to change move speed with size.
+    /// </summary>
+    private const float MOVE_SPEED_FACTOR = 4f;
+
+    private PlayerAnimation playerAnimation;
+
+    /// <summary>
     /// A reference to the camera, used for correcting movement direction.
     /// </summary>
     [SerializeField]
@@ -82,11 +78,10 @@ public class Movement : InputBehaviour
     /// </summary>
     private Rigidbody rb;
 
-    private float baseMass;
-
-    private const float MOVESPEEDFACTOR = 4f;
-
-    private PlayerAnimation playerAnimation;
+    /// <summary>
+    /// How quickly the player model turns.
+    /// </summary>
+    private float turnSpeed = 10f;
 
 
 
@@ -96,10 +91,9 @@ public class Movement : InputBehaviour
         rb = GetComponent<Rigidbody>();
         baseMass = rb.mass;
 
-        if (playerCamera == null) { playerCamera = GameObject.FindGameObjectsWithTag("MainCamera")[0]; }
+        if (playerCamera == null) { playerCamera = GameObject.FindGameObjectsWithTag(GameTag.mainCamera)[0]; }
 
         Subscribe(InputEvent.onJumpDown, GameInput_JumpDown);
-        Subscribe(InputEvent.onJumpUp, GameInput_JumpUp);
 
         transform.rotation = Quaternion.Euler(transform.eulerAngles.x, playerCamera.transform.eulerAngles.y, transform.eulerAngles.z);
     }
@@ -111,18 +105,7 @@ public class Movement : InputBehaviour
         // kind of weird since jumping is tied directly to mass since we use forces, but horizontal movement is not
         if (isManualMovementEnabled)
         {
-            rb.velocity = moveDir * moveSpeed / (1 + Mathf.Exp(rb.mass - baseMass) * MOVESPEEDFACTOR) + new Vector3(0, rb.velocity.y, 0);
-        }
-
-        //jumping code
-        //Reduce jump height if the button is released early
-        if (isJumpCancelled && isJumping && rb.velocity.y > 0)
-        {
-            var vel = rb.velocity;
-            vel.y = rb.velocity.y * jumpCancelRate;
-            rb.velocity = vel;
-
-            if (rb.velocity.y <= 0) { isJumping = false; }
+            rb.velocity = moveDir * moveSpeed / (1 + Mathf.Exp(rb.mass - baseMass) * MOVE_SPEED_FACTOR) + new Vector3(0, rb.velocity.y, 0);
         }
     }
 
@@ -130,46 +113,76 @@ public class Movement : InputBehaviour
     {
         if (gameInput == null) { return; }
 
-        //walking code
+        #region walking code
         Vector2 inputVector = gameInput.movementInput;
         moveDir =   isManualMovementEnabled
                 ?   Quaternion.Euler(0, playerCamera.transform.eulerAngles.y, 0) * new Vector3(inputVector.x, 0, inputVector.y)
                 :   rb.velocity.HorizontalProjection().normalized;
 
-        float turnSpeed = 10f;
         if (inputVector.magnitude > 0)
         {
             transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
         }
 
-        //jumping code
-        isGrounded = Physics.CheckSphere(transform.position, groundCheckRadius, groundLayer);
-
-        if (isJumping)
+        if (isGrounded && (rb.velocity.x != 0 || rb.velocity.z != 0))
         {
-            jumpTime += Time.deltaTime;
-
-            if (jumpTime > buttonTime) { isJumping = false; }
+            AudioManager.Instance.PlaySFX(AudioManager.ClipName.Walking, true);
         }
+        #endregion
+
+        #region jumping code
+        isGrounded =    groundCollisionTracker.collisions.Count > 0
+                    &&  !isJumping;
+        //disable gravity when on the ground to prevent sliding down stairs
+        rb.useGravity = !isGrounded || rb.velocity.y > 0;
+
+        if (isGrounded) { lastTimeGrounded = Time.time; }
+        if (isJumping) { isJumping = rb.velocity.y > 0; }
+        #endregion
     }
 
 
 
     public void GameInput_JumpDown()
     {
-        if (!canJump) { return; }
-
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
-        isJumping = true;
-        isJumpCancelled = false;
-        jumpTime = 0;
-
-        playerAnimation?.StartJumpAnim();
+        if (jumpCoroutine != null) { StopCoroutine(jumpCoroutine); }
+        jumpCoroutine = StartCoroutine(TryJump());
     }
 
-    public void GameInput_JumpUp()
+    /// <summary>
+    /// Gets the GameInput instance and then activates all subscriptions.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator TryJump()
     {
-        if (isJumping) { isJumpCancelled = true; }
+        var pressTime = Time.time;
+        while (Time.time <= pressTime + jumpBufferTime)
+        {
+            if (canJump)
+            {
+                Jump();
+                jumpCoroutine = null;
+                yield break;
+            }
+            yield return new WaitForEndOfFrame();
+        }
+        jumpCoroutine = null;
+    }
+
+    private void Jump()
+    {
+        if (!canJump) { return; }
+        isJumping = true;
+
+        //artifically decreasing the time to protect against double jumps
+        lastTimeGrounded = float.MinValue;
+
+        //overwrite the vertical velocity based on the jump force
+        var vel = rb.velocity;
+        vel.y = jumpForce / rb.mass;
+        rb.velocity = vel;
+
+        playerAnimation?.StartJumpAnim();
+        AudioManager.Instance.PlaySFX(AudioManager.ClipName.Jump, true);
     }
 }

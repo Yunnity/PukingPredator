@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class AudioManager : SingletonMonobehaviour<AudioManager>
 {
@@ -12,6 +13,8 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
     private AudioSource backgroundSource;
     private AudioSource sfxSource;
 
+    private ClipName currentsfx;
+
     public enum ClipName
     {
         LevelUp,
@@ -19,8 +22,9 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         Villian,
         Puking,
         Eating,
-        Puke,
         PukeForce,
+        Walking,
+        Jump
     }
 
     public enum MusicName
@@ -36,8 +40,8 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         { ClipName.Villian, 1f },
         { ClipName.Puking, 1f },
         { ClipName.Eating, 2f },
-        { ClipName.Puke, 2f },
         { ClipName.PukeForce, 8f },
+        { ClipName.Walking, 1f },
     };
 
     protected override void Awake()
@@ -64,7 +68,7 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         sfxSource.Stop();
     }
 
-    public void PlaySFX(ClipName name)
+    public void PlaySFX(ClipName name, bool wait = false)
     {
         // sample usage AudioManager.Instance.PlaySFX(ClipName.Eating);
 
@@ -73,8 +77,13 @@ public class AudioManager : SingletonMonobehaviour<AudioManager>
         if (volume <= 0) { return; }
         
         AudioClip clip = sfxClips[(int) name];
-        if (sfxSource.clip == clip) { sfxSource.Stop(); }
+
+        // Waits for the sound effect to finish
+        if (wait && sfxSource.isPlaying && currentsfx == name) return;
+        if (currentsfx == name) { sfxSource.Stop(); }
+
         sfxSource.PlayOneShot(clip, volume);
+        currentsfx = name;
     }
 
     public static void UpdateMusicVolume()
