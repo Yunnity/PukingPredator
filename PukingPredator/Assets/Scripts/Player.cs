@@ -5,7 +5,8 @@ using UnityEngine;
 public enum PlayerState
 {
     dashing,
-    standing
+    standing,
+    aiming
 }
 
 [RequireComponent(typeof(Rigidbody))]
