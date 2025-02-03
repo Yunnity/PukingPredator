@@ -207,6 +207,7 @@ GameObject:
   - component: {fileID: 8543201992326126533}
   - component: {fileID: 5113436857972032728}
   - component: {fileID: 8976480857431449465}
+  - component: {fileID: 3479903531238649538}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -396,6 +397,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collisionTracker: {fileID: 676090849721875520}
+--- !u!114 &3479903531238649538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5441739923584274610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b26d12ade937e40b7fe1de398d27e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameInput: {fileID: 0}
 --- !u!1 &5541611196680227059
 GameObject:
   m_ObjectHideFlags: 0

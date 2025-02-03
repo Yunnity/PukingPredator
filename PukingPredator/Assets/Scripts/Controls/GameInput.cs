@@ -20,7 +20,7 @@ public enum InputEvent
     /// </summary>
     onDeviceSwapMajor,
     /// <summary>
-    /// Triggers when the user presses the "eat" input.
+    /// Triggers when the user releases the "eat" input.
     /// </summary>
     onEat,
     /// <summary>
@@ -51,6 +51,10 @@ public enum InputEvent
     /// Triggers when the user presses the "pause" input
     /// </summary>
     onPause,
+    /// <summary>
+    /// Triggers when the user presses the "eat" input
+    /// </summary>
+    onAim,
 }
 public class GameInput : SingletonMonobehaviour<GameInput>
 {
@@ -115,6 +119,7 @@ public class GameInput : SingletonMonobehaviour<GameInput>
         {
             events.Add(inputEvent, null);
         }
+        controls.Player.Eat.performed += context => TriggerEvent(InputEvent.onAim);
         controls.Player.Eat.canceled += context => TriggerEvent(InputEvent.onEat);
 
         controls.Player.Jump.canceled += context => TriggerEvent(InputEvent.onJumpUp);
