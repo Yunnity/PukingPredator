@@ -115,7 +115,7 @@ public class GameInput : SingletonMonobehaviour<GameInput>
         {
             events.Add(inputEvent, null);
         }
-        controls.Player.Eat.performed += context => TriggerEvent(InputEvent.onEat);
+        controls.Player.Eat.canceled += context => TriggerEvent(InputEvent.onEat);
 
         controls.Player.Jump.canceled += context => TriggerEvent(InputEvent.onJumpUp);
         controls.Player.Jump.performed += context => TriggerEvent(InputEvent.onJumpDown);
