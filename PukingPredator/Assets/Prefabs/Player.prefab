@@ -697,7 +697,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 641
   puking: {fileID: 4715212586831017785}
-  yCutoff: 0
+  yCutoff: -5
 --- !u!1001 &49880248143171028
 PrefabInstance:
   m_ObjectHideFlags: 0
