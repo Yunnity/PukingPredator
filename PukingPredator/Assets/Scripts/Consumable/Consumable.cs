@@ -192,10 +192,8 @@ public class Consumable : Interactable
         }
 
         stateEvents[ItemState.inWorld].onEnter += ResetLayer;
-        stateEvents[ItemState.inWorld].onEnter += SetGravityEnabled;
         stateEvents[ItemState.inWorld].onEnter += ResetScale;
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
-        stateEvents[ItemState.inWorld].onExit += SetGravityDisabled; 
         
         stateEvents[ItemState.beingConsumed].onEnter += EnablePhysics;
 
@@ -203,6 +201,8 @@ public class Consumable : Interactable
 
         stateEvents[ItemState.inInventory].onEnter += ClampShrunkScale;
         stateEvents[ItemState.inInventory].onEnter += StartDecay;
+        stateEvents[ItemState.inInventory].onEnter += SetGravityDisabled;
+        stateEvents[ItemState.inInventory].onExit += SetGravityEnabled;
         stateEvents[ItemState.inInventory].onUpdate += FollowInventory;
 
         if (rb != null) { stateEvents[ItemState.beingPuked].onEnter += ResetVelocity; }

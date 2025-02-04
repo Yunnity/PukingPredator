@@ -82,8 +82,6 @@ public class PukeTrajectory : InputBehaviour
         Vector3 currentPosition = transform.position;
         float initialHeight = currentPosition.y;
         Vector3 velocity = puking.pukeVelocity;
-        // the scale of the object at any given time
-        var scale = Consumable.consumptionCutoff;
 
         int pointIndex = 0;
         for (int i = 0; i < maxPoints; i++)
@@ -109,14 +107,7 @@ public class PukeTrajectory : InputBehaviour
 
             // Update position and velocity for the next point based on physics
             currentPosition += velocity * timeStep;
-            velocity += Physics.gravity * timeStep * scale; // Apply gravity to the velocity
-
-            // Scale the velocity
-            if (scale >= 1) { continue; }
-            //var prevScale = scale;
-            scale = Mathf.Lerp(scale, 1.05f, Consumable.pukeRate * timeStep);
-            scale = Mathf.Min(scale, 1);
-            //velocity *= scale / prevScale;
+            velocity += Physics.gravity * timeStep; // Apply gravity to the velocity
         }
 
         // Assign the calculated points to the LineRenderer to display the trajectory
