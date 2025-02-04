@@ -97,7 +97,7 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     /// The amount of time that the puke button has been held. Only meaningful
     /// at the time that the puke event is triggered.
     /// </summary>
-    public float pukeHoldDuration => Mathf.Max(minHoldTime, Time.time - pukePressTime);
+    public float pukeHoldDuration => Mathf.Max(0, Time.time - pukePressTime - minHoldTime);
 
 
 
