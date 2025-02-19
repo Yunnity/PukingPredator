@@ -37,7 +37,7 @@ public class NoteControl : Note
 
         if (text1 != "") { _ = AddText(text1); }
 
-        var controlObj = AddImage(controlSpriteKeyboardAndMouse, new Vector2(36f, 36f));
+        var controlObj = AddImage(controlSpriteKeyboardAndMouse, 36f);
         controlImage = controlObj.GetComponent<Image>();
         gameInput.Subscribe(InputEvent.onDeviceSwapAny, UpdateControlImage);
 

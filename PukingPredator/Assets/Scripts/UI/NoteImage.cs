@@ -3,22 +3,22 @@ using UnityEngine;
 public class NoteImage : Note
 {
     /// <summary>
+    /// Max sizes of the image.
+    /// </summary>
+    [SerializeField]
+    private float height = 36f;
+
+    /// <summary>
     /// The image shown by the note.
     /// </summary>
     [SerializeField]
     private Sprite sprite;
-
-    /// <summary>
-    /// Max sizes of the image.
-    /// </summary>
-    [SerializeField]
-    private Vector2 size = new Vector2(36f, 36f);
 
 
 
     protected override void Awake()
     {
         base.Awake();
-        _ = AddImage(sprite, size);
+        _ = AddImage(sprite, height);
     }
 }

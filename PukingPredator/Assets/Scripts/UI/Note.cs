@@ -105,7 +105,7 @@ public abstract class Note : MonoBehaviour
     /// </summary>
     /// <param name="sprite"></param>
     /// <param name="size"></param>
-    public GameObject AddImage(Sprite sprite, Vector2 size)
+    public GameObject AddImage(Sprite sprite, float height)
     {
         // Create a new GameObject for the image
         GameObject imageObject = new GameObject("ImageElement");
@@ -116,9 +116,12 @@ public abstract class Note : MonoBehaviour
         imageComponent.sprite = sprite;
         imageComponent.preserveAspect = true; // Keeps the original aspect ratio
 
-        // Set RectTransform size
+        // Get original sprite dimensions
+        float aspectRatio = sprite.rect.width / sprite.rect.height;
+
+        // Set RectTransform size dynamically based on height
         RectTransform rectTransform = imageComponent.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = size; // Set to the desired width & height
+        rectTransform.sizeDelta = new Vector2(height * aspectRatio, height);
 
         //// Optionally, add a ContentSizeFitter if you want it to adjust dynamically
         //ContentSizeFitter fitter = imageObject.AddComponent<ContentSizeFitter>();
