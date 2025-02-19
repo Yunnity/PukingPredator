@@ -120,10 +120,19 @@ public abstract class Note : MonoBehaviour
         RectTransform rectTransform = imageComponent.GetComponent<RectTransform>();
         rectTransform.sizeDelta = size; // Set to the desired width & height
 
-        // Optionally, add a ContentSizeFitter if you want it to adjust dynamically
-        ContentSizeFitter fitter = imageObject.AddComponent<ContentSizeFitter>();
-        fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        //// Optionally, add a ContentSizeFitter if you want it to adjust dynamically
+        //ContentSizeFitter fitter = imageObject.AddComponent<ContentSizeFitter>();
+        //fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+        //fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+        // Disable ContentSizeFitter to avoid auto-scaling issues
+        ContentSizeFitter fitter = imageObject.GetComponent<ContentSizeFitter>();
+        if (fitter != null)
+        {
+            Destroy(fitter);
+        }
+
+        if (color != Color.white) { SetChildTint(imageObject.transform, color); }
 
         return imageObject;
     }
@@ -156,6 +165,8 @@ public abstract class Note : MonoBehaviour
         fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
         fitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained; // Keep height fixed
 
+        if (color != Color.white) { SetChildTint(textObject.transform, color); }
+
         return textObject;
     }
 
@@ -181,6 +192,7 @@ public abstract class Note : MonoBehaviour
         layoutGroup.spacing = 10f;
         layoutGroup.childForceExpandWidth = false;
         layoutGroup.childForceExpandHeight = false;
+        layoutGroup.childControlWidth = false;
 
         // Add CanvasGroup for controlling alpha
         containerCanvasGroup = container.AddComponent<CanvasGroup>();
@@ -216,19 +228,24 @@ public abstract class Note : MonoBehaviour
     {
         foreach (Transform child in container.transform)
         {
-            // Tint TextMeshProUGUI elements
-            TextMeshProUGUI textComponent = child.GetComponent<TextMeshProUGUI>();
-            if (textComponent != null)
-            {
-                textComponent.color = tintColor;
-            }
+            SetChildTint(child, tintColor);
+        }
+    }
 
-            // Tint Image elements
-            Image imageComponent = child.GetComponent<Image>();
-            if (imageComponent != null)
-            {
-                imageComponent.color = tintColor;
-            }
+    private void SetChildTint(Transform child, Color tintColor)
+    {
+        // Tint TextMeshProUGUI elements
+        TextMeshProUGUI textComponent = child.GetComponent<TextMeshProUGUI>();
+        if (textComponent != null)
+        {
+            textComponent.color = tintColor;
+        }
+
+        // Tint Image elements
+        Image imageComponent = child.GetComponent<Image>();
+        if (imageComponent != null)
+        {
+            imageComponent.color = tintColor;
         }
     }
 }
