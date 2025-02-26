@@ -95,15 +95,19 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     /// Used to track when the button was first pressed to determine how long
     /// it was held.
     /// </summary>
-    private float pukePressTime = 0f;
+    private float buttonPressTime = 0f;
 
     /// <summary>
     /// The amount of time that the puke button has been held. Only meaningful
     /// at the time that the puke event is triggered.
     /// </summary>
-    public float pukeHoldDuration => Mathf.Max(minHoldTime, Time.time - pukePressTime);
+    public float pukeHoldDuration => Mathf.Max(minHoldTime, Time.time - buttonPressTime);
 
-
+    /// <summary>
+    /// The amount of time that the eat button has been held. Only meaningful
+    /// at the time that the eat event is triggered.
+    /// </summary>
+    public float eatHoldDuration => Mathf.Max(minHoldTime, Time.time - buttonPressTime);
 
     protected override void Awake()
     {
@@ -119,7 +123,11 @@ public class GameInput : SingletonMonobehaviour<GameInput>
         {
             events.Add(inputEvent, null);
         }
-        controls.Player.Eat.performed += context => TriggerEvent(InputEvent.onAim);
+        controls.Player.Eat.performed += context =>
+        {
+            buttonPressTime = Time.time;
+            TriggerEvent(InputEvent.onAim);
+        };
         controls.Player.Eat.canceled += context => TriggerEvent(InputEvent.onEat);
 
         controls.Player.Jump.canceled += context => TriggerEvent(InputEvent.onJumpUp);
@@ -133,7 +141,7 @@ public class GameInput : SingletonMonobehaviour<GameInput>
         controls.Player.Puke.performed += context =>
         {
             isChargingPuke = true;
-            pukePressTime = Time.time;
+            buttonPressTime = Time.time;
             TriggerEvent(InputEvent.onPukeStart);
         };
 

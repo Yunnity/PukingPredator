@@ -15,7 +15,12 @@ public class Aim : InputBehaviour
     private Rigidbody rb;
 
     /// <summary>
-    /// The radius of spherecasts when the players scale is 1.
+    /// The rigidbody of the player.
+    /// </summary>
+    public GameObject aimVisual;
+
+    /// <summary>
+    /// The radius of aimVisual when the players scale is 1.
     /// </summary>
     private float baseRadius = 0.2f;
 
@@ -41,7 +46,7 @@ public class Aim : InputBehaviour
 
         startSphereRenderer = CreateLineRenderer(Color.green);
         endSphereRenderer = CreateLineRenderer(Color.red);
-        pathRenderer = CreateLineRenderer(Color.cyan, false);
+        pathRenderer = CreateLineRenderer(Color.green, false);
 
         Subscribe(InputEvent.onAim, () => isAiming = true);
         Subscribe(InputEvent.onEat, () => isAiming = false);
@@ -51,13 +56,16 @@ public class Aim : InputBehaviour
     {
         if (isAiming)
         {
+            if (gameInput.eatHoldDuration < GameInput.minHoldTime * 2) { return; }
+            aimVisual.SetActive(true);
             DrawWireSphereCast();
             player.SetState(PlayerState.aiming);
         }
         else
         {
-            ClearWireSphereCast();
+            aimVisual.SetActive(false);
             player.SetState(PlayerState.standing);
+            ClearWireSphereCast();
         }
     }
 
@@ -74,17 +82,16 @@ public class Aim : InputBehaviour
         startSphereRenderer.enabled = true;
         endSphereRenderer.enabled = true;
         pathRenderer.enabled = true;
-        float multiplier = transform.localScale.y;
+        float multiplier = player.transform.localScale.y;
         float startBehindOffset = 0.1f * multiplier;
         float maxDistance = baseRange * multiplier + startBehindOffset;
         float radius = baseRadius * multiplier;
 
+        //aimVisual.transform.localScale = new Vector3(radius, aimVisual.transform.localScale.y, radius);
         Vector3 startPosition = transform.position + (radius + 0.05f) * Vector3.up - transform.forward * startBehindOffset;
         Vector3 endPosition = startPosition + transform.forward.normalized * maxDistance;
 
         // Draw wire spheres at start and end positions
-        DrawWireSphere(startSphereRenderer, startPosition, radius);
-        DrawWireSphere(endSphereRenderer, endPosition, radius);
 
         // Draw line path
         pathRenderer.positionCount = 2;
