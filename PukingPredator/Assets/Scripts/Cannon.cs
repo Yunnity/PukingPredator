@@ -7,16 +7,15 @@ public class Cannon : MonoBehaviour
     [SerializeField] GameObject cannonball;
     [SerializeField] float cannonballSpeed;
 
-    GameObject player;
-    Quaternion playerDirection;
     Rigidbody cannonRB;
     Timer cannonballSpawnTimer;
     float cannonballSpawnTime = 2f;
+    GameObject cannonMouth;
+
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindWithTag("Player");
-        cannonRB = GetComponent<Rigidbody>();
+        cannonMouth = gameObject.transform.GetChild(0).gameObject;
         cannonballSpawnTimer = gameObject.AddComponent<Timer>();
         cannonballSpawnTimer.onTimerComplete += SpawnCannonball;
         cannonballSpawnTimer.StartTimer(cannonballSpawnTime);
@@ -25,16 +24,16 @@ public class Cannon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        playerDirection = Quaternion.LookRotation(player.transform.position - transform.position);
-        playerDirection = Quaternion.Slerp(transform.rotation, playerDirection, 100 * Time.deltaTime);
-        cannonRB.MoveRotation(playerDirection);
     }
 
     void SpawnCannonball()
     {
-        Vector3 offset = new Vector3(1f, 0, 0);
-        GameObject spawnedCannonball = Instantiate(cannonball, transform.position + offset, Quaternion.identity);
-        Vector3 cannonballDirection = new Vector3(player.transform.position.x - spawnedCannonball.transform.position.x, 0, player.transform.position.z - spawnedCannonball.transform.position.z);
+        //Vector3 offset = new Vector3(0.2f, 0, 0);
+        Vector3 offset = cannonMouth.transform.position - gameObject.transform.position;
+        //Debug.Log($"cannonMouth.transform.position = {cannonMouth.transform.position}");
+        GameObject spawnedCannonball = Instantiate(cannonball, cannonMouth.transform.position + offset, Quaternion.identity);
+        //Debug.Log($"spawnedCannonball.transform.position.x = {spawnedCannonball.transform.position.x}");
+        Vector3 cannonballDirection = new Vector3(spawnedCannonball.transform.position.x - gameObject.transform.position.x, 0, spawnedCannonball.transform.position.z - gameObject.transform.position.z);
         spawnedCannonball.GetComponent<Rigidbody>().velocity = cannonballDirection * cannonballSpeed;
         cannonballSpawnTimer.StartTimer(cannonballSpawnTime);
     }
