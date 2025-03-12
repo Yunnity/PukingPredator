@@ -34,8 +34,6 @@ public class Aim : InputBehaviour
     private LineRenderer lineRenderer;
     private int segments = 32;
 
-    private LineRenderer startSphereRenderer;
-    private LineRenderer endSphereRenderer;
     private LineRenderer pathRenderer;
 
     // Start is called before the first frame update
@@ -44,8 +42,6 @@ public class Aim : InputBehaviour
         rb = GetComponent<Rigidbody>();
         player = GetComponent<Player>();
 
-        startSphereRenderer = CreateLineRenderer(Color.green);
-        endSphereRenderer = CreateLineRenderer(Color.red);
         pathRenderer = CreateLineRenderer(Color.green, false);
 
         Subscribe(InputEvent.onAim, () => isAiming = true);
@@ -58,40 +54,36 @@ public class Aim : InputBehaviour
         {
             if (gameInput.eatHoldDuration < GameInput.minHoldTime * 2) { return; }
             aimVisual.SetActive(true);
-            DrawWireSphereCast();
+            DrawAimVisual();
             player.SetState(PlayerState.aiming);
         }
         else
         {
             aimVisual.SetActive(false);
             player.SetState(PlayerState.standing);
-            ClearWireSphereCast();
+            Clear();
         }
     }
 
 
-    void ClearWireSphereCast()
+    void Clear()
     {
-        startSphereRenderer.enabled = false;
-        endSphereRenderer.enabled = false;
         pathRenderer.enabled = false;
     }
 
-    void DrawWireSphereCast()
+    void DrawAimVisual()
     {
-        startSphereRenderer.enabled = true;
-        endSphereRenderer.enabled = true;
         pathRenderer.enabled = true;
-        float multiplier = player.transform.localScale.y;
-        float startBehindOffset = 0.1f * multiplier;
-        float maxDistance = baseRange * multiplier + startBehindOffset;
-        float radius = baseRadius * multiplier;
+        var multiplier = transform.localScale.y;
+        var startBehindOffset = 0.1f * multiplier;
+        var maxDistance = baseRange * multiplier + startBehindOffset;
+        
+        var radius = baseRadius * multiplier;
 
-        //aimVisual.transform.localScale = new Vector3(radius, aimVisual.transform.localScale.y, radius);
         Vector3 startPosition = transform.position + (radius + 0.05f) * Vector3.up - transform.forward * startBehindOffset;
         Vector3 endPosition = startPosition + transform.forward.normalized * maxDistance;
 
-        // Draw wire spheres at start and end positions
+        aimVisual.transform.localScale = new Vector3(maxDistance, aimVisual.transform.localScale.y, maxDistance);
 
         // Draw line path
         pathRenderer.positionCount = 2;
@@ -112,21 +104,6 @@ public class Aim : InputBehaviour
         lr.startColor = color;
         lr.endColor = color;
         return lr;
-    }
-
-    void DrawWireSphere(LineRenderer lr, Vector3 position, float radius)
-    {
-        Vector3[] points = new Vector3[segments + 1];
-        float angleStep = 360f / segments;
-
-        for (int i = 0; i <= segments; i++)
-        {
-            float angle = i * angleStep * Mathf.Deg2Rad;
-            points[i] = position + new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0);
-        }
-
-        lr.positionCount = points.Length;
-        lr.SetPositions(points);
     }
 
 }
