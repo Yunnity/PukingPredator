@@ -73,16 +73,6 @@ public class AimVisualizer : InputBehaviour
         });
     }
 
-    //private void Update()
-    //{
-    //    if (!isAiming) { return; }
-    //    if (gameInput.eatHoldDuration < GameInput.minHoldTime * 2) { return; }
-
-    //    SetVisible(true);
-    //    player.SetState(PlayerState.aiming);
-    //}
-
-
 
     /// <summary>
     /// Updates the x and z scale of the range visualizer
