@@ -411,8 +411,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameInput: {fileID: 0}
-  aimVisual: {fileID: 8248491005779491232}
-  radius: 1
+  visualObject: {fileID: 8248491005779491232}
 --- !u!1 &5541611196680227059
 GameObject:
   m_ObjectHideFlags: 0
@@ -826,7 +825,7 @@ PrefabInstance:
     - target: {fileID: 25753720653937431, guid: 202ddcd7047b3de409a62ae52b74a745,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8721352339407560475, guid: 202ddcd7047b3de409a62ae52b74a745,
         type: 3}
@@ -836,7 +835,7 @@ PrefabInstance:
     - target: {fileID: 8721352339407560475, guid: 202ddcd7047b3de409a62ae52b74a745,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.05
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 8721352339407560475, guid: 202ddcd7047b3de409a62ae52b74a745,
         type: 3}

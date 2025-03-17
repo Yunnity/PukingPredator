@@ -11,7 +11,7 @@ public class InteractablePicker : MonoBehaviour
     /// <summary>
     /// The max distance when the players scale is 1.
     /// </summary>
-    private float baseRange = 2f;
+    public static float BASE_RANGE = 2f;
 
     /// <summary>
     /// Used if raycast fails.
@@ -117,9 +117,9 @@ public class InteractablePicker : MonoBehaviour
     private bool RaycastInDirection(Vector3 direction, out RaycastHit hit)
     {
         var multiplier = transform.localScale.y;
-        var startBehindOffset = 0.1f * multiplier; //used to make objects directly in front of you get selected
-        var maxDistance = baseRange * multiplier + startBehindOffset;
         var radius = baseRadius * multiplier;
+        var startBehindOffset = 0.1f * multiplier; //used to make objects directly in front of you get selected
+        var maxDistance = BASE_RANGE * multiplier + startBehindOffset - radius;
         var ray = new Ray(
             transform.position + (radius + 0.05f) * Vector3.up - transform.forward * startBehindOffset,
             direction
