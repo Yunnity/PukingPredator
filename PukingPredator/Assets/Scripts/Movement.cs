@@ -22,7 +22,7 @@ public class Movement : InputBehaviour
     /// <summary>
     /// If the instance is currently on the ground.
     /// </summary>
-    private bool isGrounded = false;
+    public bool isGrounded { get; private set; } = false;
 
     /// <summary>
     /// If the instance is currently in a jump.
