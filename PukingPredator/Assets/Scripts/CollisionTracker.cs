@@ -30,6 +30,11 @@ public class CollisionTracker : MonoBehaviour
     private Action onCollision;
 
     /// <summary>
+    /// Triggers when player leaves collider.
+    /// </summary>
+    private Action onLeave;
+
+    /// <summary>
     /// If the tracker should only check for player collisions.
     /// </summary>
     [SerializeField]
@@ -52,6 +57,7 @@ public class CollisionTracker : MonoBehaviour
         if (!PassesAllFilters(other)) { return; }
 
         _collisions.Remove(other.gameObject);
+        onLeave?.Invoke();
     }
 
     private void Start()
@@ -76,6 +82,16 @@ public class CollisionTracker : MonoBehaviour
     public void UnsubscribeOnCollision(Action action)
     {
         onCollision -= action;
+    }
+
+    public void SubscribeOnLeave(Action action)
+    {
+        onLeave += action;
+    }
+
+    public void UnsubscribeOnLeave(Action action)
+    {
+        onLeave -= action;
     }
 
     #region Filters
