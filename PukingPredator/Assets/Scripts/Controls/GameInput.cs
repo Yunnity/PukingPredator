@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
 using UnityEngine.InputSystem.LowLevel;
 
 /// <summary>
@@ -73,12 +74,14 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     /// </summary>
     private Dictionary<InputEvent, Action> events = new();
 
+    public GamepadType gamepadType { get; private set; }
+
     private bool isChargingPuke = false;
 
     /// <summary>
     /// The most recently used input device type. Can change constantly in game.
     /// </summary>
-    public InputDeviceType inputDeviceType = InputDeviceType.mouse;
+    public InputDeviceType inputDeviceType { get; private set; } = InputDeviceType.mouse;
 
     /// <summary>
     /// The minimum time for something to be held for. A tap will still be
@@ -178,9 +181,22 @@ public class GameInput : SingletonMonobehaviour<GameInput>
             {
                 inputDeviceType = InputDeviceType.mouse;
             }
-            else if (device is Gamepad)
+            else if (device is Gamepad gamepad)
             {
                 inputDeviceType = InputDeviceType.gamepad;
+
+                if (gamepad is DualShockGamepad)
+                {
+                    gamepadType = GamepadType.playStation;
+                }
+                else if (gamepad.description.manufacturer.ToLower().Contains("microsoft"))
+                {
+                    gamepadType = GamepadType.xbox;
+                }
+                else
+                {
+                    gamepadType = GamepadType.other;
+                }
             }
             else
             {

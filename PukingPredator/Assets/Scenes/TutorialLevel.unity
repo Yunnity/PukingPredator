@@ -2442,7 +2442,7 @@ GameObject:
   m_Component:
   - component: {fileID: 283558116}
   - component: {fileID: 283558118}
-  - component: {fileID: 283558117}
+  - component: {fileID: 283558119}
   m_Layer: 0
   m_Name: Jumping
   m_TagString: Untagged
@@ -2465,20 +2465,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1106840459}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &283558117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 283558115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12c5f92d5d7be41f49348d2b10f4775a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delay: 0
-  text: Press [Space / South] to jump
 --- !u!65 &283558118
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2500,6 +2486,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.11, y: 0.65, z: 3.27}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &283558119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283558115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7713a01ea0d6745e18a0fe288190d5f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
+  delay: 0
+  controlSpriteKeyboardAndMouse: {fileID: 21300000, guid: c516a1bbe12dc1646a48d0cf495b892d,
+    type: 3}
+  controlSpriteXBOX: {fileID: 21300000, guid: 9304efaf057138941a18155e0a690164, type: 3}
+  controlSpritePS4: {fileID: 21300000, guid: e8a5d510a464177458712b25528a34f8, type: 3}
+  text1: Press
+  text2: to jump
 --- !u!1001 &319903862
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3788,6 +3794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12c5f92d5d7be41f49348d2b10f4775a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
   delay: 10
   text: Use the puked crate to jump
 --- !u!65 &523497712
@@ -4621,6 +4628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12c5f92d5d7be41f49348d2b10f4775a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
   delay: 0
   text: Holding down the puke button may do something...
 --- !u!65 &608094761
@@ -6522,6 +6530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12c5f92d5d7be41f49348d2b10f4775a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
   delay: 0
   text: Your range grows with size.
 --- !u!65 &1039629864
@@ -7819,7 +7828,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1353184876}
   - component: {fileID: 1353184878}
-  - component: {fileID: 1353184877}
+  - component: {fileID: 1353184879}
   m_Layer: 0
   m_Name: Puke
   m_TagString: Untagged
@@ -7842,20 +7851,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1106840459}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1353184877
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1353184875}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12c5f92d5d7be41f49348d2b10f4775a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delay: 0
-  text: Press [RMB / LT] to puke
 --- !u!65 &1353184878
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7877,6 +7872,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.09, y: 0.67, z: 1.98}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1353184879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353184875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7713a01ea0d6745e18a0fe288190d5f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
+  delay: 0
+  controlSpriteKeyboardAndMouse: {fileID: 21300000, guid: 01ca832b0f944c24db54e42727ac58ba,
+    type: 3}
+  controlSpriteXBOX: {fileID: 21300000, guid: 3e391e8124f6837408e16a42b853ff09, type: 3}
+  controlSpritePS4: {fileID: 21300000, guid: 2d9a35ab034a997499103cf320061927, type: 3}
+  text1: Tap
+  text2: to puke
 --- !u!1001 &1358649799
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8058,6 +8073,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12c5f92d5d7be41f49348d2b10f4775a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
   delay: 0
   text: Consume collectables for bonus points!
 --- !u!65 &1364424506
@@ -8738,6 +8754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12c5f92d5d7be41f49348d2b10f4775a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
   delay: 0
   text: You will DASH to what you eat!
 --- !u!65 &1495943105
@@ -11162,7 +11179,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1940655931}
   - component: {fileID: 1940655933}
-  - component: {fileID: 1940655932}
+  - component: {fileID: 1940655934}
   m_Layer: 0
   m_Name: Movement
   m_TagString: Untagged
@@ -11179,26 +11196,12 @@ Transform:
   m_GameObject: {fileID: 1940655930}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.52, y: 0.15, z: 0.5}
+  m_LocalPosition: {x: -5.973, y: 0.15, z: 0.814}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1106840459}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1940655932
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1940655930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12c5f92d5d7be41f49348d2b10f4775a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delay: 10
-  text: '[WASD / Left Joystick] to move'
 --- !u!65 &1940655933
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11218,8 +11221,28 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.97, y: 0.65, z: 2.04}
+  m_Size: {x: 1.15, y: 0.65, z: 2.04}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1940655934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940655930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7713a01ea0d6745e18a0fe288190d5f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
+  delay: 5
+  controlSpriteKeyboardAndMouse: {fileID: 21300000, guid: 5d32001cc340441cb920abcb4d4e651c,
+    type: 3}
+  controlSpriteXBOX: {fileID: 21300000, guid: 476007c50d1adb94991a72a8f321a6c8, type: 3}
+  controlSpritePS4: {fileID: 21300000, guid: 15cfb070cb10d2f40932a15bd521d24c, type: 3}
+  text1: 
+  text2: to move
 --- !u!1001 &1940800786
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11972,7 +11995,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2070930257}
   - component: {fileID: 2070930259}
-  - component: {fileID: 2070930258}
+  - component: {fileID: 2070930260}
   m_Layer: 0
   m_Name: Eating
   m_TagString: Untagged
@@ -11995,20 +12018,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1106840459}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2070930258
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2070930256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12c5f92d5d7be41f49348d2b10f4775a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delay: 0
-  text: Press [LMB / RT] to eat
 --- !u!65 &2070930259
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12030,6 +12039,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.99, y: 0.71, z: 6.25}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2070930260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2070930256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7713a01ea0d6745e18a0fe288190d5f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 1, b: 1, a: 1}
+  delay: 0
+  controlSpriteKeyboardAndMouse: {fileID: 21300000, guid: 1c0fd3d23ce52ac4f923c090af390a60,
+    type: 3}
+  controlSpriteXBOX: {fileID: 21300000, guid: 461c48c8f6c3a4343ac1b88871ec1b94, type: 3}
+  controlSpritePS4: {fileID: 21300000, guid: 291d2feda5625d94b9e6bafd1bd7ed39, type: 3}
+  text1: Press
+  text2: to eat
 --- !u!1001 &2072489119
 PrefabInstance:
   m_ObjectHideFlags: 0
