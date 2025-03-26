@@ -20,12 +20,18 @@ public class SlidingItem : MovableItem
     private int direction = 1;
     private Player player;
     bool updatePlayer = false;
+    private Timer pauseTimer;
+    private bool isWaiting = false;
 
     protected override void Start()
     {
         base.Start();
         collisionTracker.SubscribeOnCollision(OnTrackerEnter);
         collisionTracker.SubscribeOnLeave(OnTrackerExit);
+
+        pauseTimer = gameObject.AddComponent<Timer>();
+        pauseTimer.onTimerComplete += () => isWaiting = false;
+
     }
 
 
@@ -57,7 +63,7 @@ public class SlidingItem : MovableItem
 
     private void Update()
     {
-        if (path == null || path.Count < 2)
+        if (path == null || path.Count < 2 || isWaiting)
             return;
 
         MoveAlongPath();
@@ -66,9 +72,15 @@ public class SlidingItem : MovableItem
     private void MoveAlongPath()
     {
         Vector3 targetPosition = path[nextPoint];
+
+        Vector3 starting = transform.position;
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
         if (updatePlayer)
-            player.transform.position = Vector3.MoveTowards(player.transform.position, targetPosition, speed * Time.deltaTime);
+        {
+            Vector3 offset = transform.position - starting;
+            player.transform.position += offset;
+
+        }
 
         if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
         {
@@ -78,6 +90,10 @@ public class SlidingItem : MovableItem
             {
                 direction *= -1; // Reverse
                 nextPoint += direction * 2;
+
+                // Waits once it reaches the end of its path for 1 second
+                isWaiting = true;
+                pauseTimer.StartTimer(1.0f);
             }
         }
     }
