@@ -11,7 +11,7 @@ public class SlidingItem : MovableItem
     private float speed = 2f;
 
     /// <summary>
-    /// Used to check if the player is on the platofrm and moves the player if grounded.
+    /// Used to check if the player is on the platform and moves the player if grounded.
     /// </summary>
     [SerializeField]
     private CollisionTracker collisionTracker;
@@ -23,6 +23,8 @@ public class SlidingItem : MovableItem
     private Timer pauseTimer;
     private bool isWaiting = false;
 
+
+
     protected override void Start()
     {
         base.Start();
@@ -33,6 +35,15 @@ public class SlidingItem : MovableItem
         pauseTimer.onTimerComplete += () => isWaiting = false;
 
     }
+
+    private void Update()
+    {
+        if (path == null || path.Count < 2 || isWaiting)
+            return;
+
+        MoveAlongPath();
+    }
+
 
 
     private void OnTrackerEnter()
@@ -59,14 +70,6 @@ public class SlidingItem : MovableItem
 
             yield return null;
         }
-    }
-
-    private void Update()
-    {
-        if (path == null || path.Count < 2 || isWaiting)
-            return;
-
-        MoveAlongPath();
     }
 
     private void MoveAlongPath()

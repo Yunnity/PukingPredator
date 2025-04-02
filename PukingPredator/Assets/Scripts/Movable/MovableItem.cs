@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 public class MovableItem : PhysicsCollapseGroup
 {
@@ -11,11 +7,11 @@ public class MovableItem : PhysicsCollapseGroup
 
         foreach (var child in relevantChildren)
         {
-            child.Subscribe(PhysicsEvent.onEnable, disableMovement);
+            child.Subscribe(PhysicsEvent.onEnable, DisableMovement);
         }
     }
 
-    private void disableMovement()
+    private void DisableMovement()
     {
         enabled = false;
     }
