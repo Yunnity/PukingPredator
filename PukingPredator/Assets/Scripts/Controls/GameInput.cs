@@ -20,7 +20,7 @@ public enum InputEvent
     /// </summary>
     onDeviceSwapMajor,
     /// <summary>
-    /// Triggers when the user presses the "eat" input.
+    /// Triggers when the user releases the "eat" input.
     /// </summary>
     onEat,
     /// <summary>
@@ -51,6 +51,10 @@ public enum InputEvent
     /// Triggers when the user presses the "pause" input
     /// </summary>
     onPause,
+    /// <summary>
+    /// Triggers when the user presses the "eat" input
+    /// </summary>
+    onAim,
 }
 public class GameInput : SingletonMonobehaviour<GameInput>
 {
@@ -91,15 +95,19 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     /// Used to track when the button was first pressed to determine how long
     /// it was held.
     /// </summary>
-    private float pukePressTime = 0f;
+    private float buttonPressTime = 0f;
 
     /// <summary>
     /// The amount of time that the puke button has been held. Only meaningful
     /// at the time that the puke event is triggered.
     /// </summary>
-    public float pukeHoldDuration => Mathf.Max(0, Time.time - pukePressTime - minHoldTime);
+    public float pukeHoldDuration => Mathf.Max(0, Time.time - buttonPressTime - minHoldTime);
 
-
+    /// <summary>
+    /// The amount of time that the eat button has been held. Only meaningful
+    /// at the time that the eat event is triggered.
+    /// </summary>
+    public float eatHoldDuration => Mathf.Max(0, Time.time - buttonPressTime - minHoldTime);
 
     protected override void Awake()
     {
@@ -115,7 +123,12 @@ public class GameInput : SingletonMonobehaviour<GameInput>
         {
             events.Add(inputEvent, null);
         }
-        controls.Player.Eat.performed += context => TriggerEvent(InputEvent.onEat);
+        controls.Player.Eat.performed += context =>
+        {
+            buttonPressTime = Time.time;
+            TriggerEvent(InputEvent.onAim);
+        };
+        controls.Player.Eat.canceled += context => TriggerEvent(InputEvent.onEat);
 
         controls.Player.Jump.canceled += context => TriggerEvent(InputEvent.onJumpUp);
         controls.Player.Jump.performed += context => TriggerEvent(InputEvent.onJumpDown);
@@ -128,7 +141,7 @@ public class GameInput : SingletonMonobehaviour<GameInput>
         controls.Player.Puke.performed += context =>
         {
             isChargingPuke = true;
-            pukePressTime = Time.time;
+            buttonPressTime = Time.time;
             TriggerEvent(InputEvent.onPukeStart);
         };
 

@@ -83,12 +83,16 @@ public class Movement : InputBehaviour
     /// </summary>
     private float turnSpeed = 10f;
 
-
+    /// <summary>
+    /// The player gameobject.
+    /// </summary>
+    private Player player;
 
     private void Start()
     {
         playerAnimation = GetComponent<PlayerAnimation>();
         rb = GetComponent<Rigidbody>();
+        player = GetComponent<Player>();
         baseMass = rb.mass;
 
         if (playerCamera == null) { playerCamera = GameObject.FindGameObjectsWithTag(GameTag.mainCamera)[0]; }
@@ -122,6 +126,13 @@ public class Movement : InputBehaviour
         if (inputVector.magnitude > 0)
         {
             transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
+        }
+
+        if (player.state == PlayerState.aiming && moveDir == Vector3.zero)
+        {
+            Vector3 targetDir = playerCamera.transform.forward;
+            targetDir.y = 0;
+            transform.forward = Vector3.Slerp(transform.forward, targetDir, Time.deltaTime * turnSpeed);
         }
 
         if (isGrounded && (rb.velocity.x != 0 || rb.velocity.z != 0))
