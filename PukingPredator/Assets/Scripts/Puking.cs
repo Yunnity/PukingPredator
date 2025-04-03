@@ -112,11 +112,11 @@ public class Puking : InputBehaviour
             //itemRb.AddForce(pukeVelocity * itemRb.mass, ForceMode.Impulse);
             itemRb.velocity = pukeVelocity;
 
-            if (pukeWithForce)
-            {
-                KnockbackItemsInFrontofPlayer(pukeForce, itemRb);
-                AddCollisionBlast(itemToPuke.gameObject, itemRb);
-            }
+            //if (pukeWithForce)
+            //{
+            //    KnockbackItemsInFrontofPlayer(pukeForce, itemRb);
+            //    AddCollisionBlast(itemToPuke.gameObject, itemRb);
+            //}
         }
 
     }
