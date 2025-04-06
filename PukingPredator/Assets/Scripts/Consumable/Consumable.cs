@@ -46,6 +46,11 @@ public class Consumable : Interactable
     public Timer decayTimer { get; private set; }
 
     /// <summary>
+    /// If the origin has been centered already or not.
+    /// </summary>
+    private bool hasOriginBeenCentered = false;
+
+    /// <summary>
     /// The layer that the object started out on.
     /// </summary>
     private int initialLayer;
@@ -192,17 +197,18 @@ public class Consumable : Interactable
         }
 
         stateEvents[ItemState.inWorld].onEnter += ResetLayer;
-        stateEvents[ItemState.inWorld].onEnter += SetGravityEnabled;
         stateEvents[ItemState.inWorld].onEnter += ResetScale;
         stateEvents[ItemState.inWorld].onExit += SetLayerToConsumed;
-        stateEvents[ItemState.inWorld].onExit += SetGravityDisabled; 
-        
+        stateEvents[ItemState.inWorld].onExit += CenterOrigin;
+
         stateEvents[ItemState.beingConsumed].onEnter += EnablePhysics;
 
         stateEvents[ItemState.beingConsumed].onUpdate += UpdateBeingConsumed;
 
         stateEvents[ItemState.inInventory].onEnter += ClampShrunkScale;
         stateEvents[ItemState.inInventory].onEnter += StartDecay;
+        stateEvents[ItemState.inInventory].onEnter += SetGravityDisabled;
+        stateEvents[ItemState.inInventory].onExit += SetGravityEnabled;
         stateEvents[ItemState.inInventory].onUpdate += FollowInventory;
 
         if (rb != null) { stateEvents[ItemState.beingPuked].onEnter += ResetVelocity; }
@@ -216,6 +222,14 @@ public class Consumable : Interactable
     }
 
 
+
+    private void CenterOrigin()
+    {
+        if (hasOriginBeenCentered) { return; }
+        hasOriginBeenCentered = true;
+
+        gameObject.CenterOrigin();
+    }
 
     private void ClampShrunkScale()
     {

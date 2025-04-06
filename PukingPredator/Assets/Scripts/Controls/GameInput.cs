@@ -101,13 +101,13 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     /// The amount of time that the puke button has been held. Only meaningful
     /// at the time that the puke event is triggered.
     /// </summary>
-    public float pukeHoldDuration => Mathf.Max(minHoldTime, Time.time - buttonPressTime);
+    public float pukeHoldDuration => Mathf.Max(0, Time.time - buttonPressTime - minHoldTime);
 
     /// <summary>
     /// The amount of time that the eat button has been held. Only meaningful
     /// at the time that the eat event is triggered.
     /// </summary>
-    public float eatHoldDuration => Mathf.Max(minHoldTime, Time.time - buttonPressTime);
+    public float eatHoldDuration => Mathf.Max(0, Time.time - buttonPressTime - minHoldTime);
 
     protected override void Awake()
     {

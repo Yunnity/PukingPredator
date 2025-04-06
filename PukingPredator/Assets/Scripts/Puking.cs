@@ -28,7 +28,8 @@ public class Puking : InputBehaviour
     /// <summary>
     /// The direction to puke in. Pukes forwards with a little force upwards.
     /// </summary>
-    private Vector3 pukeDirection => transform.forward + Vector3.up * 0.1f;
+    private Vector3 pukeDirection => transform.forward + Vector3.up * PUKE_VERTICAL_FACTOR;
+    private const float PUKE_VERTICAL_FACTOR = 0.5f;
 
     /// <summary>
     /// The collision tracker used to roughly determine the objects that could
@@ -57,13 +58,17 @@ public class Puking : InputBehaviour
         get
         {
             float holdPercent = gameInput.pukeHoldDuration / MAX_PUKE_DURATION;
-            holdPercent = Mathf.Pow(holdPercent, 2);
+            holdPercent = Mathf.Pow(holdPercent, 2); //spend more time on lower charges
             holdPercent = Mathf.Clamp(holdPercent, 0, 1);
-            return Mathf.Lerp(MIN_PUKE_FORCE * player.relativeScale, MAX_PUKE_FORCE, holdPercent);
+            return Mathf.Lerp(
+                MIN_PUKE_FORCE * Mathf.Pow(player.relativeScale, 0.25f),
+                MAX_PUKE_FORCE * Mathf.Pow(player.relativeScale, 0.35f),
+                holdPercent
+            );
         }
     }
-    private const float MIN_PUKE_FORCE = 1f;
-    private const float MAX_PUKE_FORCE = 20f;
+    private const float MIN_PUKE_FORCE = 2f;
+    private const float MAX_PUKE_FORCE = 10f;
     private const float MAX_PUKE_DURATION = 2f;
 
     /// <summary>
@@ -104,13 +109,14 @@ public class Puking : InputBehaviour
             //TODO: make this code work if there is no rigid body. perhaps just set
             //...the velocity and if there was a rigid body then we can reduce the velocity
             //...while calculating it based on the mass?
-            itemRb.AddForce(pukeVelocity * itemRb.mass, ForceMode.Impulse);
+            //itemRb.AddForce(pukeVelocity * itemRb.mass, ForceMode.Impulse);
+            itemRb.velocity = pukeVelocity;
 
-            if (pukeWithForce)
-            {
-                KnockbackItemsInFrontofPlayer(pukeForce, itemRb);
-                AddCollisionBlast(itemToPuke.gameObject, itemRb);
-            }
+            //if (pukeWithForce)
+            //{
+            //    KnockbackItemsInFrontofPlayer(pukeForce, itemRb);
+            //    AddCollisionBlast(itemToPuke.gameObject, itemRb);
+            //}
         }
 
     }

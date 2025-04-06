@@ -23,7 +23,7 @@ public class ProjectileBlast : MonoBehaviour
     void Start()
 	{
         ownerCollisionDetector = owner.AddComponent<CollisionDetector>();
-        ownerCollisionDetector.Subscribe(Explode);
+        ownerCollisionDetector.Subscribe(TryExplode);
 
     }
 
@@ -49,6 +49,11 @@ public class ProjectileBlast : MonoBehaviour
 
             hitRB.AddExplosionForce(blastForce, transform.position, 5f, 0.01f, ForceMode.VelocityChange);
         }
+    }
+    private void TryExplode()
+    {
+        var rb = owner.GetComponent<Rigidbody>();
+        if (rb.velocity.HorizontalProjection().magnitude > 1.5f) { Explode(); }
 
         //destroy self, only do one blast collision
         Destroy(gameObject);
