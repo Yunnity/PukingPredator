@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6fd698c335fc04c51a57c49d83194fa9
+guid: 0b78ec49c532c459f983740b5a9355c4
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: TX_Floor_002
-    second: {fileID: 2100000, guid: cd13096a2f069413fad386d1b9b9fb62, type: 2}
+      name: standardSurface1
+    second: {fileID: 2100000, guid: 072b67cfc001441668e706aeab4d8e50, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -37,7 +37,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 1
