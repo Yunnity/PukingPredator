@@ -52,11 +52,11 @@ public class InteractablePicker : MonoBehaviour
 
         if (previousTargetInteractable != null)
         {
-            previousTargetInteractable.broadcastEnabled(false);
+            previousTargetInteractable.outline.enabled = false;
         }
         if (targetInteractable != null)
         {
-            targetInteractable.broadcastEnabled(true);
+            targetInteractable.outline.enabled = true;
         }
     }
 

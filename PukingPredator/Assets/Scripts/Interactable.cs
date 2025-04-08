@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public abstract class Interactable : MonoBehaviour
@@ -29,15 +28,6 @@ public abstract class Interactable : MonoBehaviour
     /// </summary>
     private Color outlineColor = Color.white;
 
-    /// <summary>
-    /// Invoked when the object is highlighted (outline enabled).
-    /// </summary>
-    public event Action Highlighted;
-
-    /// <summary>
-    /// Invoked when the object is unhighlighted (outline disabled).
-    /// </summary>
-    public event Action Unhighlighted;
 
 
     protected virtual void Awake()
@@ -57,22 +47,6 @@ public abstract class Interactable : MonoBehaviour
     {
         return hitbox.ClosestPoint(pos);
     }
-
-    /// <summary>
-    /// sets the outline and lets subsribers know the interactable is outlined
-    /// <returns></returns>
-    public void broadcastEnabled(bool enable)
-    {
-        outline.enabled = enable;
-        if (enable)
-        {
-            Highlighted?.Invoke();
-        } else
-        {
-            Unhighlighted?.Invoke();
-        }
-    }
-
 
     private void ConfigureOutline()
     {
