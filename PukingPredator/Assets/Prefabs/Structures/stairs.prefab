@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 1911684935459414642}
   - component: {fileID: 8516310013188519662}
   - component: {fileID: 1027589701618537780}
+  - component: {fileID: -3033185891950504278}
+  - component: {fileID: -3423381715246140172}
   - component: {fileID: 8361830319861193323}
   - component: {fileID: -6065880408925412385}
   - component: {fileID: 2266998484905277492}
@@ -108,7 +110,51 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 5356990882948990955, guid: 4fc0846b9db1740a190117109e22d06d, type: 3}
+  m_Mesh: {fileID: 6599022232217105194, guid: ffe6c5dc89ffe43858dda41116e127d3, type: 3}
+--- !u!64 &-3033185891950504278
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8924489932329422222}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7007243039000544691, guid: ffe6c5dc89ffe43858dda41116e127d3, type: 3}
+--- !u!64 &-3423381715246140172
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8924489932329422222}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6620430866513678817, guid: ffe6c5dc89ffe43858dda41116e127d3, type: 3}
 --- !u!54 &8361830319861193323
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -151,7 +197,6 @@ MonoBehaviour:
   outline: {fileID: 0}
   _canDecay: 0
   decayInto: {fileID: 0}
-  inventory: {fileID: 0}
   isConsumable: 1
   thumbnail: {fileID: 21300000, guid: 4afdc912840cb7849970933a8385f38b, type: 3}
 --- !u!114 &2266998484905277492
