@@ -2969,7 +2969,7 @@ Transform:
   m_GameObject: {fileID: 283558115}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 23.08, y: 2, z: -0.1}
+  m_LocalPosition: {x: 23.19, y: 1.81, z: 0.04}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2994,7 +2994,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.11, y: 0.65, z: 3.27}
+  m_Size: {x: 0.83, y: 0.65, z: 3.27}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &283558119
 MonoBehaviour:
@@ -8335,7 +8335,7 @@ Transform:
   m_GameObject: {fileID: 1039629861}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.66, y: 2.04, z: 0.71}
+  m_LocalPosition: {x: 16.45, y: 2.04, z: 1.05}
   m_LocalScale: {x: 0.42, y: 1, z: 0.3261}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8355,7 +8355,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 1, b: 1, a: 1}
   delay: 0
-  text: Your range grows with size.
+  text: The bigger you are, the farther you can eat
 --- !u!65 &1039629864
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8950,9 +8950,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1940655931}
-  - {fileID: 1853839847}
   - {fileID: 2070930257}
   - {fileID: 1495943103}
+  - {fileID: 1853839847}
   - {fileID: 1364424504}
   - {fileID: 1039629862}
   - {fileID: 283558116}
@@ -10179,7 +10179,7 @@ Transform:
   m_GameObject: {fileID: 1353184875}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 28.393, y: 1.854, z: 0.505}
+  m_LocalPosition: {x: 27.11, y: 2.18, z: 0.505}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10204,7 +10204,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.09, y: 0.67, z: 1.98}
+  m_Size: {x: 3.13, y: 0.67, z: 1.98}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1353184879
 MonoBehaviour:
@@ -10224,7 +10224,7 @@ MonoBehaviour:
     type: 3}
   controlSpriteXBOX: {fileID: 21300000, guid: 3e391e8124f6837408e16a42b853ff09, type: 3}
   controlSpritePS4: {fileID: 21300000, guid: 2d9a35ab034a997499103cf320061927, type: 3}
-  text1: Tap
+  text1: Tap or hold
   text2: to puke
 --- !u!1001 &1358649799
 PrefabInstance:
@@ -15518,7 +15518,7 @@ Transform:
   m_GameObject: {fileID: 2070930256}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.5, y: 0.37, z: 0.51}
+  m_LocalPosition: {x: -3.74, y: 0.37, z: 1}
   m_LocalScale: {x: 0.61, y: 1, z: 0.3261}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15543,7 +15543,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.99, y: 0.71, z: 6.25}
+  m_Size: {x: 2.9, y: 0.71, z: 6.25}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2070930260
 MonoBehaviour:
