@@ -4,33 +4,35 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
-
-    private const float MOVING_THRESHOLD = 0f;
-
-    [SerializeField]
-    private GameObject model;
-
     private Animator animator;
-    private Rigidbody rb;
+
+    private GameInput gameInput;
 
     private int isMovingHash = Animator.StringToHash("isMoving");
     private int isPukingHash = Animator.StringToHash("isPuking");
     private int isJumpingHash = Animator.StringToHash("isJumping");
-    int isEatingHash = Animator.StringToHash("isEating");
+    private int isEatingHash = Animator.StringToHash("isEating");
 
-    // Start is called before the first frame update
+    [SerializeField]
+    private GameObject model;
+
+    private Rigidbody rb;
+
+
+
     void Start()
     {
         animator = model.GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        
+        gameInput = GameInput.Instance;
     }
 
-    // Update is called once per frame
     void Update()
     {
         UpdateMovementState();
     }
+
+
 
     private void PrintAnimatorState()
     {
@@ -43,23 +45,11 @@ public class PlayerAnimation : MonoBehaviour
         }
     }
 
-    // Check animation state
-    // Currently, we only have moving and idle
-    private void UpdateMovementState()
+    private void ResetTriggers()
     {
-        // TODO WE NEED TO CHANGE THIS but we can do it when we have more animations
-        bool horizontalMovement = Mathf.Abs(rb.velocity.x) + Mathf.Abs(rb.velocity.z) > MOVING_THRESHOLD;
-        bool isMoving = animator.GetBool(isMovingHash);
-        if ((!isMoving && horizontalMovement) || (isMoving && !horizontalMovement))
-        {
-            animator.SetBool(isMovingHash, horizontalMovement);
-        }
-    }
-
-    public void StartPukeAnim()
-    {
-        ResetTriggers();
-        animator.SetTrigger(isPukingHash);
+        animator.ResetTrigger(isPukingHash);
+        animator.ResetTrigger(isEatingHash);
+        animator.ResetTrigger(isJumpingHash);
     }
 
     public void StartEatAnim()
@@ -73,10 +63,19 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetTrigger(isJumpingHash);
     }
 
-    private void ResetTriggers()
+    public void StartPukeAnim()
     {
-        animator.ResetTrigger(isPukingHash);
-        animator.ResetTrigger(isEatingHash);
-        animator.ResetTrigger(isJumpingHash);
+        ResetTriggers();
+        animator.SetTrigger(isPukingHash);
+    }
+
+    private void UpdateMovementState()
+    {
+        bool isMoving = gameInput.movementInput.magnitude > 0;
+        bool animatorIsMoving = animator.GetBool(isMovingHash);
+        if (isMoving != animatorIsMoving)
+        {
+            animator.SetBool(isMovingHash, isMoving);
+        }
     }
 }

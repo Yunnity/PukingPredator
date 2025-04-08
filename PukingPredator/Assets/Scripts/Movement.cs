@@ -126,6 +126,11 @@ public class Movement : InputBehaviour
         if (inputVector.magnitude > 0)
         {
             transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * turnSpeed);
+
+            if (isGrounded)
+            {
+                AudioManager.Instance.PlaySFX(AudioManager.ClipName.Walking, true);
+            }
         }
 
         if (player.state == PlayerState.aiming && moveDir == Vector3.zero)
@@ -133,11 +138,6 @@ public class Movement : InputBehaviour
             Vector3 targetDir = playerCamera.transform.forward;
             targetDir.y = 0;
             transform.forward = Vector3.Slerp(transform.forward, targetDir, Time.deltaTime * turnSpeed);
-        }
-
-        if (isGrounded && (rb.velocity.x != 0 || rb.velocity.z != 0))
-        {
-            AudioManager.Instance.PlaySFX(AudioManager.ClipName.Walking, true);
         }
         #endregion
 
