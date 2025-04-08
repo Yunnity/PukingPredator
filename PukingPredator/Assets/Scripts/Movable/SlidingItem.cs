@@ -16,13 +16,35 @@ public class SlidingItem : MovableItem
     [SerializeField]
     private CollisionTracker collisionTracker;
 
+    /// <summary>
+    /// Index of the next point the platform will move towards.
+    /// </summary>
     private int nextPoint = 0;
-    private int direction = 1;
-    private Player player;
-    bool updatePlayer = false;
-    private Timer pauseTimer;
-    private bool isWaiting = false;
 
+    /// <summary>
+    /// Direction in which the platform is moving (1 for forward, -1 for backward).
+    /// </summary>
+    private int direction = 1;
+
+    /// <summary>
+    /// Reference to the player currently interacting with the platform.
+    /// </summary>
+    private Player player;
+
+    /// <summary>
+    /// Determines whether the player should be updated with the platform's movement.
+    /// </summary>
+    bool updatePlayer = false;
+
+    /// <summary>
+    /// Timer used to pause the platform at waypoints.
+    /// </summary>
+    private Timer pauseTimer;
+
+    /// <summary>
+    /// Indicates whether the platform is currently waiting at a point.
+    /// </summary>
+    private bool isWaiting = false;
 
 
     protected override void Start()
