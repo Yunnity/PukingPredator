@@ -7,6 +7,12 @@ public enum InputDeviceType
     gamepad,
     other,
 }
+public enum GamepadType
+{
+    xbox,
+    playStation,
+    other,
+}
 
 static class InputDeviceTypeMethods
 {

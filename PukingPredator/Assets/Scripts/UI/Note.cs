@@ -1,13 +1,38 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-[RequireComponent(typeof(Collider))]
 public abstract class Note : MonoBehaviour
 {
     /// <summary>
     /// The alpha of the note visuals.
     /// </summary>
-    private float alpha = 0f;
+    private float alpha
+    {
+        get => _alpha;
+        set
+        {
+            _alpha = value;
+            containerCanvasGroup.alpha = Mathf.Clamp01(value);
+        }
+    }
+    private float _alpha = 0f;
+
+    /// <summary>
+    /// The tint/color of the note.
+    /// </summary>
+    [SerializeField]
+    private Color color = Color.white;
+
+    /// <summary>
+    /// The container for the note content.
+    /// </summary>
+    protected GameObject container;
+    private CanvasGroup containerCanvasGroup;
+    private float containerHeight = 50f;
+    private float containerPivotX = 0.5f;
+    private float containerPivotY = 0.3f;
 
     /// <summary>
     /// Delay in seconds before making the note appear. Intended for tutorials.
@@ -21,45 +46,160 @@ public abstract class Note : MonoBehaviour
     private float fadeSpeed = 4f;
 
     /// <summary>
-    /// If the player was nearby the last time a check was performed.
+    /// If the note should be seen currently.
     /// </summary>
-    private bool isPlayerNearby = false;
+    protected bool visible
+    {
+        get => _visible;
+        set
+        {
+            if (value == _visible) { return; }
+            _visible = value;
+
+            StopAllCoroutines(); // Stop any ongoing fading in/out
+
+            var targetAlpha = _visible ? 1f : 0f;
+            StartCoroutine(FadeAlpha(targetAlpha));
+        }
+    }
+    private bool _visible = false;
 
 
+
+    protected virtual void Awake()
+    {
+        CreateContainer();
+
+        alpha = 0f; // Default not visible
+
+        //make sure the collider is set to trigger if there is one.
+        var collider = GetComponent<Collider>();
+        if (collider != null) { collider.isTrigger = true; }
+    }
 
     private void Start()
     {
-        SetAlpha(0f);
-
-        //make sure the collider is set to trigger
-        GetComponent<Collider>().isTrigger = true;
+        if (color != Color.white) { SetContainerTint(color); }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (isPlayerNearby) { return; }
-
         if (other.gameObject.CompareTag(GameTag.player))
         {
-            isPlayerNearby = true;
-            StopAllCoroutines(); // Stop any ongoing fading out
-            StartCoroutine(FadeAlpha(1f)); // Fade in to alpha = 1
+            visible = true;
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (!isPlayerNearby) { return; }
-
         if (other.gameObject.CompareTag(GameTag.player))
         {
-            isPlayerNearby = false;
-            StopAllCoroutines(); // Stop any ongoing fading in
-            StartCoroutine(FadeAlpha(0f)); // Fade out to alpha = 0
+            visible = false;
         }
     }
 
 
+
+    /// <summary>
+    /// Create an Image component dynamically.
+    /// </summary>
+    /// <param name="sprite"></param>
+    /// <param name="size"></param>
+    public GameObject AddImage(Sprite sprite, float height)
+    {
+        // Create a new GameObject for the image
+        GameObject imageObject = new GameObject("ImageElement");
+        imageObject.transform.SetParent(container.transform, false);
+
+        // Add Image component
+        Image imageComponent = imageObject.AddComponent<Image>();
+        imageComponent.sprite = sprite;
+        imageComponent.preserveAspect = true; // Keeps the original aspect ratio
+
+        // Get original sprite dimensions
+        float aspectRatio = sprite.rect.width / sprite.rect.height;
+
+        // Set RectTransform size dynamically based on height
+        RectTransform rectTransform = imageComponent.GetComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(height * aspectRatio, height);
+
+        //// Optionally, add a ContentSizeFitter if you want it to adjust dynamically
+        //ContentSizeFitter fitter = imageObject.AddComponent<ContentSizeFitter>();
+        //fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+        //fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+        // Disable ContentSizeFitter to avoid auto-scaling issues
+        ContentSizeFitter fitter = imageObject.GetComponent<ContentSizeFitter>();
+        if (fitter != null)
+        {
+            Destroy(fitter);
+        }
+
+        if (color != Color.white) { SetChildTint(imageObject.transform, color); }
+
+        return imageObject;
+    }
+
+    /// <summary>
+    /// Create a Text component dynamically.
+    /// </summary>
+    protected GameObject AddText(string text)
+    {
+        // Create new Text object
+        GameObject textObject = new GameObject("TextElement");
+        textObject.transform.SetParent(container.transform, false);
+
+        // Add TextMeshProUGUI component
+        TextMeshProUGUI textComponent = textObject.AddComponent<TextMeshProUGUI>();
+        textComponent.text = text;
+        textComponent.alignment = TextAlignmentOptions.Center;
+
+        // Enable Auto-Size for dynamic font scaling
+        textComponent.enableAutoSizing = true;
+        textComponent.fontSizeMin = 10f;
+        textComponent.fontSizeMax = 36f;
+
+        // Set RectTransform height while letting width auto-adjust
+        RectTransform rectTransform = textComponent.GetComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(0, 50f); // Fixed height, width will adjust dynamically
+
+        // Add a ContentSizeFitter to dynamically resize the width
+        ContentSizeFitter fitter = textObject.AddComponent<ContentSizeFitter>();
+        fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+        fitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained; // Keep height fixed
+
+        if (color != Color.white) { SetChildTint(textObject.transform, color); }
+
+        return textObject;
+    }
+
+    private void CreateContainer()
+    {
+        var canvas = GameObject.Find("Canvas");
+
+        // Create a new container GameObject and make it a child of the Canvas
+        container = new GameObject("TextContainer");
+        container.transform.SetParent(canvas.transform, false);
+
+        // Add RectTransform for positioning
+        RectTransform rectTransform = container.AddComponent<RectTransform>();
+        rectTransform.pivot = new Vector2(containerPivotX, containerPivotY);
+        rectTransform.anchorMin = new Vector2(containerPivotX, containerPivotY);
+        rectTransform.anchorMax = new Vector2(containerPivotX, containerPivotY);
+        rectTransform.sizeDelta = new Vector2(Screen.width * 0.9f, containerHeight);
+        rectTransform.anchoredPosition = Vector2.zero;
+
+        // Add HorizontalLayoutGroup for automatic arrangement
+        HorizontalLayoutGroup layoutGroup = container.AddComponent<HorizontalLayoutGroup>();
+        layoutGroup.childAlignment = TextAnchor.MiddleCenter;
+        layoutGroup.spacing = 10f;
+        layoutGroup.childForceExpandWidth = false;
+        layoutGroup.childForceExpandHeight = false;
+        layoutGroup.childControlWidth = false;
+
+        // Add CanvasGroup for controlling alpha
+        containerCanvasGroup = container.AddComponent<CanvasGroup>();
+    }
 
     /// <summary>
     /// Coroutine to fade the image to the target alpha over time.
@@ -83,16 +223,32 @@ public abstract class Note : MonoBehaviour
             // Gradually adjust the alpha based on fadeSpeed and deltaTime
             alpha = Mathf.MoveTowards(alpha, targetAlpha, fadeSpeed * Time.deltaTime);
 
-            // Set the new alpha value to the image
-            SetAlpha(alpha);
-
             yield return null;
         }
     }
 
-    /// <summary>
-    /// Helper function to set the alpha of the visuals.
-    /// </summary>
-    /// <param name="alpha"></param>
-    protected abstract void SetAlpha(float alpha);
+    public void SetContainerTint(Color tintColor)
+    {
+        foreach (Transform child in container.transform)
+        {
+            SetChildTint(child, tintColor);
+        }
+    }
+
+    private void SetChildTint(Transform child, Color tintColor)
+    {
+        // Tint TextMeshProUGUI elements
+        TextMeshProUGUI textComponent = child.GetComponent<TextMeshProUGUI>();
+        if (textComponent != null)
+        {
+            textComponent.color = tintColor;
+        }
+
+        // Tint Image elements
+        Image imageComponent = child.GetComponent<Image>();
+        if (imageComponent != null)
+        {
+            imageComponent.color = tintColor;
+        }
+    }
 }

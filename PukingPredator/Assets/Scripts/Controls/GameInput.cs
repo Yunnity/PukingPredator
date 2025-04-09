@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
 using UnityEngine.InputSystem.LowLevel;
 
 /// <summary>
@@ -20,7 +21,7 @@ public enum InputEvent
     /// </summary>
     onDeviceSwapMajor,
     /// <summary>
-    /// Triggers when the user presses the "eat" input.
+    /// Triggers when the user releases the "eat" input.
     /// </summary>
     onEat,
     /// <summary>
@@ -51,6 +52,10 @@ public enum InputEvent
     /// Triggers when the user presses the "pause" input
     /// </summary>
     onPause,
+    /// <summary>
+    /// Triggers when the user presses the "eat" input
+    /// </summary>
+    onAim,
 }
 public class GameInput : SingletonMonobehaviour<GameInput>
 {
@@ -69,12 +74,14 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     /// </summary>
     private Dictionary<InputEvent, Action> events = new();
 
+    public GamepadType gamepadType { get; private set; }
+
     private bool isChargingPuke = false;
 
     /// <summary>
     /// The most recently used input device type. Can change constantly in game.
     /// </summary>
-    public InputDeviceType inputDeviceType = InputDeviceType.mouse;
+    public InputDeviceType inputDeviceType { get; private set; } = InputDeviceType.mouse;
 
     /// <summary>
     /// The minimum time for something to be held for. A tap will still be
@@ -91,15 +98,19 @@ public class GameInput : SingletonMonobehaviour<GameInput>
     /// Used to track when the button was first pressed to determine how long
     /// it was held.
     /// </summary>
-    private float pukePressTime = 0f;
+    private float buttonPressTime = 0f;
 
     /// <summary>
     /// The amount of time that the puke button has been held. Only meaningful
     /// at the time that the puke event is triggered.
     /// </summary>
-    public float pukeHoldDuration => Mathf.Max(minHoldTime, Time.time - pukePressTime);
+    public float pukeHoldDuration => Mathf.Max(0, Time.time - buttonPressTime - minHoldTime);
 
-
+    /// <summary>
+    /// The amount of time that the eat button has been held. Only meaningful
+    /// at the time that the eat event is triggered.
+    /// </summary>
+    public float eatHoldDuration => Mathf.Max(0, Time.time - buttonPressTime - minHoldTime);
 
     protected override void Awake()
     {
@@ -115,7 +126,12 @@ public class GameInput : SingletonMonobehaviour<GameInput>
         {
             events.Add(inputEvent, null);
         }
-        controls.Player.Eat.performed += context => TriggerEvent(InputEvent.onEat);
+        controls.Player.Eat.performed += context =>
+        {
+            buttonPressTime = Time.time;
+            TriggerEvent(InputEvent.onAim);
+        };
+        controls.Player.Eat.canceled += context => TriggerEvent(InputEvent.onEat);
 
         controls.Player.Jump.canceled += context => TriggerEvent(InputEvent.onJumpUp);
         controls.Player.Jump.performed += context => TriggerEvent(InputEvent.onJumpDown);
@@ -128,7 +144,7 @@ public class GameInput : SingletonMonobehaviour<GameInput>
         controls.Player.Puke.performed += context =>
         {
             isChargingPuke = true;
-            pukePressTime = Time.time;
+            buttonPressTime = Time.time;
             TriggerEvent(InputEvent.onPukeStart);
         };
 
@@ -165,9 +181,22 @@ public class GameInput : SingletonMonobehaviour<GameInput>
             {
                 inputDeviceType = InputDeviceType.mouse;
             }
-            else if (device is Gamepad)
+            else if (device is Gamepad gamepad)
             {
                 inputDeviceType = InputDeviceType.gamepad;
+
+                if (gamepad is DualShockGamepad)
+                {
+                    gamepadType = GamepadType.playStation;
+                }
+                else if (gamepad.description.manufacturer.ToLower().Contains("microsoft"))
+                {
+                    gamepadType = GamepadType.xbox;
+                }
+                else
+                {
+                    gamepadType = GamepadType.other;
+                }
             }
             else
             {
