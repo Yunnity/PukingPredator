@@ -8,13 +8,13 @@ using UnityEngine;
 /// </summary>
 public class PhysicsCollapseGroup : MonoBehaviour
 {
-    private List<PhysicsBehaviour> relevantChildren;
+    protected List<PhysicsBehaviour> relevantChildren;
 
     private bool hasTriggered = false;
 
 
 
-    void Start()
+    protected virtual void Start()
     {
         //get the physics objects out of the descendants
         relevantChildren = gameObject
