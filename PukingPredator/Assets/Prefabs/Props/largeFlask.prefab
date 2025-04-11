@@ -99,7 +99,7 @@ MonoBehaviour:
   _canDecay: 0
   decayInto: {fileID: 0}
   isConsumable: 1
-  thumbnail: {fileID: 21300000, guid: 3f18f3df45b697941bcbdb05662824cf, type: 3}
+  thumbnail: {fileID: 21300000, guid: db61c9274c772404c9ddcc54c8bd457b, type: 3}
 --- !u!1001 &1702587447242791642
 PrefabInstance:
   m_ObjectHideFlags: 0

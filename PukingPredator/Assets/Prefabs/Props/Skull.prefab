@@ -183,7 +183,7 @@ MonoBehaviour:
   _canDecay: 0
   decayInto: {fileID: 0}
   isConsumable: 1
-  thumbnail: {fileID: 21300000, guid: 3f18f3df45b697941bcbdb05662824cf, type: 3}
+  thumbnail: {fileID: 21300000, guid: 466dfe224fb84c34aa13fe9fb6bef800, type: 3}
 --- !u!65 &3780167217277883588
 BoxCollider:
   m_ObjectHideFlags: 0
