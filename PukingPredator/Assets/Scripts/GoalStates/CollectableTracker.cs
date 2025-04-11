@@ -70,7 +70,7 @@ public class CollectableTracker : MonoBehaviour
     /// </summary>
     public void CollectOne()
     {
-        if (audioManager != null) { audioManager.PlaySFX(AudioManager.ClipName.LevelUp); }
+        if (audioManager != null) { audioManager.PlaySFX(AudioID.GotCollectable); }
 
         var targetSlot = emptySlots[0];
         emptySlots.RemoveAt(0);

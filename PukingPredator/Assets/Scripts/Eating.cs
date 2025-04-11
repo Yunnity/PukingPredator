@@ -32,15 +32,19 @@ public class Eating : InputBehaviour
 
     private void GameInput_Eat()
     {
-        var targetInteractable = player.targetInteractable;
+        if (inventory.isFull)
+        {
+            AudioManager.Instance.PlaySFX(AudioID.CannotEat);
+            return;
+        }
 
-        if (inventory.isFull) { return; }
+        var targetInteractable = player.targetInteractable;
         if (targetInteractable == null) { return; }
 
         //TODO: should this be shifted down to the consume object script so that
         //      it only triggers if you actually eat stuff? getting a collectable
         //      isnt the same as eating
-        AudioManager.Instance.PlaySFX(AudioManager.ClipName.Eating);
+        AudioManager.Instance.PlaySFX(AudioID.Eat, wait: true);
         anim.StartEatAnim();
 
         var targetObject = targetInteractable.gameObject;
