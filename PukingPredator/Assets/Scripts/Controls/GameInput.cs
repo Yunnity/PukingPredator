@@ -215,6 +215,16 @@ public class GameInput : SingletonMonobehaviour<GameInput>
         }
     }
 
+    public void DisableInput()
+    {
+        controls.Player.Disable();
+    }
+
+    public void EnableInput()
+    {
+        controls.Player.Enable();
+    }
+
     public void Subscribe(InputEvent inputEvent, Action action)
     {
         events[inputEvent] += action;
