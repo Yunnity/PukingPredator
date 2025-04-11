@@ -45,15 +45,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
-  sfxClips:
-  - {fileID: 8300000, guid: 4559a85cfa19c984a977c1e4f685aec8, type: 3}
-  - {fileID: 8300000, guid: 6dd9ab6eb801390489281812ce9343ea, type: 3}
-  - {fileID: 8300000, guid: 49f104c4e6c1bfe48910e632019e8a4d, type: 3}
-  - {fileID: 8300000, guid: c217253d8f01f5e43a4c3b01abb925f1, type: 3}
-  - {fileID: 8300000, guid: 3729b17ea02d16d4fb973bf3f66f28d9, type: 3}
-  - {fileID: 8300000, guid: aeb4626bb9e244d44adca9778b276ca7, type: 3}
-  - {fileID: 8300000, guid: 158d7e6c1ae747744bee1dd7d88fb69f, type: 3}
+  sounds:
+  - {fileID: 8300000, guid: 7cb7f8b0dd8c1473c959df1b2f37a08b, type: 3}
+  - {fileID: 8300000, guid: 3cd8e3d0be46f465f87f0c3cd638ddb8, type: 3}
+  - {fileID: 8300000, guid: 2105df12913844d57b57b1d1e716e0aa, type: 3}
   - {fileID: 8300000, guid: 36c91f94cd1381b4b914b7a3c1943c60, type: 3}
+  - {fileID: 8300000, guid: 66207fdd248fd4832b8f553a73091c3a, type: 3}
+  - {fileID: 8300000, guid: d6ca901848227448388c8ad78a1908e4, type: 3}
+  - {fileID: 8300000, guid: 7f9d5aa1858454444b36d8bc4b64971a, type: 3}
+  - {fileID: 8300000, guid: f550fc475156043e994121cfc805875e, type: 3}
+  - {fileID: 8300000, guid: 202f2d432b0844545be65628289117d8, type: 3}
+  - {fileID: 8300000, guid: 0038502d9de46432bbae73085c90a925, type: 3}
+  - {fileID: 8300000, guid: bfb44caf6a5264b408d856d02a38812f, type: 3}
+  - {fileID: 8300000, guid: ca7b527b391d544aba41347ca0c810db, type: 3}
+  - {fileID: 8300000, guid: 9e81e8bce33374b64a4c7772d5b7310a, type: 3}
+  - {fileID: 8300000, guid: fe67143608aa149bfb0a80ced7cde016, type: 3}
   backgroundTracks:
   - {fileID: 8300000, guid: 517e3da8627d1ab4684f21d32484823b, type: 3}
   - {fileID: 8300000, guid: 4662d00209071374da7398aa19c1cf64, type: 3}

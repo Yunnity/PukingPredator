@@ -100,8 +100,12 @@ public class Puking : InputBehaviour
 
         anim.StartPukeAnim();
 
-        bool pukeWithForce = pukeForce > MAX_PUKE_FORCE * PUKE_EXPLODE_THRESHOLD;
-        AudioManager.Instance.PlaySFX(pukeWithForce ? AudioManager.ClipName.PukeForce : AudioManager.ClipName.Puking);
+        //TODO: bring back different sounds based on puke force?
+        //bool pukeWithForce = pukeForce > MAX_PUKE_FORCE * PUKE_EXPLODE_THRESHOLD;
+        //AudioManager.Instance.PlaySFX(pukeWithForce ? AudioManager.ClipName.PukeForce : AudioManager.ClipName.Puking);
+
+        AudioManager.Instance.PlaySFX(AudioID.Puke);
+        
 
         Rigidbody itemRb = itemToPuke.GetComponent<Rigidbody>();
         if (itemRb != null)

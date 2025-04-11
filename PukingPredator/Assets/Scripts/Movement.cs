@@ -129,7 +129,7 @@ public class Movement : InputBehaviour
 
             if (isGrounded)
             {
-                AudioManager.Instance.PlaySFX(AudioManager.ClipName.Walking, true);
+                AudioManager.Instance.PlaySFX(AudioID.Walk, true);
             }
         }
 
@@ -194,6 +194,6 @@ public class Movement : InputBehaviour
         rb.velocity = vel;
 
         playerAnimation?.StartJumpAnim();
-        AudioManager.Instance.PlaySFX(AudioManager.ClipName.Jump, true);
+        AudioManager.Instance.PlaySFX(AudioID.Jump);
     }
 }

@@ -64,6 +64,8 @@ public class SceneTransition : SingletonMonobehaviour<SceneTransition>
     /// <returns></returns>
     private IEnumerator FadeOut(string sceneName)
     {
+        GameInput.Instance.DisableInput();
+
         Image fadeImage = CreateFadeImage();
         if (fadeImage != null)
         {
@@ -88,6 +90,8 @@ public class SceneTransition : SingletonMonobehaviour<SceneTransition>
         {
             yield return null;
         }
+
+        GameInput.Instance.EnableInput();
 
         yield return StartCoroutine(FadeIn());
     }
