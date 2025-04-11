@@ -75,19 +75,18 @@ public class GameManager : SingletonMonobehaviour<GameManager>
 
     public static void TransitionToScene(string sceneName)
     {
-        var isLevelScene = Instance.levelIds.Contains(sceneName);
-        if (!isLevelScene) { Cursor.lockState = CursorLockMode.Confined; }
-        if (isLevelScene) { Instance.currentLevelId = sceneName; }
+        var currentSceneName = SceneManager.GetActiveScene().name;
 
-        if (isLevelScene)
+        bool currentIsLevel = Instance.levelIds.Contains(currentSceneName);
+        bool targetIsLevel = Instance.levelIds.Contains(sceneName);
+
+        if (!targetIsLevel) { Cursor.lockState = CursorLockMode.Confined; }
+        if (targetIsLevel) { Instance.currentLevelId = sceneName; }
+
+        if (targetIsLevel != currentIsLevel || currentSceneName == "Startup")
         {
             AudioManager.Instance.StopMusic();
-            AudioManager.Instance.PlayBackground(MusicID.Game);
-        }
-        else
-        {
-            AudioManager.Instance.StopMusic();
-            AudioManager.Instance.PlayBackground(MusicID.Title);
+            AudioManager.Instance.PlayBackground(targetIsLevel ? MusicID.Game : MusicID.Title);
         }
 
         SceneTransition.Instance.FadeToScene(sceneName);
