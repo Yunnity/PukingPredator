@@ -29142,6 +29142,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2847057592120240645, guid: acf9e99f95aaaa443a419775f59a9067,
+        type: 3}
+      propertyPath: m_text
+      value: YOU WIN!
+      objectReference: {fileID: 0}
     - target: {fileID: 4675187398879541319, guid: acf9e99f95aaaa443a419775f59a9067,
         type: 3}
       propertyPath: m_Name

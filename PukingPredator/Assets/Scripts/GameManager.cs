@@ -64,7 +64,11 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     public static void TransitionToNextLevel()
     {
         var nextLevelNumber = Instance.levelIds.IndexOf(Instance.currentLevelId) + 1;
-        if (nextLevelNumber >= Instance.levelIds.Count) { return; }
+        if (nextLevelNumber >= Instance.levelIds.Count)
+        {
+            TransitionToScene("StartScreen");
+            return;
+        }
         TransitionToLevel(nextLevelNumber);
     }
 
