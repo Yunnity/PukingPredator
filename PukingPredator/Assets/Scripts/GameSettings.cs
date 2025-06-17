@@ -11,6 +11,14 @@ public static class GameSettings
 {
     //TODO: we should probably make a way to reset the settings in the future.
 
+    /// <summary>
+    /// Not an actual setting, just here to toggle it in the code.
+    /// If true, you will be able to eat while full, but it will delete the
+    /// first item eaten.
+    /// If false, you just can't eat while full.
+    /// </summary>
+    public static bool canEatWhileFull = true;
+
     public static float cameraSensitivity = 1f;
 
     private static float _volumeMaster = 0.5f;

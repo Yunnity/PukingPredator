@@ -44,10 +44,13 @@ public class InteractablePicker : MonoBehaviour
         var previousTargetInteractable = targetInteractable;
         targetInteractable = GetViewedInteractable();
 
-        //dont let the player select edible things while full
-        if (player.inventory.isFull && targetInteractable is Consumable)
+        if (!GameSettings.canEatWhileFull)
         {
-            targetInteractable = null;
+            //dont let the player select edible things while full
+            if (player.inventory.isFull && targetInteractable is Consumable)
+            {
+                targetInteractable = null;
+            }
         }
 
         if (previousTargetInteractable != null)
