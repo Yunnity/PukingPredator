@@ -132,8 +132,12 @@ public class Movement : InputBehaviour
                 AudioManager.Instance.PlaySFX(AudioID.Walk, true);
             }
         }
+        #endregion
 
-        if (player.state == PlayerState.aiming && moveDir == Vector3.zero)
+        #region aiming code
+        if (player.state == PlayerState.aiming
+            && moveDir == Vector3.zero
+            && gameInput.eatHoldDuration > 2 * GameInput.minHoldTime)
         {
             Vector3 targetDir = playerCamera.transform.forward;
             targetDir.y = 0;
