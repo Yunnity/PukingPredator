@@ -32,7 +32,7 @@ public class Eating : InputBehaviour
 
     private void GameInput_Eat()
     {
-        if (inventory.isFull)
+        if (inventory.isFull && !GameSettings.canEatWhileFull)
         {
             AudioManager.Instance.PlaySFX(AudioID.CannotEat);
             return;
@@ -58,6 +58,14 @@ public class Eating : InputBehaviour
     {
         var consumableData = obj.GetComponent<Consumable>();
         if (consumableData == null || !consumableData.isConsumable) { return; }
+
+        if (inventory.isFull)
+        {
+            //delete the bottom item in the stack to clear up space
+            var lastItem = inventory.PeekItem(inventory.itemCount - 1);
+            inventory.RemoveItem(lastItem);
+            Destroy(lastItem);
+        }
 
         inventory.PushItem(consumableData);
         consumableData.SetState(ItemState.beingConsumed);
